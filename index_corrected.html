@@ -304,9 +304,25 @@
               <textarea id="donorAddress" rows="3"></textarea>
             </div>
             <div class="field">
-              <label>Last Donation Date</label>
-              <input id="donorLastDonation" type="date">
-            </div>
+  <label>Last Donation Date</label>
+  <input id="donorLastDonation" type="date">
+</div>
+
+<div class="field">
+  <label>Currently Available <span class="required">*</span></label>
+  <select id="donorAvailable" required>
+    <option value="Yes">Yes, I am available</option>
+    <option value="No">No, not currently</option>
+  </select>
+</div>
+
+<div class="field">
+  <label>Status <span class="required">*</span></label>
+  <select id="donorStatus" required>
+    <option value="Active">Active</option>
+    <option value="Inactive">Inactive</option>
+  </select>
+</div>
           </div>
 
           <div class="form-actions">
