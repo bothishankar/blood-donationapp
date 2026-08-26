@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#b91c1c">
+  <title>Ponguruchi Nannbargal - Blood Donation</title>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .site-header {
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .header-inner {
+      max-width: 1180px;
+      margin: auto;
+      min-height: 82px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #111827;
+    }
+    .brand-drop {
+      font-size: 42px;
+      line-height: 1;
+    }
+    .brand-title { font-size: 23px; font-weight: 800; }
+    .brand-subtitle { color: #6b7280; font-size: 14px; margin-top: 3px; }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .nav-btn {
+      border: 1px solid #d7dce5;
+      background: #fff;
+      color: #111827;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-weight: 600;
+    }
+    .nav-btn:hover { background: #f8fafc; }
+    .nav-btn.admin { border-color: #b91c1c; color: #991b1b; }
+
+    main { min-height: calc(100vh - 150px); }
+    .page { display: none; }
+    .page.active { display: block; }
+    .container { max-width: 1180px; margin: auto; padding: 42px 20px 60px; }
+
+    .hero {
+      background: linear-gradient(135deg, #fff1f2, #ffffff);
+      border-radius: 28px;
+      padding: 64px 54px;
+      border: 1px solid #fee2e2;
+    }
+    .hero h1 { font-size: clamp(38px, 6vw, 64px); margin: 0 0 16px; line-height: 1.05; }
+    .hero p { font-size: 20px; color: #4b5563; max-width: 700px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: 700;
+    }
+    .btn-primary { background: #b91c1c; color: #fff; }
+    .btn-blue { background: #2563eb; color: #fff; }
+    .btn-light { background: #fff; border: 1px solid #d1d5db; color: #111827; }
+    .btn-danger { background: #7f1d1d; color: #fff; }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .stat {
+      background: #fff;
+      border-radius: 18px;
+      padding: 26px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 5px 20px rgba(0,0,0,.04);
+    }
+    .stat-number { font-size: 38px; font-weight: 800; color: #b91c1c; }
+    .stat-label { color: #6b7280; margin-top: 5px; }
+
+    .heading { margin-bottom: 24px; }
+    .heading h2 { font-size: 34px; margin: 0 0 8px; }
+    .heading p { color: #6b7280; margin: 0; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.04);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { font-weight: 700; }
+    .required { color: #b91c1c; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 12px 13px;
+      background: #fff;
+      outline: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    }
+    .form-actions { display: flex; gap: 10px; margin-top: 24px; flex-wrap: wrap; }
+    .message { margin-top: 14px; padding: 12px 14px; border-radius: 10px; display: none; }
+    .message.show { display: block; }
+    .message.success { background: #ecfdf5; color: #166534; }
+    .message.error { background: #fef2f2; color: #991b1b; }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr) auto;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .results { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .result-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .result-card h3 { margin: 8px 0; }
+    .badge {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .admin-banner {
+      background: #111827;
+      color: #fff;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .admin-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .footer {
+      background: #111827;
+      color: #d1d5db;
+      text-align: center;
+      padding: 24px 15px;
+    }
+
+    @media (max-width: 800px) {
+      .header-inner { align-items: flex-start; flex-direction: column; }
+      .nav { justify-content: flex-start; }
+      .hero { padding: 38px 24px; }
+      .stats, .form-grid, .results, .search-row { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="#" onclick="showPage('home'); return false;">
+      <span class="brand-drop">🩸</span>
+      <span>
+        <div class="brand-title">Ponguruchi Nannbargal</div>
+        <div class="brand-subtitle">Blood Donation</div>
+      </span>
+    </a>
+
+    <nav class="nav">
+      <button class="nav-btn" onclick="showPage('home')">Home</button>
+      <button class="nav-btn" onclick="showPage('donor')">Become Donor</button>
+      <button class="nav-btn" onclick="showPage('find')">Find Blood</button>
+      <button class="nav-btn" onclick="showPage('request')">Request Blood</button>
+      <button class="nav-btn admin" onclick="showPage('adminLogin')">🔐 Admin Login</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section id="home" class="page active">
+    <div class="container">
+      <div class="hero">
+        <h1>Every Drop Can Save A Life</h1>
+        <p>Find a donor or register as a donor in a few seconds.</p>
+        <div class="hero-actions">
+          <button class="btn btn-blue" onclick="showPage('donor')">Become a Donor</button>
+          <button class="btn btn-light" onclick="showPage('find')">Find Blood</button>
+          <button class="btn btn-primary" onclick="showPage('request')">Emergency Blood Request</button>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div id="homeDonors" class="stat-number">0</div>
+          <div class="stat-label">Registered Donors</div>
+        </div>
+        <div class="stat">
+          <div id="homeRequests" class="stat-number">0</div>
+          <div class="stat-label">Active Requests</div>
+        </div>
+        <div class="stat">
+          <div id="homeGroups" class="stat-number">0</div>
+          <div class="stat-label">Blood Groups</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BECOME DONOR -->
+  <section id="donor" class="page">
+    <div class="container">
+      <div class="heading">
+        <h2>Become a Donor</h2>
+        <p>Register your details so people can find you when blood is needed.</p>
+      </div>
+
+      <div class="card">
+        <form id="donorForm">
+          <div class="form-grid">
+            <div class="field">
+              <label>Full Name <span class="required">*</span></label>
+              <input id="donorName" required>
+            </div>
+            <div class="field">
+              <label>Mobile Number <span class="required">*</span></label>
+              <input id="donorMobile" type="tel" required>
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input id="donorEmail" type="email">
+            </div>
+            <div class="field">
+              <label>Blood Group <span class="required">*</span></label>
+              <select id="donorBloodGroup" required>
+                <option value="">Select</option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option>
+                <option>O+</option><option>O-</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Gender</label>
+              <select id="donorGender">
+                <option value="">Select</option>
+                <option>Male</option><option>Female</option><option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Date of Birth</label>
+              <input id="donorDob" type="date">
+            </div>
+            <div class="field">
+              <label>District</label>
+              <input id="donorDistrict">
+            </div>
+            <div class="field">
+              <label>City</label>
+              <input id="donorCity">
+            </div>
+            <div class="field full">
+              <label>Address</label>
+              <textarea id="donorAddress" rows="3"></textarea>
+            </div>
+            <div class="field">
+              <label>Last Donation Date</label>
+              <input id="donorLastDonation" type="date">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-blue" id="donorSubmit" type="submit">🩸 Register Donor</button>
+            <button class="btn btn-light" type="button" onclick="showPage('home')">Cancel</button>
+          </div>
+          <div id="donorMessage" class="message"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIND BLOOD -->
+  <section id="find" class="page">
+    <div class="container">
+      <div class="heading">
+        <h2>Find Blood</h2>
+        <p>Search registered donors by blood group and location.</p>
+      </div>
+
+      <div class="card">
+        <div class="search-row">
+          <select id="findBloodGroup">
+            <option value="">All Blood Groups</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option>
+            <option>O+</option><option>O-</option>
+          </select>
+          <input id="findDistrict" placeholder="District">
+          <input id="findCity" placeholder="City">
+          <button class="btn btn-blue" onclick="searchBlood()">Search</button>
+        </div>
+        <div id="findResults" class="results"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REQUEST BLOOD -->
+  <section id="request" class="page">
+    <div class="container">
+      <div class="heading">
+        <h2>Request Blood</h2>
+        <p>Submit an urgent or normal blood requirement.</p>
+      </div>
+
+      <div class="card">
+        <form id="requestForm">
+          <div class="form-grid">
+            <div class="field">
+              <label>Patient Name <span class="required">*</span></label>
+              <input id="patientName" required>
+            </div>
+            <div class="field">
+              <label>Hospital <span class="required">*</span></label>
+              <input id="hospital" required>
+            </div>
+            <div class="field">
+              <label>Contact Number <span class="required">*</span></label>
+              <input id="contactNumber" type="tel" required>
+            </div>
+            <div class="field">
+              <label>Blood Group <span class="required">*</span></label>
+              <select id="requestBloodGroup" required>
+                <option value="">Select</option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>AB+</option><option>AB-</option>
+                <option>O+</option><option>O-</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Units Required</label>
+              <input id="unitsRequired" type="number" min="1" value="1">
+            </div>
+            <div class="field">
+              <label>District</label>
+              <input id="requestDistrict">
+            </div>
+            <div class="field">
+              <label>Location</label>
+              <input id="requestLocation">
+            </div>
+            <div class="field">
+              <label>Priority</label>
+              <select id="priority">
+                <option>Normal</option>
+                <option>Urgent</option>
+                <option>Emergency</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Required Date</label>
+              <input id="requiredDate" type="date">
+            </div>
+            <div class="field">
+              <label>Required Time</label>
+              <input id="requiredTime" type="time">
+            </div>
+            <div class="field full">
+              <label>Description</label>
+              <textarea id="requestDescription" rows="3"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" id="requestSubmit" type="submit">🚨 Submit Request</button>
+            <button class="btn btn-light" type="button" onclick="showPage('home')">Cancel</button>
+          </div>
+          <div id="requestMessage" class="message"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN LOGIN -->
+  <section id="adminLogin" class="page">
+    <div class="container">
+      <div class="heading">
+        <h2>🔐 Admin Login</h2>
+        <p>Sign in to access the administration dashboard.</p>
+      </div>
+
+      <div class="card" style="max-width:650px;margin:auto;">
+        <form id="adminLoginForm">
+          <div class="form-grid">
+            <div class="field full">
+              <label>Username <span class="required">*</span></label>
+              <input id="adminUsername" required autocomplete="username">
+            </div>
+            <div class="field full">
+              <label>Password <span class="required">*</span></label>
+              <input id="adminPassword" type="password" required autocomplete="current-password">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-blue" id="adminLoginButton" type="submit">🔐 Login</button>
+            <button class="btn btn-light" type="button" onclick="showPage('home')">Cancel</button>
+          </div>
+          <div id="adminLoginMessage" class="message"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN DASHBOARD -->
+  <section id="adminDashboard" class="page">
+    <div class="container">
+      <div class="admin-banner">
+        <h2 style="margin:0;">📊 Admin Dashboard</h2>
+        <p style="margin-bottom:0;">Manage the blood donation application.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div id="adminDonorCount" class="stat-number">0</div>
+          <div class="stat-label">Registered Donors</div>
+        </div>
+        <div class="stat">
+          <div id="adminRequestCount" class="stat-number">0</div>
+          <div class="stat-label">Blood Requests</div>
+        </div>
+        <div class="stat">
+          <div id="adminAvailableCount" class="stat-number">0</div>
+          <div class="stat-label">Available Donors</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <h3>Admin Controls</h3>
+        <div class="admin-actions">
+          <button class="btn btn-blue" onclick="loadAdminDonors()">🩸 Manage Donors</button>
+          <button class="btn btn-light" onclick="loadAdminRequests()">🚨 Blood Requests</button>
+          <button class="btn btn-light" onclick="showPage('home')">🏠 Home</button>
+          <button class="btn btn-danger" onclick="adminLogout()">🚪 Logout</button>
+        </div>
+        <div id="adminContent" style="margin-top:24px;"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  Ponguruchi Nannbargal © 2026
+</footer>
+
+<!-- Your existing connector. Keep app.js in the repository root. -->
+<script src="app.js"></script>
+
+<script>
+  function showPage(pageId) {
+    const adminPages = ["adminDashboard"];
+    if (adminPages.includes(pageId) &&
+        !localStorage.getItem("bloodDonationAdmin")) {
+      pageId = "adminLogin";
+    }
+
+    document.querySelectorAll(".page").forEach(function(page) {
+      page.classList.remove("active");
+    });
+
+    const page = document.getElementById(pageId);
+    if (page) {
+      page.classList.add("active");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    if (pageId === "adminDashboard") {
+      loadAdminDashboard();
+    }
+
+    if (pageId === "find") {
+      searchBlood();
+    }
+  }
+
+  function setMessage(id, text, type) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = "message show " + type;
+  }
+
+  async function loadHomeStats() {
+    try {
+      const result = await BloodDonationAPI.getDashboardStats();
+      const stats = result.stats || result || {};
+
+      document.getElementById("homeDonors").textContent =
+        stats.totalDonors || stats.donors || 0;
+
+      document.getElementById("homeRequests").textContent =
+        stats.activeRequests || stats.totalRequests || stats.requests || 0;
+
+      const donors = await BloodDonationAPI.getDonors();
+      const groups = new Set(
+        donors.map(d => d.Blood_Group || d.bloodGroup || d.BLOOD_GROUP)
+             .filter(Boolean)
+      );
+      document.getElementById("homeGroups").textContent = groups.size;
+    } catch (e) {
+      console.error("Home stats:", e);
+    }
+  }
+
+  document.getElementById("donorForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const button = document.getElementById("donorSubmit");
+    button.disabled = true;
+    button.textContent = "Saving...";
+
+    try {
+      await BloodDonationAPI.registerDonor({
+        name: document.getElementById("donorName").value.trim(),
+        mobile: document.getElementById("donorMobile").value.trim(),
+        email: document.getElementById("donorEmail").value.trim(),
+        bloodGroup: document.getElementById("donorBloodGroup").value,
+        gender: document.getElementById("donorGender").value,
+        dob: document.getElementById("donorDob").value,
+        district: document.getElementById("donorDistrict").value.trim(),
+        city: document.getElementById("donorCity").value.trim(),
+        address: document.getElementById("donorAddress").value.trim(),
+        lastDonationDate: document.getElementById("donorLastDonation").value,
+        available: "Yes",
+        status: "Active"
+      });
+
+      setMessage("donorMessage", "✓ Donor registered successfully.", "success");
+      this.reset();
+      loadHomeStats();
+    } catch (error) {
+      setMessage("donorMessage", error.message || "Unable to register donor.", "error");
+    }
+
+    button.disabled = false;
+    button.textContent = "🩸 Register Donor";
+  });
+
+  async function searchBlood() {
+    const container = document.getElementById("findResults");
+    container.innerHTML = "<p>Loading donors...</p>";
+
+    try {
+      const donors = await BloodDonationAPI.searchDonors({
+        bloodGroup: document.getElementById("findBloodGroup").value,
+        district: document.getElementById("findDistrict").value.trim(),
+        city: document.getElementById("findCity").value.trim(),
+        available: true
+      });
+
+      if (!donors.length) {
+        container.innerHTML = "<p>No matching donors found.</p>";
+        return;
+      }
+
+      container.innerHTML = donors.map(function(donor) {
+        const name = donor.Name || donor.name || "Donor";
+        const group = donor.Blood_Group || donor.bloodGroup || "";
+        const mobile = donor.Mobile || donor.mobile || "";
+        const city = donor.City || donor.city || "";
+        const district = donor.District || donor.district || "";
+
+        return `
+          <div class="result-card">
+            <span class="badge">${escapeHtml(group)}</span>
+            <h3>${escapeHtml(name)}</h3>
+            <p>📱 ${escapeHtml(mobile)}</p>
+            <p>📍 ${escapeHtml(city)} ${escapeHtml(district)}</p>
+          </div>
+        `;
+      }).join("");
+    } catch (error) {
+      container.innerHTML =
+        "<p>Unable to search donors. Please try again.</p>";
+      console.error(error);
+    }
+  }
+
+  document.getElementById("requestForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const button = document.getElementById("requestSubmit");
+    button.disabled = true;
+    button.textContent = "Submitting...";
+
+    try {
+      await BloodDonationAPI.createBloodRequest({
+        patientName: document.getElementById("patientName").value.trim(),
+        hospital: document.getElementById("hospital").value.trim(),
+        contactNumber: document.getElementById("contactNumber").value.trim(),
+        bloodGroup: document.getElementById("requestBloodGroup").value,
+        unitsRequired: document.getElementById("unitsRequired").value,
+        district: document.getElementById("requestDistrict").value.trim(),
+        location: document.getElementById("requestLocation").value.trim(),
+        priority: document.getElementById("priority").value,
+        requiredDate: document.getElementById("requiredDate").value,
+        requiredTime: document.getElementById("requiredTime").value,
+        description: document.getElementById("requestDescription").value.trim()
+      });
+
+      setMessage("requestMessage", "✓ Blood request submitted successfully.", "success");
+      this.reset();
+      loadHomeStats();
+    } catch (error) {
+      setMessage("requestMessage", error.message || "Unable to submit request.", "error");
+    }
+
+    button.disabled = false;
+    button.textContent = "🚨 Submit Request";
+  });
+
+  document.getElementById("adminLoginForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const button = document.getElementById("adminLoginButton");
+    button.disabled = true;
+    button.textContent = "Logging in...";
+
+    try {
+      const username = document.getElementById("adminUsername").value.trim();
+      const password = document.getElementById("adminPassword").value;
+
+      const result = await BloodDonationAPI.login(username, password);
+
+      if (!result.success) {
+        throw new Error(result.error || "Invalid username or password.");
+      }
+
+      const user = result.user || {};
+
+      if (String(user.role || "").toLowerCase() !== "admin") {
+        throw new Error("This account does not have admin access.");
+      }
+
+      localStorage.setItem("bloodDonationAdmin", JSON.stringify(user));
+
+      setMessage("adminLoginMessage", "✓ Login successful.", "success");
+      document.getElementById("adminLoginForm").reset();
+
+      showPage("adminDashboard");
+    } catch (error) {
+      setMessage("adminLoginMessage", error.message || "Login failed.", "error");
+    }
+
+    button.disabled = false;
+    button.textContent = "🔐 Login";
+  });
+
+  async function loadAdminDashboard() {
+    if (!localStorage.getItem("bloodDonationAdmin")) {
+      showPage("adminLogin");
+      return;
+    }
+
+    try {
+      const result = await BloodDonationAPI.getDashboardStats();
+      const stats = result.stats || result || {};
+
+      document.getElementById("adminDonorCount").textContent =
+        stats.totalDonors || stats.donors || 0;
+
+      document.getElementById("adminRequestCount").textContent =
+        stats.activeRequests || stats.totalRequests || stats.requests || 0;
+
+      document.getElementById("adminAvailableCount").textContent =
+        stats.availableDonors || 0;
+    } catch (error) {
+      console.error("Admin dashboard:", error);
+    }
+  }
+
+  async function loadAdminDonors() {
+    const content = document.getElementById("adminContent");
+
+    if (!localStorage.getItem("bloodDonationAdmin")) {
+      showPage("adminLogin");
+      return;
+    }
+
+    content.innerHTML = "<p>Loading donors...</p>";
+
+    try {
+      const donors = await BloodDonationAPI.getDonors();
+
+      if (!donors.length) {
+        content.innerHTML = "<p>No donors found.</p>";
+        return;
+      }
+
+      content.innerHTML = donors.map(function(donor) {
+        const name = donor.Name || donor.name || "Donor";
+        const group = donor.Blood_Group || donor.bloodGroup || "";
+        const mobile = donor.Mobile || donor.mobile || "";
+        const city = donor.City || donor.city || "";
+
+        return `
+          <div class="result-card" style="margin-bottom:12px;">
+            <span class="badge">${escapeHtml(group)}</span>
+            <h3>${escapeHtml(name)}</h3>
+            <p>📱 ${escapeHtml(mobile)}</p>
+            <p>📍 ${escapeHtml(city)}</p>
+          </div>
+        `;
+      }).join("");
+    } catch (error) {
+      content.innerHTML = "<p>Unable to load donors.</p>";
+      console.error(error);
+    }
+  }
+
+  async function loadAdminRequests() {
+    const content = document.getElementById("adminContent");
+
+    if (!localStorage.getItem("bloodDonationAdmin")) {
+      showPage("adminLogin");
+      return;
+    }
+
+    content.innerHTML = "<p>Loading requests...</p>";
+
+    try {
+      const requests = await BloodDonationAPI.getBloodRequests();
+
+      if (!requests.length) {
+        content.innerHTML = "<p>No blood requests found.</p>";
+        return;
+      }
+
+      content.innerHTML = requests.map(function(request) {
+        const group = request.Blood_Group || request.bloodGroup || "";
+        const patient = request.Patient_Name || request.patientName || "Patient";
+        const hospital = request.Hospital || request.hospital || "";
+        const contact = request.Contact_Number || request.contactNumber || "";
+
+        return `
+          <div class="result-card" style="margin-bottom:12px;">
+            <span class="badge">${escapeHtml(group)}</span>
+            <h3>${escapeHtml(patient)}</h3>
+            <p>🏥 ${escapeHtml(hospital)}</p>
+            <p>📱 ${escapeHtml(contact)}</p>
+          </div>
+        `;
+      }).join("");
+    } catch (error) {
+      content.innerHTML = "<p>Unable to load requests.</p>";
+      console.error(error);
+    }
+  }
+
+  function adminLogout() {
+    localStorage.removeItem("bloodDonationAdmin");
+    document.getElementById("adminContent").innerHTML = "";
+    showPage("home");
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    loadHomeStats();
+  });
+</script>
+
+</body>
+</html>
