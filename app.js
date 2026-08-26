@@ -20,7 +20,6 @@ async function api(action, data = {}) {
   try {
 
     const response = await fetch(API_URL, {
-
       method: "POST",
 
       headers: {
@@ -28,23 +27,36 @@ async function api(action, data = {}) {
       },
 
       body: JSON.stringify(payload)
-
     });
 
+
     const text = await response.text();
+
+    console.log(
+      "Apps Script response:",
+      text
+    );
+
 
     let result;
 
     try {
+
       result = JSON.parse(text);
+
     } catch (error) {
 
-      console.error("Invalid API response:", text);
+      console.error(
+        "Invalid API response:",
+        text
+      );
 
       throw new Error(
         "Invalid response from Google Apps Script."
       );
+
     }
+
 
     if (!result.success) {
 
@@ -52,9 +64,12 @@ async function api(action, data = {}) {
         result.error ||
         "Google Apps Script request failed."
       );
+
     }
 
+
     return result;
+
 
   } catch (error) {
 
@@ -64,7 +79,9 @@ async function api(action, data = {}) {
     );
 
     throw error;
+
   }
+
 }
 
 
@@ -97,7 +114,9 @@ async function testApi() {
       success: false,
       error: error.message
     };
+
   }
+
 }
 
 
@@ -160,6 +179,7 @@ async function registerDonor(donor) {
     status:
       donor.status ||
       "Active"
+
   };
 
 
@@ -183,6 +203,7 @@ async function registerDonor(donor) {
 
 
   return result;
+
 }
 
 
@@ -197,7 +218,9 @@ async function getDonors() {
       "getDonors"
     );
 
+
   return result.donors || [];
+
 }
 
 
@@ -232,7 +255,9 @@ async function searchDonors(filters = {}) {
       }
     );
 
+
   return result.donors || [];
+
 }
 
 
@@ -296,6 +321,7 @@ async function createBloodRequest(request) {
 
     }
   );
+
 }
 
 
@@ -310,7 +336,9 @@ async function getBloodRequests() {
       "getRequests"
     );
 
+
   return result.requests || [];
+
 }
 
 
@@ -323,6 +351,7 @@ async function getDashboardStats() {
   return await api(
     "getDashboardStats"
   );
+
 }
 
 
@@ -337,7 +366,9 @@ async function getSettings() {
       "getSettings"
     );
 
+
   return result.settings || {};
+
 }
 
 
@@ -352,7 +383,9 @@ async function getDashboard() {
       "getDashboard"
     );
 
+
   return result.dashboard || [];
+
 }
 
 
@@ -392,27 +425,54 @@ async function registerUser(user) {
 
     }
   );
+
 }
 
 
 // ============================================================
-// LOGIN
+// ADMIN / USER LOGIN
 // ============================================================
 
 async function login(username, password) {
 
-  return await api(
-    "login",
-    {
+  if (!username || !password) {
 
-      username:
-        username,
+    throw new Error(
+      "Username and password are required."
+    );
 
-      password:
-        password
+  }
 
-    }
+
+  console.log(
+    "Attempting login:",
+    username
   );
+
+
+  const result =
+    await api(
+      "login",
+      {
+
+        username:
+          username,
+
+        password:
+          password
+
+      }
+    );
+
+
+  console.log(
+    "Login response:",
+    result
+  );
+
+
+  return result;
+
 }
 
 
@@ -426,6 +486,7 @@ async function addDonation(donation) {
     "addDonation",
     donation
   );
+
 }
 
 
@@ -435,11 +496,14 @@ async function getDonationHistory(donorId = "") {
     await api(
       "getHistory",
       {
-        donorId: donorId
+        donorId:
+          donorId
       }
     );
 
+
   return result.history || [];
+
 }
 
 
@@ -453,11 +517,14 @@ async function getNotifications(userId = "") {
     await api(
       "getNotifications",
       {
-        userId: userId
+        userId:
+          userId
       }
     );
 
+
   return result.notifications || [];
+
 }
 
 
@@ -467,11 +534,90 @@ async function addNotification(notification) {
     "addNotification",
     notification
   );
+
 }
 
 
 // ============================================================
-// GLOBAL EXPORT
+// SAVE SETTING
+// ============================================================
+
+async function saveSetting(
+  setting,
+  value,
+  userId = ""
+) {
+
+  return await api(
+    "saveSetting",
+    {
+
+      setting:
+        setting,
+
+      value:
+        value,
+
+      userId:
+        userId
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// ADMIN HELPERS
+// ============================================================
+
+async function adminLogin(
+  username,
+  password
+) {
+
+  const result =
+    await login(
+      username,
+      password
+    );
+
+
+  if (!result.success) {
+
+    throw new Error(
+      result.error ||
+      "Login failed."
+    );
+
+  }
+
+
+  const user =
+    result.user ||
+    {};
+
+
+  if (
+    String(
+      user.role || ""
+    ).toLowerCase() !== "admin"
+  ) {
+
+    throw new Error(
+      "This account does not have administrator access."
+    );
+
+  }
+
+
+  return result;
+
+}
+
+
+// ============================================================
+// GLOBAL API EXPORT
 // ============================================================
 
 window.BloodDonationAPI = {
@@ -499,6 +645,10 @@ window.BloodDonationAPI = {
   registerUser,
 
   login,
+
+  adminLogin,
+
+  saveSetting,
 
   addDonation,
 
