@@ -1,15 +1,303 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#b91c1c">
-<link rel="manifest" href="manifest.json">
-<title>Blood Donation App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Ponguruchi Nannbargal</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div id="app"><div class="loading">Loading Blood Donation App…</div></div>
+
+<header class="header">
+    <h2>🩸 Ponguruchi Nannbargal</h2>
+
+    <nav>
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('donor')">Become Donor</button>
+        <button onclick="showSection('find')">Find Blood</button>
+        <button onclick="showSection('request')">Request Blood</button>
+    </nav>
+</header>
+
+
+<section id="home" class="page">
+
+    <h1>Every Drop Can Save A Life</h1>
+
+    <p>Register as a donor or find blood instantly.</p>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3 id="donorCount">0</h3>
+            <p>Registered Donors</p>
+        </div>
+
+        <div class="card">
+            <h3 id="requestCount">0</h3>
+            <p>Blood Requests</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section id="donor" class="page" style="display:none">
+
+<h2>Become A Donor</h2>
+
+<form id="donorForm">
+
+<input id="name" placeholder="Full Name" required>
+
+<input id="mobile" placeholder="Mobile Number" required>
+
+<input id="email" type="email" placeholder="Email">
+
+<select id="bloodGroup" required>
+
+<option value="">Blood Group</option>
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>AB+</option>
+<option>AB-</option>
+<option>O+</option>
+<option>O-</option>
+
+</select>
+
+<select id="gender">
+
+<option>Male</option>
+<option>Female</option>
+
+</select>
+
+<input id="dob" type="date">
+
+<input id="district" placeholder="District">
+
+<input id="city" placeholder="City">
+
+<textarea id="address" placeholder="Address"></textarea>
+
+<input id="lastDonationDate" type="date">
+
+<button type="submit">Register Donor</button>
+
+</form>
+
+</section>
+
+
+
+<section id="find" class="page" style="display:none">
+
+<h2>Find Blood Donors</h2>
+
+<select id="searchGroup">
+
+<option value="">All Blood Groups</option>
+
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>AB+</option>
+<option>AB-</option>
+<option>O+</option>
+<option>O-</option>
+
+</select>
+
+<button onclick="loadDonors()">Search</button>
+
+<div id="donorList"></div>
+
+</section>
+
+
+
+
+<section id="request" class="page" style="display:none">
+
+<h2>Blood Request</h2>
+
+<form id="requestForm">
+
+<input id="patientName" placeholder="Patient Name" required>
+
+<input id="hospital" placeholder="Hospital" required>
+
+<input id="contactNumber" placeholder="Contact Number" required>
+
+<select id="reqBloodGroup" required>
+
+<option value="">Blood Group</option>
+
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>AB+</option>
+<option>AB-</option>
+<option>O+</option>
+<option>O-</option>
+
+</select>
+
+<input id="units" type="number" placeholder="Units Required">
+
+<button type="submit">Send Request</button>
+
+</form>
+
+</section>
+
+
 <script src="app.js"></script>
+
+<script>
+
+function showSection(id){
+
+document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+
+document.getElementById(id).style.display='block';
+
+if(id==="find") loadDonors();
+
+}
+
+
+document.getElementById("donorForm").addEventListener("submit",async function(e){
+
+e.preventDefault();
+
+const donor={
+
+name:name.value,
+mobile:mobile.value,
+email:email.value,
+bloodGroup:bloodGroup.value,
+gender:gender.value,
+dob:dob.value,
+district:district.value,
+city:city.value,
+address:address.value,
+lastDonationDate:lastDonationDate.value,
+available:"Yes",
+status:"Active"
+
+};
+
+try{
+
+await BloodDonationAPI.registerDonor(donor);
+
+alert("Donor Registered Successfully");
+
+this.reset();
+
+loadStats();
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
+
+
+document.getElementById("requestForm").addEventListener("submit",async function(e){
+
+e.preventDefault();
+
+try{
+
+await BloodDonationAPI.createBloodRequest({
+
+patientName:patientName.value,
+hospital:hospital.value,
+contactNumber:contactNumber.value,
+bloodGroup:reqBloodGroup.value,
+unitsRequired:units.value
+
+});
+
+alert("Blood Request Sent");
+
+this.reset();
+
+loadStats();
+
+}catch(err){
+
+alert(err.message);
+
+}
+
+});
+
+
+async function loadDonors(){
+
+const group=searchGroup.value;
+
+const donors=await BloodDonationAPI.searchDonors({
+
+bloodGroup:group
+
+});
+
+let html="";
+
+donors.forEach(d=>{
+
+html+=`
+
+<div class="card">
+
+<h3>${d.Name}</h3>
+
+<p>${d.Blood_Group}</p>
+
+<p>${d.Mobile}</p>
+
+<p>${d.City}</p>
+
+</div>
+
+`;
+
+});
+
+donorList.innerHTML=html;
+
+}
+
+
+async function loadStats(){
+
+const stats=await BloodDonationAPI.getDashboardStats();
+
+donorCount.innerText=stats.totalDonors||0;
+
+requestCount.innerText=stats.totalRequests||0;
+
+}
+
+loadStats();
+
+</script>
+
 </body>
 </html>
