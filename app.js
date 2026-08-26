@@ -17,9 +17,11 @@ async function api(action, data = {}) {
     ...data
   };
 
+  let response;
+
   try {
 
-    const response = await fetch(API_URL, {
+    response = await fetch(API_URL, {
       method: "POST",
 
       headers: {
@@ -29,180 +31,127 @@ async function api(action, data = {}) {
       body: JSON.stringify(payload)
     });
 
+  } catch (error) {
 
-    const text = await response.text();
+    console.error("Network/API error:", error);
 
-    console.log(
-      "Apps Script response:",
-      text
+    throw new Error(
+      "Cannot connect to Google Apps Script. Check the Apps Script deployment."
     );
+  }
 
 
-    let result;
+  const text = await response.text();
 
-    try {
+  let result;
 
-      result = JSON.parse(text);
+  try {
 
-    } catch (error) {
-
-      console.error(
-        "Invalid API response:",
-        text
-      );
-
-      throw new Error(
-        "Invalid response from Google Apps Script."
-      );
-
-    }
-
-
-    if (!result.success) {
-
-      throw new Error(
-        result.error ||
-        "Google Apps Script request failed."
-      );
-
-    }
-
-
-    return result;
-
+    result = JSON.parse(text);
 
   } catch (error) {
 
     console.error(
-      "API Error:",
-      error
+      "Invalid Apps Script response:",
+      text
     );
 
-    throw error;
-
+    throw new Error(
+      "Google Apps Script returned an invalid response."
+    );
   }
 
+
+  if (!result || result.success !== true) {
+
+    throw new Error(
+      result && result.error
+        ? result.error
+        : "Google Apps Script request failed."
+    );
+  }
+
+
+  return result;
 }
 
 
 // ============================================================
-// TEST API CONNECTION
+// HEALTH CHECK
 // ============================================================
 
 async function testApi() {
 
-  try {
-
-    const result =
-      await api("health");
-
-    console.log(
-      "Google Apps Script connected:",
-      result
-    );
-
-    return result;
-
-  } catch (error) {
-
-    console.error(
-      "API connection failed:",
-      error
-    );
-
-    return {
-      success: false,
-      error: error.message
-    };
-
-  }
+  return await api("health");
 
 }
 
 
 // ============================================================
-// REGISTER DONOR
+// DONOR REGISTRATION
 // ============================================================
 
-async function registerDonor(donor) {
+async function registerDonor(donor = {}) {
 
-  const data = {
+  return await api(
+    "registerDonor",
+    {
 
-    name:
-      donor.name ||
-      "",
+      name:
+        donor.name ||
+        "",
 
-    mobile:
-      donor.mobile ||
-      "",
+      mobile:
+        donor.mobile ||
+        "",
 
-    email:
-      donor.email ||
-      "",
+      email:
+        donor.email ||
+        "",
 
-    bloodGroup:
-      donor.bloodGroup ||
-      donor.blood_group ||
-      donor.Blood_Group ||
-      "",
+      bloodGroup:
+        donor.bloodGroup ||
+        donor.blood_group ||
+        donor.Blood_Group ||
+        "",
 
-    gender:
-      donor.gender ||
-      "",
+      gender:
+        donor.gender ||
+        "",
 
-    dob:
-      donor.dob ||
-      "",
+      dob:
+        donor.dob ||
+        "",
 
-    district:
-      donor.district ||
-      "",
+      district:
+        donor.district ||
+        "",
 
-    city:
-      donor.city ||
-      "",
+      city:
+        donor.city ||
+        "",
 
-    address:
-      donor.address ||
-      "",
+      address:
+        donor.address ||
+        "",
 
-    lastDonationDate:
-      donor.lastDonationDate ||
-      donor.last_donation_date ||
-      "",
+      lastDonationDate:
+        donor.lastDonationDate ||
+        donor.last_donation_date ||
+        donor.Last_Donation_Date ||
+        "",
 
-    available:
-      donor.available !== undefined
-        ? donor.available
-        : "Yes",
+      available:
+        donor.available !== undefined
+          ? donor.available
+          : "Yes",
 
-    status:
-      donor.status ||
-      "Active"
+      status:
+        donor.status ||
+        "Active"
 
-  };
-
-
-  console.log(
-    "Sending donor to Google Sheets:",
-    data
+    }
   );
-
-
-  const result =
-    await api(
-      "registerDonor",
-      data
-    );
-
-
-  console.log(
-    "Donor successfully saved:",
-    result
-  );
-
-
-  return result;
 
 }
 
@@ -214,12 +163,11 @@ async function registerDonor(donor) {
 async function getDonors() {
 
   const result =
-    await api(
-      "getDonors"
-    );
+    await api("getDonors");
 
-
-  return result.donors || [];
+  return Array.isArray(result.donors)
+    ? result.donors
+    : [];
 
 }
 
@@ -256,7 +204,9 @@ async function searchDonors(filters = {}) {
     );
 
 
-  return result.donors || [];
+  return Array.isArray(result.donors)
+    ? result.donors
+    : [];
 
 }
 
@@ -265,7 +215,7 @@ async function searchDonors(filters = {}) {
 // CREATE BLOOD REQUEST
 // ============================================================
 
-async function createBloodRequest(request) {
+async function createBloodRequest(request = {}) {
 
   return await api(
     "createRequest",
@@ -293,7 +243,7 @@ async function createBloodRequest(request) {
       unitsRequired:
         request.unitsRequired ||
         request.units_required ||
-        "",
+        1,
 
       district:
         request.district ||
@@ -332,12 +282,11 @@ async function createBloodRequest(request) {
 async function getBloodRequests() {
 
   const result =
-    await api(
-      "getRequests"
-    );
+    await api("getRequests");
 
-
-  return result.requests || [];
+  return Array.isArray(result.requests)
+    ? result.requests
+    : [];
 
 }
 
@@ -348,9 +297,36 @@ async function getBloodRequests() {
 
 async function getDashboardStats() {
 
-  return await api(
-    "getDashboardStats"
-  );
+  const result =
+    await api("getDashboardStats");
+
+
+  return {
+
+    success: true,
+
+    stats:
+      result.stats ||
+      {}
+
+  };
+
+}
+
+
+// ============================================================
+// DASHBOARD DATA
+// ============================================================
+
+async function getDashboard() {
+
+  const result =
+    await api("getDashboard");
+
+
+  return Array.isArray(result.dashboard)
+    ? result.dashboard
+    : [];
 
 }
 
@@ -362,9 +338,7 @@ async function getDashboardStats() {
 async function getSettings() {
 
   const result =
-    await api(
-      "getSettings"
-    );
+    await api("getSettings");
 
 
   return result.settings || {};
@@ -373,27 +347,10 @@ async function getSettings() {
 
 
 // ============================================================
-// DASHBOARD
-// ============================================================
-
-async function getDashboard() {
-
-  const result =
-    await api(
-      "getDashboard"
-    );
-
-
-  return result.dashboard || [];
-
-}
-
-
-// ============================================================
 // USER REGISTRATION
 // ============================================================
 
-async function registerUser(user) {
+async function registerUser(user = {}) {
 
   return await api(
     "register",
@@ -430,48 +387,30 @@ async function registerUser(user) {
 
 
 // ============================================================
-// ADMIN / USER LOGIN
+// LOGIN
 // ============================================================
 
-async function login(username, password) {
+async function login(
+  username,
+  password
+) {
 
-  if (!username || !password) {
+  return await api(
+    "login",
+    {
 
-    throw new Error(
-      "Username and password are required."
-    );
+      username:
+        String(
+          username || ""
+        ).trim(),
 
-  }
+      password:
+        String(
+          password || ""
+        )
 
-
-  console.log(
-    "Attempting login:",
-    username
+    }
   );
-
-
-  const result =
-    await api(
-      "login",
-      {
-
-        username:
-          username,
-
-        password:
-          password
-
-      }
-    );
-
-
-  console.log(
-    "Login response:",
-    result
-  );
-
-
-  return result;
 
 }
 
@@ -480,7 +419,9 @@ async function login(username, password) {
 // DONATION HISTORY
 // ============================================================
 
-async function addDonation(donation) {
+async function addDonation(
+  donation = {}
+) {
 
   return await api(
     "addDonation",
@@ -490,19 +431,24 @@ async function addDonation(donation) {
 }
 
 
-async function getDonationHistory(donorId = "") {
+async function getDonationHistory(
+  donorId = ""
+) {
 
   const result =
     await api(
       "getHistory",
       {
-        donorId:
-          donorId
+        donorId: donorId
       }
     );
 
 
-  return result.history || [];
+  return Array.isArray(
+    result.history
+  )
+    ? result.history
+    : [];
 
 }
 
@@ -511,24 +457,31 @@ async function getDonationHistory(donorId = "") {
 // NOTIFICATIONS
 // ============================================================
 
-async function getNotifications(userId = "") {
+async function getNotifications(
+  userId = ""
+) {
 
   const result =
     await api(
       "getNotifications",
       {
-        userId:
-          userId
+        userId: userId
       }
     );
 
 
-  return result.notifications || [];
+  return Array.isArray(
+    result.notifications
+  )
+    ? result.notifications
+    : [];
 
 }
 
 
-async function addNotification(notification) {
+async function addNotification(
+  notification = {}
+) {
 
   return await api(
     "addNotification",
@@ -539,85 +492,7 @@ async function addNotification(notification) {
 
 
 // ============================================================
-// SAVE SETTING
-// ============================================================
-
-async function saveSetting(
-  setting,
-  value,
-  userId = ""
-) {
-
-  return await api(
-    "saveSetting",
-    {
-
-      setting:
-        setting,
-
-      value:
-        value,
-
-      userId:
-        userId
-
-    }
-  );
-
-}
-
-
-// ============================================================
-// ADMIN HELPERS
-// ============================================================
-
-async function adminLogin(
-  username,
-  password
-) {
-
-  const result =
-    await login(
-      username,
-      password
-    );
-
-
-  if (!result.success) {
-
-    throw new Error(
-      result.error ||
-      "Login failed."
-    );
-
-  }
-
-
-  const user =
-    result.user ||
-    {};
-
-
-  if (
-    String(
-      user.role || ""
-    ).toLowerCase() !== "admin"
-  ) {
-
-    throw new Error(
-      "This account does not have administrator access."
-    );
-
-  }
-
-
-  return result;
-
-}
-
-
-// ============================================================
-// GLOBAL API EXPORT
+// GLOBAL API
 // ============================================================
 
 window.BloodDonationAPI = {
@@ -627,35 +502,24 @@ window.BloodDonationAPI = {
   testApi,
 
   registerDonor,
-
   getDonors,
-
   searchDonors,
 
   createBloodRequest,
-
   getBloodRequests,
 
   getDashboardStats,
+  getDashboard,
 
   getSettings,
 
-  getDashboard,
-
   registerUser,
-
   login,
 
-  adminLogin,
-
-  saveSetting,
-
   addDonation,
-
   getDonationHistory,
 
   getNotifications,
-
   addNotification
 
 };
@@ -667,9 +531,26 @@ window.BloodDonationAPI = {
 
 document.addEventListener(
   "DOMContentLoaded",
-  function() {
+  async function () {
 
-    testApi();
+    try {
+
+      const result =
+        await testApi();
+
+      console.log(
+        "Blood Donation API connected:",
+        result
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Blood Donation API connection failed:",
+        error
+      );
+
+    }
 
   }
 );
