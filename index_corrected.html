@@ -588,8 +588,8 @@
         city: document.getElementById("donorCity").value.trim(),
         address: document.getElementById("donorAddress").value.trim(),
         lastDonationDate: document.getElementById("donorLastDonation").value,
-        available: "Yes",
-        status: "Active"
+        available: document.getElementById("donorAvailable").value,
+        status: document.getElementById("donorStatus").value
       });
 
       setMessage("donorMessage", "✓ Donor registered successfully.", "success");
