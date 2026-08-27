@@ -400,6 +400,49 @@ async function getSettings() {
 }
 
 // ============================================================
+// SAVE ALL PAGE LAYOUT SETTINGS
+// ============================================================
+
+async function saveSettings(settings) {
+
+  const admin = requireAdmin();
+
+  if (!settings || typeof settings !== "object") {
+    throw new Error("Invalid page settings.");
+  }
+
+  const settingNames = [
+    "appName",
+    "copyrightName",
+    "logo",
+    "primaryColor",
+    "headerColor",
+    "panelColor",
+    "backgroundColor",
+    "headerVisible",
+    "headerSubtitle",
+    "footerVisible",
+    "footerText"
+  ];
+
+  for (const setting of settingNames) {
+
+    await api("saveSetting", {
+      userId: admin.userId,
+      setting: setting,
+      value:
+        settings[setting] !== undefined
+          ? settings[setting]
+          : ""
+    });
+  }
+
+  return {
+    success: true
+  };
+}
+
+// ============================================================
 // ADMIN SAVE SETTING
 // ============================================================
 
