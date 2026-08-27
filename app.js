@@ -1930,6 +1930,8 @@ window.BloodDonationAPI = {
 
   getSettings,
 
+  saveSettings,
+
   saveSetting,
 
   registerUser,
