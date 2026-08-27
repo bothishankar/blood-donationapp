@@ -399,6 +399,24 @@ async function getSettings() {
   return result.settings || {};
 }
 
+// ============================================================
+// ADMIN SAVE SETTING
+// ============================================================
+
+async function saveSetting(setting, value) {
+
+  const admin = requireAdmin();
+
+  if (!setting) {
+    throw new Error("Setting name is required.");
+  }
+
+  return await api("saveSetting", {
+    userId: admin.userId,
+    setting: setting,
+    value: value
+  });
+}
 
 // ============================================================
 // USER REGISTRATION
@@ -801,7 +819,7 @@ async function loadAdminDonors() {
 
               ${donors.map(
                 function(donor) {
-
+ 
                   const donorId =
                     donor.donorId ||
                     donor.Donor_ID ||
@@ -1868,6 +1886,8 @@ window.BloodDonationAPI = {
   getDashboard,
 
   getSettings,
+
+  saveSetting,
 
   registerUser,
 
