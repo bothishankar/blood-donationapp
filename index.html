@@ -2280,7 +2280,7 @@ async function showAdminSettings() {
     );
 
   if (logoInput) {
-    logoInput.value = "";
+    logoInput.value = settings.logo || "";
   }
 
 
@@ -2309,7 +2309,7 @@ async function savePageSettings() {
 
   if (
     logoUrl &&
-    !/^https?:\/\//i.test(logoUrl)
+    !/^https?:\\/\\//i.test(logoUrl)
   ) {
     setMessage(
       "settingsMessage",
