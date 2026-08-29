@@ -2297,118 +2297,71 @@ async function showAdminSettings() {
 async function savePageSettings() {
 
   const logoInput =
-    document.getElementById(
-      "settingLogo"
-    );
-
+    document.getElementById("settingLogo");
 
   const current =
     await getPageSettings();
 
+  const logoUrl =
+    logoInput
+      ? logoInput.value.trim()
+      : (current.logo || "");
+
+  if (
+    logoUrl &&
+    !/^https?:\/\//i.test(logoUrl)
+  ) {
+    setMessage(
+      "settingsMessage",
+      "Please enter a valid logo URL starting with http:// or https://.",
+      "error"
+    );
+    return;
+  }
 
   const settings = {
 
     appName:
-      document.getElementById(
-        "settingAppName"
-      ).value.trim() ||
+      document.getElementById("settingAppName").value.trim() ||
       DEFAULT_PAGE_SETTINGS.appName,
 
-
     copyrightName:
-      document.getElementById(
-        "settingCopyright"
-      ).value.trim() ||
+      document.getElementById("settingCopyright").value.trim() ||
       DEFAULT_PAGE_SETTINGS.copyrightName,
 
-
     logo:
-      current.logo || "",
-
+      logoUrl,
 
     primaryColor:
-      document.getElementById(
-        "settingPrimaryColor"
-      ).value,
-
+      document.getElementById("settingPrimaryColor").value,
 
     headerColor:
-      document.getElementById(
-        "settingHeaderColor"
-      ).value,
-
+      document.getElementById("settingHeaderColor").value,
 
     panelColor:
-      document.getElementById(
-        "settingPanelColor"
-      ).value,
-
+      document.getElementById("settingPanelColor").value,
 
     backgroundColor:
-      document.getElementById(
-        "settingBackgroundColor"
-      ).value,
-
+      document.getElementById("settingBackgroundColor").value,
 
     headerVisible:
-      document.getElementById(
-        "settingHeaderVisible"
-      ).value,
-
+      document.getElementById("settingHeaderVisible").value,
 
     headerSubtitle:
-      document.getElementById(
-        "settingHeaderSubtitle"
-      ).value.trim() ||
+      document.getElementById("settingHeaderSubtitle").value.trim() ||
       DEFAULT_PAGE_SETTINGS.headerSubtitle,
 
-
     footerVisible:
-      document.getElementById(
-        "settingFooterVisible"
-      ).value,
-
+      document.getElementById("settingFooterVisible").value,
 
     footerText:
-      document.getElementById(
-        "settingFooterText"
-      ).value.trim() ||
-      document.getElementById(
-        "settingCopyright"
-      ).value.trim() ||
+      document.getElementById("settingFooterText").value.trim() ||
+      document.getElementById("settingCopyright").value.trim() ||
       DEFAULT_PAGE_SETTINGS.footerText
   };
 
-
-  /* =======================================================
-     LOGO UPLOAD
-     ======================================================= */
-
-  if (
-    logoInput &&
-    logoInput.files &&
-    logoInput.files[0]
-  ) {
-
-    const file =
-      logoInput.files[0];
-
-
-    if (
-      !file.type.startsWith(
-        "image/"
-      )
-    ) {
-
-      setMessage(
-        "settingsMessage",
-        "Please select an image file.",
-        "error"
-      );
-
-      return;
-    }
-
+  await saveSettingsObject(settings);
+}
 
     const reader =
       new FileReader();
