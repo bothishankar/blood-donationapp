@@ -23,12 +23,13 @@ async function api(action, data = {}) {
   try {
 
     response = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
-      body: JSON.stringify(payload)
-    });
+       method: "POST",
+       redirect: "follow",
+       headers: {
+         "Content-Type": "text/plain;charset=utf-8"
+       },
+       body: JSON.stringify(payload)
+     });
 
   } catch (error) {
 
