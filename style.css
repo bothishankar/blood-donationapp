@@ -2211,3 +2211,412 @@
     right: -4px;
   }
 }
+
+
+/* =========================================================
+   MOBILE HEADER ACTIONS
+   Notification stays at the top.
+   Admin stays beside the main header / About area.
+   ========================================================= */
+
+.mobile-header-actions {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.mobile-admin-btn {
+  white-space: nowrap;
+  padding: 9px 11px;
+  font-size: 12px;
+}
+
+/* Desktop: the existing desktop nav continues to show
+   Notification + Admin in the navigation area. */
+@media (min-width: 851px) {
+  .mobile-header-actions {
+    display: none;
+  }
+}
+
+/* Mobile/tablet: show Notification + Admin in the top header,
+   because .desktop-nav is hidden at this breakpoint. */
+@media (max-width: 850px) {
+  .mobile-header-actions {
+    display: flex;
+  }
+
+  .header-inner {
+    gap: 10px;
+  }
+
+  .mobile-menu-btn {
+    flex: 0 0 44px;
+  }
+
+  .brand {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .brand-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .notification-btn {
+    flex: 0 0 auto;
+  }
+
+  .mobile-admin-btn {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .mobile-header-actions {
+    gap: 6px;
+  }
+
+  .mobile-admin-btn {
+    min-height: 38px;
+    padding: 7px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+  }
+
+  .notification-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Very narrow phones: keep both controls visible without
+   changing the rest of the Premium V2 layout. */
+@media (max-width: 390px) {
+  .brand {
+    max-width: 150px;
+  }
+
+  .brand-name {
+    font-size: 14px;
+  }
+
+  .brand-meta {
+    font-size: 9px;
+  }
+
+  .mobile-admin-btn {
+    padding-left: 7px;
+    padding-right: 7px;
+    font-size: 10px;
+  }
+}
+
+
+/* =========================================================
+   FINAL MOBILE HEADER
+   Only Notification stays on the top-right.
+   Admin Login is opened from the hamburger menu.
+   ========================================================= */
+
+.mobile-header-actions {
+  display: none;
+  align-items: center;
+  margin-left: auto;
+}
+
+.mobile-header-actions .mobile-admin-btn {
+  display: none !important;
+}
+
+.mobile-menu-panel {
+  display: none;
+}
+
+@media (max-width: 850px) {
+  .mobile-header-actions {
+    display: flex;
+  }
+
+  .mobile-menu-panel {
+    position: fixed;
+    top: 78px;
+    left: 14px;
+    z-index: 1100;
+    width: min(230px, calc(100vw - 28px));
+    padding: 10px;
+    border: 1px solid rgba(219,229,245,0.95);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.97);
+    box-shadow: 0 18px 45px rgba(16,42,86,0.18);
+    backdrop-filter: blur(18px);
+  }
+
+  .mobile-menu-panel.show {
+    display: block;
+    animation: mobileMenuIn 0.16s ease-out;
+  }
+
+  .mobile-menu-admin {
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 13px;
+    background: #f4f7fc;
+    color: #102a56;
+    font: inherit;
+    font-weight: 800;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  .mobile-menu-admin:hover,
+  .mobile-menu-admin:active {
+    background: #eaf1ff;
+  }
+
+  .mobile-menu-admin-icon {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 19px;
+  }
+
+  .header-inner {
+    gap: 10px;
+  }
+
+  .mobile-menu-btn {
+    flex: 0 0 44px;
+  }
+
+  .brand {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .mobile-header-actions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .mobile-menu-panel {
+    top: 76px;
+  }
+
+  .notification-btn {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@keyframes mobileMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE HEADER FIX
+   Mobile:
+   - Hamburger LEFT
+   - Logo + name CENTER
+   - Notification RIGHT
+   - Admin Login ONLY inside hamburger menu
+   ========================================================= */
+@media (max-width: 850px) {
+  .site-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 5000 !important;
+  }
+
+  .header-inner {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    width: min(calc(100% - 24px), var(--container)) !important;
+    min-height: 82px !important;
+    gap: 10px !important;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 5010 !important;
+  }
+
+  .brand {
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .brand-logo {
+    flex: 0 0 56px !important;
+    width: 56px !important;
+    height: 56px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .brand-copy {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .brand-name {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .mobile-header-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+    margin-left: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 5010 !important;
+  }
+
+  .mobile-header-actions .notification-btn {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px !important;
+    position: relative !important;
+    z-index: 5011 !important;
+    border: 1px solid #dbe5f5 !important;
+    background: #ffffff !important;
+    color: var(--navy) !important;
+    font-size: 20px !important;
+  }
+
+  .mobile-header-actions .notification-badge {
+    display: inline-flex !important;
+  }
+
+  /* Desktop-only controls must not leak into mobile. */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Admin is accessed from hamburger menu only. */
+  .mobile-menu-panel {
+    display: none !important;
+    position: fixed !important;
+    top: 92px !important;
+    left: 12px !important;
+    width: min(250px, calc(100vw - 24px)) !important;
+    z-index: 6000 !important;
+  }
+
+  .mobile-menu-panel.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .mobile-menu-admin {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 58px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-inner {
+    min-height: 78px !important;
+  }
+
+  .brand-logo {
+    width: 52px !important;
+    height: 52px !important;
+    flex-basis: 52px !important;
+  }
+
+  .brand-name {
+    font-size: 18px !important;
+  }
+
+  .brand-meta {
+    font-size: 11px !important;
+  }
+
+  .mobile-header-actions,
+  .mobile-header-actions .notification-btn {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .mobile-menu-panel {
+    top: 86px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .header-inner {
+    width: calc(100% - 16px) !important;
+    gap: 7px !important;
+  }
+
+  .mobile-menu-btn {
+    flex-basis: 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .brand-logo {
+    width: 48px !important;
+    height: 48px !important;
+    flex-basis: 48px !important;
+  }
+
+  .brand-name {
+    font-size: 16px !important;
+  }
+
+  .brand-meta {
+    font-size: 9px !important;
+  }
+
+  .mobile-header-actions,
+  .mobile-header-actions .notification-btn {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}
