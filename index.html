@@ -1329,7 +1329,7 @@
               <input class="form-control" name="Location" required placeholder="Poongurichi">
 
               <label>Image URL</label>
-              <input class="form-control" name="Image_URL" type="url" placeholder="https://...">
+              <input class="form-control" name="Image_URL" type="text" placeholder="https://... or image reference">
 
               <label>Description</label>
               <textarea class="form-control" name="Description" placeholder="Event details..."></textarea>
@@ -3303,37 +3303,117 @@
       }
     }
 
+    /* =========================================================
+       CREATE EVENT
+       Explicit validation + normalized API payload.
+       ========================================================= */
     document.getElementById("adminEventForm")?.addEventListener("submit", async function(event) {
       event.preventDefault();
-      if (!ensureAdminAccess() || !this.checkValidity()) {
-        this.reportValidity();
-        return;
-      }
+
+      if (!ensureAdminAccess()) return;
 
       const message = document.getElementById("adminEventMessage");
       const submit = this.querySelector("button[type=submit]");
-      const data = Object.fromEntries(new FormData(this));
+
+      const titleEl = this.elements.namedItem("Title");
+      const dateEl = this.elements.namedItem("Event_Date");
+      const locationEl = this.elements.namedItem("Location");
+      const imageEl = this.elements.namedItem("Image_URL");
+      const descriptionEl = this.elements.namedItem("Description");
+
+      const title = String(titleEl?.value || "").trim();
+      const eventDate = String(dateEl?.value || "").trim();
+      const location = String(locationEl?.value || "").trim();
+      const imageUrl = String(imageEl?.value || "").trim();
+      const description = String(descriptionEl?.value || "").trim();
+
+      /* Validate the three mandatory event fields directly.
+         This avoids the old checkValidity() path and gives a clear
+         message for the exact field that is missing. */
+      if (!title) {
+        message.className = "form-message error";
+        message.textContent = "Event title is required.";
+        titleEl?.focus();
+        return;
+      }
+
+      if (!eventDate) {
+        message.className = "form-message error";
+        message.textContent = "Event date is required.";
+        dateEl?.focus();
+        return;
+      }
+
+      if (!location) {
+        message.className = "form-message error";
+        message.textContent = "Event location is required.";
+        locationEl?.focus();
+        return;
+      }
+
+      const userId = getAdminUserId();
+
+      /* Apps Script versions can use different property names.
+         Sending the aliases together prevents the backend from
+         receiving an empty title/date/location. */
+      const data = {
+        Title: title,
+        Event_Title: title,
+        title: title,
+        eventTitle: title,
+
+        Event_Date: eventDate,
+        EventDate: eventDate,
+        eventDate: eventDate,
+
+        Location: location,
+        location: location,
+
+        Image_URL: imageUrl,
+        ImageUrl: imageUrl,
+        imageURL: imageUrl,
+        imageUrl: imageUrl,
+
+        Description: description,
+        description: description,
+
+        userId: userId,
+        User_ID: userId
+      };
 
       try {
         submit.disabled = true;
         message.className = "form-message success";
         message.textContent = "Creating event…";
 
-        await BloodDonationAPI.createEvent(data, getAdminUserId());
+        if (!window.BloodDonationAPI || typeof BloodDonationAPI.api !== "function") {
+          throw new Error("Event service is not available. Please check app.js.");
+        }
+
+        const result = await BloodDonationAPI.api("createEvent", data);
+
+        if (result?.success === false) {
+          throw new Error(result.error || "Unable to create event.");
+        }
 
         this.reset();
+        message.className = "form-message success";
         message.textContent = "Event created successfully.";
         toast("Event created.");
-        await loadAdminDashboard();
-        await loadEvents();
+
+        await Promise.allSettled([
+          loadAdminDashboard(),
+          loadEvents()
+        ]);
       } catch (error) {
-        console.error(error);
+        console.error("Create event error:", error);
         message.className = "form-message error";
         message.textContent = error?.message || "Unable to create event.";
       } finally {
         submit.disabled = false;
       }
     });
+
 
     document.getElementById("adminAboutForm")?.addEventListener("submit", async function(event) {
       event.preventDefault();
