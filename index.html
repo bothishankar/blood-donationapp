@@ -70,27 +70,6 @@
       </a>
 
 
-      <div class="mobile-header-actions">
-        <button
-          class="notification-btn"
-          type="button"
-          onclick="openNotifications()"
-          aria-label="Notifications"
-          title="Notifications"
-        >
-          🔔
-          <span id="notificationBadgeMobile" class="notification-badge">0</span>
-        </button>
-
-        <button
-          class="admin-btn mobile-admin-btn"
-          type="button"
-          onclick="openAdmin()"
-        >
-          🔐 Admin
-        </button>
-      </div>
-
       <nav class="desktop-nav">
 
         <button
@@ -2593,16 +2572,9 @@
       modal.classList.add("show");
 
       const badge = document.getElementById("notificationBadge");
-      const mobileBadge = document.getElementById("notificationBadgeMobile");
-
       if (badge) {
         badge.textContent = "0";
         badge.style.display = "none";
-      }
-
-      if (mobileBadge) {
-        mobileBadge.textContent = "0";
-        mobileBadge.style.display = "none";
       }
     }
 
@@ -2651,16 +2623,9 @@
       });
 
       const badge = document.getElementById("notificationBadge");
-      const mobileBadge = document.getElementById("notificationBadgeMobile");
-
       if (badge) {
         badge.textContent = String(APP_NOTIFICATIONS.length);
         badge.style.display = "inline-flex";
-      }
-
-      if (mobileBadge) {
-        mobileBadge.textContent = String(APP_NOTIFICATIONS.length);
-        mobileBadge.style.display = "inline-flex";
       }
 
       renderNotifications();
