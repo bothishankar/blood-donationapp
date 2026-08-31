@@ -34,8 +34,9 @@
 
       <button
         class="mobile-menu-btn"
-        onclick="goTo('home')"
-        aria-label="Home"
+        type="button"
+        onclick="toggleMobileMenu()"
+        aria-label="Open menu"
       >
         ☰
       </button>
@@ -69,6 +70,20 @@
 
       </a>
 
+
+      <div class="mobile-header-actions">
+        <button
+          class="notification-btn"
+          type="button"
+          onclick="openNotifications()"
+          aria-label="Notifications"
+          title="Notifications"
+        >
+          🔔
+          <span id="notificationBadgeMobile" class="notification-badge">0</span>
+        </button>
+
+      </div>
 
       <nav class="desktop-nav">
 
@@ -135,6 +150,18 @@
     </div>
 
   </header>
+
+  <!-- Mobile menu: Admin Login is available from the hamburger button. -->
+  <div id="mobileMenu" class="mobile-menu-panel" aria-hidden="true">
+    <button
+      class="mobile-menu-admin"
+      type="button"
+      onclick="openAdmin(); closeMobileMenu();"
+    >
+      <span class="mobile-menu-admin-icon">🔐</span>
+      <span>Admin Login</span>
+    </button>
+  </div>
 
 
   <!-- =======================================================
@@ -2558,6 +2585,26 @@
 
 
     /* =========================================================
+       MOBILE MENU
+       ========================================================= */
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      if (!menu) return;
+
+      const isOpen = menu.classList.toggle("show");
+      menu.setAttribute("aria-hidden", String(!isOpen));
+    }
+
+    function closeMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      if (!menu) return;
+
+      menu.classList.remove("show");
+      menu.setAttribute("aria-hidden", "true");
+    }
+
+    /* =========================================================
        NOTIFICATIONS
        Added without changing existing application logic.
        ========================================================= */
@@ -2572,9 +2619,16 @@
       modal.classList.add("show");
 
       const badge = document.getElementById("notificationBadge");
+      const mobileBadge = document.getElementById("notificationBadgeMobile");
+
       if (badge) {
         badge.textContent = "0";
         badge.style.display = "none";
+      }
+
+      if (mobileBadge) {
+        mobileBadge.textContent = "0";
+        mobileBadge.style.display = "none";
       }
     }
 
@@ -2623,9 +2677,16 @@
       });
 
       const badge = document.getElementById("notificationBadge");
+      const mobileBadge = document.getElementById("notificationBadgeMobile");
+
       if (badge) {
         badge.textContent = String(APP_NOTIFICATIONS.length);
         badge.style.display = "inline-flex";
+      }
+
+      if (mobileBadge) {
+        mobileBadge.textContent = String(APP_NOTIFICATIONS.length);
+        mobileBadge.style.display = "inline-flex";
       }
 
       renderNotifications();
