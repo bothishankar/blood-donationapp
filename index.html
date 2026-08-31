@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#b3132b">
+<meta name="description" content="Poongurichi Nanbargal Blood Donors Club">
+<title>Poongurichi Nanbargal | Blood Donors Club</title>
+<style>
+:root{
+ --primary:#b3132b;--primary2:#7d1021;--gold:#f5b301;--bg:#f7f8fc;
+ --card:#fff;--text:#152033;--muted:#68758a;--border:#e5e9f0;
+ --shadow:0 14px 35px rgba(21,32,51,.09)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.site-header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.header-inner{max-width:1180px;margin:auto;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);min-width:260px}
+.brand-logo{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 3px 12px #0002;background:#fff}
+.brand-title{font-size:20px;font-weight:900;line-height:1.1}.brand-subtitle{font-size:12px;color:var(--muted);margin-top:4px}
+.nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.nav button{border:0;background:transparent;padding:10px 11px;border-radius:9px;font-weight:800;color:var(--text)}
+.nav button:hover{background:#f2f4f8}.nav .admin{color:var(--primary);border:1px solid #e5a6ae}
+main{min-height:calc(100vh - 150px)}
+.page{display:none;padding:35px 18px}.page.active{display:block}.container{max-width:1180px;margin:auto}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#b3132b 0%,#8a1425 58%,#5c0e1a 100%);color:#fff;border-radius:28px;padding:54px 42px;box-shadow:var(--shadow)}
+.hero:after{content:"🩸";position:absolute;right:45px;bottom:-55px;font-size:220px;opacity:.08}
+.hero-kicker{font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#ffd7dc}
+.hero h1{position:relative;z-index:1;font-size:clamp(38px,6vw,68px);line-height:.98;margin:10px 0 16px;max-width:760px}
+.hero p{position:relative;z-index:1;font-size:18px;max-width:680px;line-height:1.6;color:#ffecef}
+.actions{position:relative;z-index:2;display:flex;gap:10px;flex-wrap:wrap;margin-top:25px}
+.btn{border:1px solid var(--border);background:#fff;color:var(--text);border-radius:11px;padding:12px 16px;font-weight:900;transition:.2s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px #0001}
+.btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}.btn-danger{background:#8f1023;border-color:#8f1023;color:#fff}
+.btn-white{background:#fff;color:#8f1023;border-color:#fff}
+.section-title{margin:32px 0 14px}.section-title h2{margin:0;font-size:30px}.section-title p{margin:6px 0;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:18px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:23px;text-align:center;box-shadow:0 7px 20px #15203308}
+.stat-number{font-size:37px;font-weight:950;color:var(--primary)}.stat-label{color:var(--muted);font-weight:700;margin-top:4px}
+.groups{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.group-card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;position:relative;overflow:hidden}
+.group-card:before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--primary)}
+.group-name{font-size:28px;font-weight:950;color:var(--primary)}.group-count{font-size:18px;font-weight:900;margin-top:5px}.group-card small{color:var(--muted)}
+.panel{background:#fff;border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+.field label{font-weight:850}.req{color:var(--primary)}
+input,select,textarea{width:100%;padding:13px 14px;border:1px solid #ccd5e2;border-radius:10px;background:#fff;color:var(--text);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px #b3132b18}
+.form-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.message{display:none;margin-top:15px;padding:12px 14px;border-radius:10px;font-weight:700}.message.show{display:block}.success{background:#dcfce7;color:#166534}.error{background:#fee2e2;color:#991b1b}
+.results{margin-top:20px}.result,.admin-row{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#fff;border:1px solid var(--border);border-radius:13px;padding:15px;margin-top:10px}
+.result-name{font-weight:900}.result-meta,.admin-meta{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+.badge{display:inline-block;background:#fff0f2;color:var(--primary);border-radius:999px;padding:5px 9px;font-weight:900}
+.admin-hero{background:linear-gradient(135deg,#182338,#303d55);color:#fff;border-radius:18px;padding:25px;margin-bottom:18px}.admin-hero h2{margin:0 0 5px}.admin-hero p{margin:0;color:#d9e1ec}
+.admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.logo-preview{width:105px;height:105px;border-radius:50%;border:1px solid var(--border);overflow:hidden;display:grid;place-items:center;font-size:42px;margin-top:7px;background:#fff}.logo-preview img{width:100%;height:100%;object-fit:cover}
+footer{background:#101827;color:#cbd5e1;text-align:center;padding:24px 18px;margin-top:30px}
+@media(max-width:850px){.header-inner{align-items:flex-start;flex-direction:column}.nav{justify-content:flex-start}.groups{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.stats,.groups,.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding:35px 23px}.result,.admin-row{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+
+<header id="siteHeader" class="site-header">
+<div class="header-inner">
+<a href="#" class="brand" onclick="showPage('home');return false">
+<img id="brandLogo" class="brand-logo" src="https://bothishankar.github.io/blood-donationapp/icons/poongurichi-logo.jpeg" alt="Poongurichi Nanbargal Blood Donors Club">
+<div><div id="brandTitle" class="brand-title">Poongurichi Nanbargal</div><div id="brandSubtitle" class="brand-subtitle">Admin: Bothishankar Ph: 9677824319</div></div>
+</a>
+<nav class="nav">
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('donor')">Become Donor</button>
+<button onclick="showPage('find')">Find Blood</button>
+<button onclick="showPage('request')">Request Blood</button><button onclick="showPage('about')">About</button>
+<button class="admin" onclick="showPage('adminLogin')">🔐 Admin</button>
+</nav>
+</div>
+</header>
+
+<main>
+<section id="home" class="page active"><div class="container">
+<div class="hero">
+<div class="hero-kicker">❤️ Poongurichi Nanbargal Blood Donors Club</div>
+<h1 id="heroTitle">Every Drop Can Save A Life</h1>
+<p>One donor can give someone another chance. Register today and help your community find blood when it matters most.</p>
+<div class="actions"><button class="btn btn-white" onclick="showPage('donor')">🩸 Become a Donor</button><button class="btn btn-white" onclick="showPage('find')">🔎 Find Blood</button><button class="btn btn-danger" onclick="showPage('request')">🚨 Emergency Request</button></div>
+</div>
+
+<div class="stats"><div class="stat"><div id="homeDonors" class="stat-number">0</div><div class="stat-label">Registered Donors</div></div><div class="stat"><div id="homeRequests" class="stat-number">0</div><div class="stat-label">Active Requests</div></div><div class="stat"><div id="homeGroups" class="stat-number">0</div><div class="stat-label">Blood Groups</div></div></div>
+
+<div class="section-title"><h2>Blood Group Availability</h2><p>Live member counts from registered donors.</p></div>
+<div id="bloodGroups" class="groups"></div>
+</div></section>
+
+<section id="donor" class="page"><div class="container"><div class="section-title"><h2>🩸 Become a Donor</h2><p>Please enter your complete details.</p></div><div class="panel"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:14px;margin-bottom:18px"><b>🔒 Locked Branding</b><div style="margin-top:6px;color:#64748b">App Name: Poongurichi Nanbargal · Logo: Official Poongurichi Nanbargal logo · Copyright: Poongurichi Nanbargal © 2026</div></div>
+<form id="donorForm"><div class="form-grid">
+<div class="field"><label>Name <span class="req">*</span></label><input id="dName" required></div>
+<div class="field"><label>Mobile <span class="req">*</span></label><input id="dMobile" type="tel" required></div>
+<div class="field"><label>Email</label><input id="dEmail" type="email"></div>
+<div class="field"><label>Blood Group <span class="req">*</span></label><select id="dBlood" required><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+<div class="field"><label>Gender</label><select id="dGender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+<div class="field"><label>Date of Birth</label><input id="dDob" type="date"></div>
+<div class="field"><label>District</label><input id="dDistrict"></div>
+<div class="field"><label>City</label><input id="dCity"></div>
+<div class="field full"><label>Address</label><textarea id="dAddress" rows="3"></textarea></div>
+<div class="field"><label>Last Donation Date</label><input id="dLast" type="date"></div>
+<div class="field"><label>Availability</label><select id="dAvailable"><option>Yes</option><option>No</option></select></div>
+</div><div class="form-actions"><button class="btn btn-primary">🩸 Register Donor</button><button type="button" class="btn" onclick="showPage('home')">Cancel</button></div><div id="donorMessage" class="message"></div></form>
+</div></div></section>
+
+<section id="find" class="page"><div class="container"><div class="section-title"><h2>🔎 Find Blood</h2><p>Search donors by blood group and location.</p></div><div class="panel">
+<div class="form-grid"><div class="field"><label>Blood Group</label><select id="fBlood"><option value="">All Groups</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div><div class="field"><label>District / City</label><input id="fLocation" placeholder="Example: Coimbatore"></div></div>
+<div class="form-actions"><button class="btn btn-primary" onclick="findBlood()">Search Donors</button></div><div id="findResults" class="results"></div>
+</div></div></section>
+
+<section id="request" class="page"><div class="container"><div class="section-title"><h2>🚨 Request Blood</h2><p>Submit a blood requirement.</p></div><div class="panel">
+<form id="requestForm"><div class="form-grid">
+<div class="field"><label>Patient Name *</label><input id="rPatient" required></div><div class="field"><label>Hospital *</label><input id="rHospital" required></div>
+<div class="field"><label>Contact Number *</label><input id="rPhone" required></div><div class="field"><label>Blood Group *</label><select id="rBlood" required><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+<div class="field"><label>Units Required *</label><input id="rUnits" type="number" min="1" required></div><div class="field"><label>District</label><input id="rDistrict"></div>
+<div class="field"><label>Location</label><input id="rLocation"></div><div class="field"><label>Priority</label><select id="rPriority"><option>Emergency</option><option>Normal</option></select></div>
+<div class="field"><label>Required Date</label><input id="rDate" type="date"></div><div class="field"><label>Required Time</label><input id="rTime" type="time"></div>
+<div class="field full"><label>Description</label><textarea id="rDescription" rows="3"></textarea></div>
+</div><div class="form-actions"><button class="btn btn-danger">🚨 Submit Request</button><button type="button" class="btn" onclick="showPage('home')">Cancel</button></div><div id="requestMessage" class="message"></div></form>
+</div></div></section>
+
+
+<section id="about" class="page"><div class="container"><div class="section-title"><h2>ℹ️ About</h2><p>About Poongurichi Nanbargal Blood Donors Club.</p></div><div class="panel"><div id="publicAboutContent"><h3>Poongurichi Nanbargal</h3><p>We connect voluntary blood donors with people who need blood.</p><p><b>Admin:</b> Bothishankar · <b>Ph:</b> 9677824319</p></div></div></div></section>
+
+<section id="adminLogin" class="page"><div class="container"><div class="panel" style="max-width:650px;margin:auto"><div class="section-title"><h2>🔐 Admin Login</h2><p>Administrator access only.</p></div><form id="loginForm"><div class="field"><label>Username *</label><input id="aUser" required autocomplete="username"></div><div class="field"><label>Password *</label><input id="aPass" type="password" required autocomplete="current-password"></div><div class="form-actions"><button class="btn btn-primary">🔐 Login</button><button type="button" class="btn" onclick="showPage('home')">Cancel</button></div><div id="loginMessage" class="message"></div></form></div></div></section>
+
+<section id="admin" class="page"><div class="container">
+<div class="admin-hero"><h2>📊 Admin Dashboard</h2><p>Poongurichi Nanbargal Blood Donors Club management.</p></div>
+<div class="stats"><div class="stat"><div id="adminDonors" class="stat-number">0</div><div class="stat-label">Donors</div></div><div class="stat"><div id="adminRequests" class="stat-number">0</div><div class="stat-label">Requests</div></div><div class="stat"><div id="adminAvailable" class="stat-number">0</div><div class="stat-label">Available Donors</div></div></div>
+<div class="panel" style="margin-top:18px"><div class="admin-actions"><button class="btn" onclick="openEvents()">❤️ Events</button><button class="btn" onclick="openAboutManagement()">📝 About</button><button class="btn btn-primary" onclick="manageDonors()">🩸 Manage Donors</button><button class="btn" onclick="manageRequests()">🚨 Blood Requests</button><button class="btn" onclick="openSettings()">⚙️ Page Layout Settings</button><button class="btn" onclick="showPage('home')">🏠 Home</button><button class="btn btn-danger" onclick="logout()">🚪 Logout</button></div><div id="adminContent"></div></div>
+</div></section>
+
+
+<section id="eventManagement" class="page"><div class="container"><div class="admin-hero"><h2>❤️ Event Management</h2><p>Admin-only event publishing.</p></div><div class="panel"><form id="eventForm"><div class="form-grid"><div class="field"><label>Event Title *</label><input id="eTitle" required></div><div class="field"><label>Event Date *</label><input id="eDate" type="date" required></div><div class="field"><label>Location *</label><input id="eLocation" required></div><div class="field"><label>Event Image URL *</label><input id="eImage" type="url" required></div><div class="field full"><label>Additional Info *</label><textarea id="eInfo" required rows="4"></textarea></div></div><div class="form-actions"><button class="btn btn-primary" type="submit">❤️ Publish Event</button><button class="btn" type="button" onclick="showPage('admin')">Back</button></div><div id="eventMessage" class="message"></div></form><div id="eventList" class="results"></div></div></div></section>
+
+<section id="aboutManagement" class="page"><div class="container"><div class="admin-hero"><h2>📝 About Management</h2><p>Admin-only editable About content.</p></div><div class="panel"><form id="aboutForm"><div class="field"><label>About Title *</label><input id="aboutTitle" required></div><div class="field" style="margin-top:14px"><label>About Content *</label><textarea id="aboutContent" rows="8" required></textarea></div><div class="field" style="margin-top:14px"><label>Contact Information</label><input id="aboutContact"></div><div class="form-actions"><button class="btn btn-primary" type="submit">💾 Save About</button><button class="btn" type="button" onclick="showPage('admin')">Back</button></div><div id="aboutMessage" class="message"></div></form></div></div></section>
+
+<section id="settings" class="page"><div class="container"><div class="admin-hero"><h2>⚙️ Page Layout Settings</h2><p>Customize the public application.</p></div><div class="panel">
+<form id="settingsForm"><div class="form-grid">
+
+</div>
+<div class="field"><label>Primary Colour</label><input id="sPrimary" type="color"></div><div class="field"><label>Header Colour</label><input id="sHeader" type="color"></div>
+<div class="field"><label>Panel Colour</label><input id="sPanel" type="color"></div><div class="field"><label>Background Colour</label><input id="sBg" type="color"></div>
+<div class="field"><label>Header Visible</label><select id="sHeaderVisible"><option value="true">Show</option><option value="false">Hide</option></select></div><div class="field"><label>Footer Visible</label><select id="sFooterVisible"><option value="true">Show</option><option value="false">Hide</option></select></div>
+<div class="field full"><label>Header Subtitle</label><input id="sSubtitle"></div><div class="field full"><label>Footer Text</label><input id="sFooter"></div>
+</div><div class="form-actions"><button class="btn btn-primary">💾 Save Settings</button><button type="button" class="btn" onclick="resetSettings()">↩ Reset to Default</button><button type="button" class="btn" onclick="showPage('admin')">← Back to Dashboard</button></div><div id="settingsMessage" class="message"></div></form>
+</div></div></section>
+</main>
+<div id="mobileNav" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;background:#fff;border-top:1px solid #e2e8f0;padding:7px 5px;grid-template-columns:repeat(5,1fr);box-shadow:0 -8px 25px #0001">
+<button class="btn" style="border:0;padding:7px 2px;font-size:11px" onclick="showPage('home')">🏠<br>Home</button>
+<button class="btn" style="border:0;padding:7px 2px;font-size:11px" onclick="showPage('donor')">🩸<br>Donor</button>
+<button class="btn" style="border:0;padding:7px 2px;font-size:11px" onclick="showPage('find')">🔎<br>Find</button>
+<button class="btn" style="border:0;padding:7px 2px;font-size:11px" onclick="showPage('request')">🚨<br>Request</button>
+<button class="btn" style="border:0;padding:7px 2px;font-size:11px" onclick="showPage('about')">ℹ️<br>About</button>
+</div>
+<style>@media(max-width:650px){#mobileNav{display:grid}main{padding-bottom:80px}}</style>
+
+
+<footer id="siteFooter"><span id="footerText">Poongurichi Nanbargal © 2026</span></footer>
+
+<script src="app.js"></script>
+<script>
+const GROUPS=["A+","A-","B+","B-","AB+","AB-","O+","O-"];
+const $=id=>document.getElementById(id);
+const value=id=>($(id)?.value||"").trim();
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));$(id)?.classList.add("active");window.scrollTo({top:0,behavior:"smooth"});if(id==="home")loadStats();if(id==="find")findBlood();if(id==="admin")loadAdminStats();}
+function message(id,text,ok=true){const e=$(id);e.textContent=text;e.className="message show "+(ok?"success":"error");}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));}
+function session(){return BloodDonationAPI.adminSession();}
+function needAdmin(){if(!session()){showPage("adminLogin");throw new Error("Please login as admin.");}return session();}
+function get(obj,...keys){for(const k of keys)if(obj&&obj[k]!==undefined&&obj[k]!==null)return obj[k];return "";}
+function applySettings(s={}){
+  $("brandTitle").textContent=s["App Name"]||"Poongurichi Nanbargal";
+  $("brandSubtitle").textContent=s["Header Subtitle"]||"Admin: Bothishankar Ph: 9677824319";
+  $("heroTitle").textContent=s["Homepage Title"]||"Every Drop Can Save A Life";
+  $("footerText").textContent=s["Footer Text"]||s["Copyright Name"]||"Poongurichi Nanbargal © 2026";
+  document.documentElement.style.setProperty("--primary",s["Primary Color"]||"#b3132b");
+  document.documentElement.style.setProperty("--header",s["Header Colour"]||"#ffffff");
+  document.documentElement.style.setProperty("--bg",s["Background Colour"]||"#f7f8fc");
+  document.documentElement.style.setProperty("--card",s["Panel Colour"]||"#ffffff");
+  $("siteHeader").style.display=s["Header Visible"]==="false"?"none":"";
+  $("siteFooter").style.display=s["Footer Visible"]==="false"?"none":"";
+  const logo=s["Logo URL"];
+  if(logo)$("brandLogo").src=logo;
+}
+async function loadSettings(){try{const r=await BloodDonationAPI.getSettings();applySettings(r.settings||{});}catch(e){console.warn("Settings API:",e);}}
+async function loadStats(){
+  try{
+    const r=await BloodDonationAPI.getDashboardStats(),s=r.stats||{};
+    const bg=s.bloodGroups||{};
+    $("homeDonors").textContent=s.totalDonors||0;
+    $("homeRequests").textContent=s.openRequests||0;
+    $("homeGroups").textContent=GROUPS.filter(g=>Number(bg[g]||0)>0).length;
+    $("bloodGroups").innerHTML=GROUPS.map(g=>'<div class="group-card"><div class="group-name">'+g+'</div><div class="group-count">'+Number(bg[g]||0)+' members</div><small>registered donors</small></div>').join("");
+  }catch(e){
+    $("homeDonors").textContent="—";$("homeRequests").textContent="—";$("homeGroups").textContent="—";
+    $("bloodGroups").innerHTML=GROUPS.map(g=>'<div class="group-card"><div class="group-name">'+g+'</div><div class="group-count">0 members</div><small>live data after deployment</small></div>').join("");
+  }
+}
+async function findBlood(){
+  const box=$("findResults");box.innerHTML="<p class='muted'>Searching...</p>";
+  try{
+    const a=await BloodDonationAPI.searchDonors({bloodGroup:value("fBlood"),district:value("fLocation"),city:value("fLocation"),available:true});
+    box.innerHTML=a.length?a.map(d=>{const n=get(d,"Name","name")||"Donor",g=get(d,"Blood_Group","bloodGroup"),m=get(d,"Mobile","mobile"),di=get(d,"District","district"),ci=get(d,"City","city");return '<div class="result"><div><span class="badge">'+esc(g)+'</span><div class="result-name">'+esc(n)+'</div><span class="result-meta">'+esc(di)+' '+esc(ci)+'</span></div><a class="btn btn-primary" href="tel:'+esc(m)+'">📞 Call</a></div>';}).join(""):"<p class='muted'>No available donor found.</p>";
+  }catch(e){box.innerHTML="<p class='muted'>Live donor search is available after deployment.</p>";}
+}
+$("donorForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const donor={name:value("dName"),mobile:value("dMobile"),email:value("dEmail"),bloodGroup:value("dBlood"),gender:value("dGender"),dob:value("dDob"),district:value("dDistrict"),city:value("dCity"),address:value("dAddress"),lastDonationDate:value("dLast"),available:value("dAvailable")};
+ try{const r=await BloodDonationAPI.registerDonor(donor);message("donorMessage","✓ Donor registered successfully"+(r.donorId?" — ID: "+r.donorId:"")+"." );e.target.reset();$("dAvailable").value="Yes";loadStats();}
+ catch(e){message("donorMessage",e.message||"Unable to register donor.",false);}
+});
+$("requestForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const request={patientName:value("rPatient"),hospital:value("rHospital"),contactNumber:value("rPhone"),bloodGroup:value("rBlood"),unitsRequired:value("rUnits"),district:value("rDistrict"),location:value("rLocation"),priority:value("rPriority"),requiredDate:value("rDate"),requiredTime:value("rTime"),description:value("rDescription")};
+ try{await BloodDonationAPI.createBloodRequest(request);message("requestMessage","✓ Blood request submitted successfully.");e.target.reset();loadStats();}
+ catch(e){message("requestMessage",e.message||"Unable to submit request.",false);}
+});
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ try{const r=await BloodDonationAPI.login(value("aUser"),$("aPass").value);if(!r||!r.success||!r.user)throw new Error(r?.error||"Invalid username or password.");if(String(r.user.role).toLowerCase()!=="admin")throw new Error("Admin access required.");BloodDonationAPI.setAdminSession(r.user);message("loginMessage","✓ Login successful.");setTimeout(()=>{showPage("admin");loadAdminStats();},250);}
+ catch(e){message("loginMessage",e.message,false);}
+});
+async function loadAdminStats(){try{needAdmin();const r=await BloodDonationAPI.getDashboardStats(),s=r.stats||{};$("adminDonors").textContent=s.totalDonors||0;$("adminRequests").textContent=s.totalRequests||0;$("adminAvailable").textContent=s.availableDonors||0;}catch(e){}}
+async function manageDonors(){
+ try{needAdmin();const a=await BloodDonationAPI.getDonors();$("adminContent").innerHTML="<h3>Manage Donors</h3>"+(a.length?a.map(d=>{const id=get(d,"Donor_ID","donorId"),n=get(d,"Name","name"),g=get(d,"Blood_Group","bloodGroup"),m=get(d,"Mobile","mobile"),di=get(d,"District","district"),ci=get(d,"City","city");return '<div class="admin-row"><div><b>'+esc(n)+'</b><span class="admin-meta">'+esc(g)+' • '+esc(m)+' • '+esc(di)+' '+esc(ci)+'</span></div><button class="btn btn-danger" onclick="removeDonor('+JSON.stringify(id)+')">Delete</button></div>';}).join(""):"<p class='muted'>No donors.</p>");}catch(e){$("adminContent").innerHTML="<p class='muted'>Unable to load donors.</p>";}
+}
+async function removeDonor(id){if(!confirm("Delete this donor?"))return;try{const a=needAdmin();await BloodDonationAPI.deleteDonor(id,a.userId);manageDonors();loadAdminStats();loadStats();}catch(e){alert(e.message);}}
+async function manageRequests(){
+ try{needAdmin();const a=await BloodDonationAPI.getBloodRequests();$("adminContent").innerHTML="<h3>Blood Requests</h3>"+(a.length?a.map(r=>{const id=get(r,"Request_ID","requestId"),p=get(r,"Patient_Name","patientName"),g=get(r,"Blood_Group","bloodGroup"),h=get(r,"Hospital","hospital"),st=get(r,"Status","status"),pr=get(r,"Priority","priority");return '<div class="admin-row"><div><b>'+esc(p)+' — '+esc(g)+'</b><span class="admin-meta">'+esc(h)+' • '+esc(pr)+' • '+esc(st)+'</span></div><button class="btn btn-danger" onclick="removeRequest('+JSON.stringify(id)+')">Delete</button></div>';}).join(""):"<p class='muted'>No requests.</p>");}catch(e){$("adminContent").innerHTML="<p class='muted'>Unable to load requests.</p>";}
+}
+async function removeRequest(id){if(!confirm("Delete this request?"))return;try{const a=needAdmin();await BloodDonationAPI.deleteRequest(id,a.userId);manageRequests();loadAdminStats();loadStats();}catch(e){alert(e.message);}}
+async function openSettings(){
+ try{needAdmin();const r=await BloodDonationAPI.getSettings(),s=r.settings||{};$("sApp").value=s["App Name"]||"Poongurichi Nanbargal";$("sCopy").value=s["Copyright Name"]||"Poongurichi Nanbargal";$("sLogo").value=s["Logo URL"]||"https://bothishankar.github.io/blood-donationapp/icons/poongurichi-logo.jpeg";$("sPrimary").value=s["Primary Color"]||"#b3132b";$("sHeader").value=s["Header Colour"]||"#ffffff";$("sPanel").value=s["Panel Colour"]||"#ffffff";$("sBg").value=s["Background Colour"]||"#f7f8fc";$("sHeaderVisible").value=String(s["Header Visible"]??"true");$("sFooterVisible").value=String(s["Footer Visible"]??"true");$("sSubtitle").value=s["Header Subtitle"]||"Admin: Bothishankar Ph: 9677824319";$("sFooter").value=s["Footer Text"]||"Poongurichi Nanbargal © 2026";previewLogo();showPage("settings");}catch(e){alert(e.message||"Unable to load settings.");}
+}
+function previewLogo(){const u=value("sLogo");$("logoPreview").innerHTML=u?'<img src="'+esc(u)+'" alt="Logo">':"🩸";}
+$("sLogo").addEventListener("input",previewLogo);
+$("settingsForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ try{
+  const a=needAdmin();
+  const settings={"App Name":value("sApp"),"Copyright Name":value("sCopy"),"Logo URL":value("sLogo"),"Primary Color":$("sPrimary").value,"Header Colour":$("sHeader").value,"Panel Colour":$("sPanel").value,"Background Colour":$("sBg").value,"Header Visible":$("sHeaderVisible").value,"Footer Visible":$("sFooterVisible").value,"Header Subtitle":value("sSubtitle"),"Footer Text":value("sFooter")};
+  for(const [setting,val] of Object.entries(settings))await BloodDonationAPI.saveSetting(setting,val,a.userId);
+  applySettings(settings);message("settingsMessage","✓ Settings saved successfully.");
+ }catch(e){message("settingsMessage",e.message||"Unable to save settings.",false);}
+});
+function resetSettings(){
+ $("sApp").value="Poongurichi Nanbargal";$("sCopy").value="Poongurichi Nanbargal";$("sLogo").value="https://bothishankar.github.io/blood-donationapp/icons/poongurichi-logo.jpeg";$("sPrimary").value="#b3132b";$("sHeader").value="#ffffff";$("sPanel").value="#ffffff";$("sBg").value="#f7f8fc";$("sHeaderVisible").value="true";$("sFooterVisible").value="true";$("sSubtitle").value="Admin: Bothishankar Ph: 9677824319";$("sFooter").value="Poongurichi Nanbargal © 2026";previewLogo();
+}
+function logout(){BloodDonationAPI.clearAdminSession();showPage("home");}
+loadSettings();loadStats();
+</script>
+</body>
+</html>
