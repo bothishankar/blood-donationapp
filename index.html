@@ -610,11 +610,14 @@
             id="donorForm"
             class="form-grid"
           >
+            <div class="required-notice full">
+              <strong>* Mandatory fields</strong> must be completed before registration.
+            </div>
 
             <div class="form-group">
 
               <label class="form-label">
-                Name *
+                Name <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
@@ -630,7 +633,7 @@
             <div class="form-group">
 
               <label class="form-label">
-                Mobile *
+                Mobile <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
@@ -638,6 +641,12 @@
                 name="Mobile"
                 required
                 type="tel"
+                inputmode="numeric"
+                autocomplete="tel"
+                pattern="[6-9][0-9]{9}"
+                minlength="10"
+                maxlength="10"
+                title="Enter a valid 10-digit Indian mobile number"
                 placeholder="Mobile number"
               >
 
@@ -663,7 +672,7 @@
             <div class="form-group">
 
               <label class="form-label">
-                Blood Group *
+                Blood Group <span class="required-mark">* Mandatory</span>
               </label>
 
               <select
@@ -693,12 +702,13 @@
             <div class="form-group">
 
               <label class="form-label">
-                Gender
+                Gender <span class="required-mark">* Mandatory</span>
               </label>
 
               <select
                 class="form-control"
                 name="Gender"
+                required
               >
 
                 <option value="">
@@ -717,13 +727,14 @@
             <div class="form-group">
 
               <label class="form-label">
-                Date of Birth
+                Date of Birth <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
                 class="form-control"
                 name="DOB"
                 type="date"
+                required
               >
 
             </div>
@@ -732,13 +743,14 @@
             <div class="form-group">
 
               <label class="form-label">
-                District
+                District <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
                 class="form-control"
                 name="District"
                 placeholder="District"
+                required
               >
 
             </div>
@@ -747,13 +759,14 @@
             <div class="form-group">
 
               <label class="form-label">
-                City
+                City <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
                 class="form-control"
                 name="City"
                 placeholder="City"
+                required
               >
 
             </div>
@@ -762,13 +775,14 @@
             <div class="form-group full">
 
               <label class="form-label">
-                Address
+                Address <span class="required-mark">* Mandatory</span>
               </label>
 
               <textarea
                 class="form-control"
                 name="Address"
                 placeholder="Your address"
+                required
               ></textarea>
 
             </div>
@@ -777,13 +791,14 @@
             <div class="form-group">
 
               <label class="form-label">
-                Last Donation Date
+                Last Donation Date <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
                 class="form-control"
                 name="Last_Donation_Date"
                 type="date"
+                required
               >
 
             </div>
@@ -954,11 +969,14 @@
             id="requestForm"
             class="form-grid"
           >
+            <div class="required-notice full">
+              <strong>* Mandatory fields</strong> must be completed before submitting a blood request.
+            </div>
 
             <div class="form-group">
 
               <label class="form-label">
-                Patient Name *
+                Patient Name <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
@@ -974,7 +992,7 @@
             <div class="form-group">
 
               <label class="form-label">
-                Blood Group *
+                Blood Group <span class="required-mark">* Mandatory</span>
               </label>
 
               <select
@@ -1004,7 +1022,7 @@
             <div class="form-group">
 
               <label class="form-label">
-                Contact Mobile *
+                Contact Mobile <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
@@ -1012,6 +1030,12 @@
                 name="Contact_Mobile"
                 required
                 type="tel"
+                inputmode="numeric"
+                autocomplete="tel"
+                pattern="[6-9][0-9]{9}"
+                minlength="10"
+                maxlength="10"
+                title="Enter a valid 10-digit Indian mobile number"
                 placeholder="Contact number"
               >
 
@@ -1021,13 +1045,14 @@
             <div class="form-group">
 
               <label class="form-label">
-                Hospital
+                Hospital <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
                 class="form-control"
                 name="Hospital"
                 placeholder="Hospital name"
+                required
               >
 
             </div>
@@ -1036,13 +1061,14 @@
             <div class="form-group">
 
               <label class="form-label">
-                District
+                District <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
                 class="form-control"
                 name="District"
                 placeholder="District"
+                required
               >
 
             </div>
@@ -1051,13 +1077,14 @@
             <div class="form-group">
 
               <label class="form-label">
-                City
+                City <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
                 class="form-control"
                 name="City"
                 placeholder="City"
+                required
               >
 
             </div>
@@ -1209,6 +1236,148 @@
   <!-- =======================================================
        FOOTER
        ======================================================= -->
+
+
+    <!-- =====================================================
+         ADMIN DASHBOARD
+         ===================================================== -->
+    <section id="page-admin" class="page-section admin-page">
+      <div class="container">
+
+        <div class="admin-page-head">
+          <div>
+            <div class="section-kicker">🔐 Administration</div>
+            <h1 class="section-title">Admin Dashboard</h1>
+            <p class="section-description">
+              Manage donors, blood requests, upcoming events and About content.
+            </p>
+          </div>
+          <button type="button" class="btn btn-light admin-logout-btn" onclick="adminLogout()">
+            🚪 Logout
+          </button>
+        </div>
+
+        <div id="adminGuardMessage" class="admin-guard-message"></div>
+
+        <div class="admin-stat-grid">
+          <div class="admin-stat-card">
+            <span>👥</span>
+            <strong id="adminStatDonors">0</strong>
+            <small>Registered Donors</small>
+          </div>
+          <div class="admin-stat-card">
+            <span>🚨</span>
+            <strong id="adminStatRequests">0</strong>
+            <small>Active Requests</small>
+          </div>
+          <div class="admin-stat-card">
+            <span>📅</span>
+            <strong id="adminStatEvents">0</strong>
+            <small>Events</small>
+          </div>
+          <div class="admin-stat-card">
+            <span>🩸</span>
+            <strong id="adminStatGroups">0</strong>
+            <small>Blood Groups</small>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+
+          <div class="admin-card admin-wide">
+            <div class="admin-card-head">
+              <div>
+                <h2>👥 Registered Donors</h2>
+                <p>View donor details and manage registrations.</p>
+              </div>
+              <button type="button" class="admin-small-btn" onclick="loadAdminDonors()">↻ Refresh</button>
+            </div>
+            <div id="adminDonorTable" class="admin-table-wrap">
+              <div class="admin-loading">Loading donors…</div>
+            </div>
+          </div>
+
+          <div class="admin-card admin-wide">
+            <div class="admin-card-head">
+              <div>
+                <h2>🚨 Blood Requests</h2>
+                <p>Review active and submitted blood requests.</p>
+              </div>
+              <button type="button" class="admin-small-btn" onclick="loadAdminRequests()">↻ Refresh</button>
+            </div>
+            <div id="adminRequestTable" class="admin-table-wrap">
+              <div class="admin-loading">Loading requests…</div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <div>
+                <h2>📅 Add Event</h2>
+                <p>Create a new upcoming blood donation event.</p>
+              </div>
+            </div>
+
+            <form id="adminEventForm" class="admin-form">
+              <label>Event Title <span class="required-mark">* Mandatory</span></label>
+              <input class="form-control" name="Title" required placeholder="Blood Donation Camp">
+
+              <label>Event Date <span class="required-mark">* Mandatory</span></label>
+              <input class="form-control" name="Event_Date" type="date" required>
+
+              <label>Location <span class="required-mark">* Mandatory</span></label>
+              <input class="form-control" name="Location" required placeholder="Poongurichi">
+
+              <label>Image URL</label>
+              <input class="form-control" name="Image_URL" type="url" placeholder="https://...">
+
+              <label>Description</label>
+              <textarea class="form-control" name="Description" placeholder="Event details..."></textarea>
+
+              <div id="adminEventMessage" class="form-message"></div>
+
+              <button class="btn btn-primary" type="submit">➕ Create Event</button>
+            </form>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <div>
+                <h2>ℹ️ About Content</h2>
+                <p>Edit the public About section.</p>
+              </div>
+            </div>
+
+            <form id="adminAboutForm" class="admin-form">
+              <label>About Title</label>
+              <input id="adminAboutTitle" class="form-control" name="Title" placeholder="Poongurichi Nanbargal">
+
+              <label>About Content</label>
+              <textarea id="adminAboutContent" class="form-control admin-about-textarea" name="Content"
+                placeholder="Write your About content..."></textarea>
+
+              <div id="adminAboutMessage" class="form-message"></div>
+
+              <button class="btn btn-primary" type="submit">💾 Save About</button>
+            </form>
+          </div>
+
+          <div class="admin-card admin-wide">
+            <div class="admin-card-head">
+              <div>
+                <h2>📅 Existing Events</h2>
+                <p>Remove events that are no longer needed.</p>
+              </div>
+              <button type="button" class="admin-small-btn" onclick="loadAdminEvents()">↻ Refresh</button>
+            </div>
+            <div id="adminEventTable" class="admin-table-wrap">
+              <div class="admin-loading">Loading events…</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
 
   <footer>
 
@@ -1443,6 +1612,12 @@
        ========================================================= */
 
     function goTo(page) {
+
+      /* Admin dashboard is protected by the existing admin session. */
+      if (page === "admin" && !adminIsLoggedIn()) {
+        openAdmin();
+        return;
+      }
 
       document
         .querySelectorAll(".page-section")
@@ -2200,6 +2375,13 @@
               "donorMessage"
             );
 
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            message.className = "form-message error";
+            message.textContent = "Please complete all mandatory fields before submitting.";
+            return;
+          }
+
 
           const data =
             Object.fromEntries(
@@ -2529,6 +2711,13 @@
               "requestMessage"
             );
 
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            message.className = "form-message error";
+            message.textContent = "Please complete all mandatory fields before submitting.";
+            return;
+          }
+
 
           const data =
             Object.fromEntries(
@@ -2773,11 +2962,14 @@
         message.textContent = "Login successful.";
         toast("Admin login successful.");
 
-        setTimeout(() => {
+        setTimeout(async () => {
           closeAdmin();
+          closeMobileMenu();
           submit.disabled = false;
           submit.textContent = "🔐 Login as Admin";
-        }, 700);
+          goTo("admin");
+          await loadAdminDashboard();
+        }, 450);
 
       } catch (error) {
         console.error(error);
@@ -2810,6 +3002,376 @@
     }
 
 
+
+    /* =========================================================
+       ADMIN DASHBOARD
+       ========================================================= */
+
+    function adminIsLoggedIn() {
+      try {
+        return !!(window.BloodDonationAPI &&
+          typeof BloodDonationAPI.adminSession === "function" &&
+          BloodDonationAPI.adminSession());
+      } catch (error) {
+        return false;
+      }
+    }
+
+    function getAdminUser() {
+      try {
+        return BloodDonationAPI.adminSession() || {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function getAdminUserId() {
+      const user = getAdminUser();
+      return value(user, "User_ID", "userId", "UserId", "ID", "id", "Username", "username");
+    }
+
+    function ensureAdminAccess() {
+      if (!adminIsLoggedIn()) {
+        document.getElementById("adminGuardMessage").innerHTML =
+          '<div class="form-message error">Please log in as an administrator to access this page.</div>';
+        return false;
+      }
+
+      const guard = document.getElementById("adminGuardMessage");
+      if (guard) guard.innerHTML = "";
+      return true;
+    }
+
+    async function loadAdminDashboard() {
+      if (!ensureAdminAccess()) return;
+
+      const stats = await Promise.resolve()
+        .then(() => BloodDonationAPI.getDashboardStats())
+        .catch(() => ({}));
+
+      const s = stats?.stats || stats?.data || stats || {};
+
+      document.getElementById("adminStatDonors").textContent =
+        Number(value(s, "registeredDonors", "totalDonors", "donors", "Registered_Donors")) || 0;
+
+      document.getElementById("adminStatRequests").textContent =
+        Number(value(s, "activeRequests", "bloodRequests", "requests", "Active_Requests")) || 0;
+
+      document.getElementById("adminStatEvents").textContent =
+        Number(value(s, "events", "totalEvents", "camps", "Events")) || 0;
+
+      document.getElementById("adminStatGroups").textContent =
+        Number(value(s, "bloodGroups", "groups", "Blood_Groups")) || 0;
+
+      await Promise.allSettled([
+        loadAdminDonors(),
+        loadAdminRequests(),
+        loadAdminEvents(),
+        loadAdminAbout()
+      ]);
+    }
+
+    async function loadAdminDonors() {
+      const box = document.getElementById("adminDonorTable");
+      if (!box || !ensureAdminAccess()) return;
+
+      box.innerHTML = '<div class="admin-loading">Loading donors…</div>';
+
+      try {
+        const donors = await BloodDonationAPI.getDonors();
+
+        if (!donors.length) {
+          box.innerHTML = '<div class="admin-empty">No registered donors found.</div>';
+          return;
+        }
+
+        box.innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Blood</th>
+                <th>Mobile</th>
+                <th>Location</th>
+                <th>90-Day Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${donors.map(donor => {
+                const id = value(donor, "Donor_ID", "donorId", "DonorID", "ID", "id");
+                const name = value(donor, "Name", "name") || "—";
+                const group = value(donor, "Blood_Group", "bloodGroup", "BloodGroup") || "—";
+                const mobile = value(donor, "Mobile", "mobile", "Phone") || "—";
+                const location = [value(donor, "City", "city"), value(donor, "District", "district")]
+                  .filter(Boolean).join(", ") || "—";
+                const eligibility = donor.eligibility?.status || "Unknown";
+
+                return `
+                  <tr>
+                    <td><strong>${escapeHtml(name)}</strong></td>
+                    <td>${escapeHtml(group)}</td>
+                    <td>${escapeHtml(mobile)}</td>
+                    <td>${escapeHtml(location)}</td>
+                    <td><span class="admin-status-pill">${escapeHtml(eligibility)}</span></td>
+                    <td>
+                      <button type="button" class="admin-danger-btn"
+                        onclick="adminDeleteDonor('${escapeAttribute(id)}')">Delete</button>
+                    </td>
+                  </tr>`;
+              }).join("")}
+            </tbody>
+          </table>`;
+      } catch (error) {
+        console.error(error);
+        box.innerHTML = '<div class="admin-empty error-text">Unable to load donors.</div>';
+      }
+    }
+
+    async function adminDeleteDonor(donorId) {
+      if (!donorId || !ensureAdminAccess()) return;
+      if (!confirm("Delete this donor registration?")) return;
+
+      try {
+        await BloodDonationAPI.deleteDonor(donorId, getAdminUserId());
+        toast("Donor deleted.");
+        await loadAdminDashboard();
+      } catch (error) {
+        console.error(error);
+        toast(error?.message || "Unable to delete donor.");
+      }
+    }
+
+    async function loadAdminRequests() {
+      const box = document.getElementById("adminRequestTable");
+      if (!box || !ensureAdminAccess()) return;
+
+      box.innerHTML = '<div class="admin-loading">Loading requests…</div>';
+
+      try {
+        const result = await BloodDonationAPI.getBloodRequests();
+        const requests = Array.isArray(result)
+          ? result
+          : (result?.requests || result?.data || []);
+
+        if (!requests.length) {
+          box.innerHTML = '<div class="admin-empty">No blood requests found.</div>';
+          return;
+        }
+
+        box.innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Blood</th>
+                <th>Mobile</th>
+                <th>Hospital</th>
+                <th>Location</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${requests.map(req => {
+                const id = value(req, "Request_ID", "requestId", "RequestID", "ID", "id");
+                const patient = value(req, "Patient_Name", "patientName", "PatientName") || "—";
+                const group = value(req, "Blood_Group", "bloodGroup", "BloodGroup") || "—";
+                const mobile = value(req, "Contact_Mobile", "contactMobile", "Mobile", "Phone") || "—";
+                const hospital = value(req, "Hospital", "hospital") || "—";
+                const location = [value(req, "City", "city"), value(req, "District", "district")]
+                  .filter(Boolean).join(", ") || "—";
+
+                return `
+                  <tr>
+                    <td><strong>${escapeHtml(patient)}</strong></td>
+                    <td>${escapeHtml(group)}</td>
+                    <td>${escapeHtml(mobile)}</td>
+                    <td>${escapeHtml(hospital)}</td>
+                    <td>${escapeHtml(location)}</td>
+                    <td>
+                      <button type="button" class="admin-danger-btn"
+                        onclick="adminDeleteRequest('${escapeAttribute(id)}')">Delete</button>
+                    </td>
+                  </tr>`;
+              }).join("")}
+            </tbody>
+          </table>`;
+      } catch (error) {
+        console.error(error);
+        box.innerHTML = '<div class="admin-empty error-text">Unable to load blood requests.</div>';
+      }
+    }
+
+    async function adminDeleteRequest(requestId) {
+      if (!requestId || !ensureAdminAccess()) return;
+      if (!confirm("Delete this blood request?")) return;
+
+      try {
+        await BloodDonationAPI.deleteRequest(requestId, getAdminUserId());
+        toast("Blood request deleted.");
+        await loadAdminDashboard();
+      } catch (error) {
+        console.error(error);
+        toast(error?.message || "Unable to delete request.");
+      }
+    }
+
+    async function loadAdminEvents() {
+      const box = document.getElementById("adminEventTable");
+      if (!box || !ensureAdminAccess()) return;
+
+      box.innerHTML = '<div class="admin-loading">Loading events…</div>';
+
+      try {
+        const result = await BloodDonationAPI.getEvents();
+        const events = Array.isArray(result)
+          ? result
+          : (result?.events || result?.data || []);
+
+        if (!events.length) {
+          box.innerHTML = '<div class="admin-empty">No events found.</div>';
+          return;
+        }
+
+        box.innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${events.map(event => {
+                const id = value(event, "Event_ID", "eventId", "EventID", "ID", "id");
+                const title = value(event, "Title", "title", "Event_Title") || "Blood Donation Camp";
+                const date = value(event, "Event_Date", "eventDate", "EventDate") || "—";
+                const location = value(event, "Location", "location") || "—";
+                const status = value(event, "Status", "status") || "Active";
+
+                return `
+                  <tr>
+                    <td><strong>${escapeHtml(title)}</strong></td>
+                    <td>${escapeHtml(formatDate(date))}</td>
+                    <td>${escapeHtml(location)}</td>
+                    <td><span class="admin-status-pill">${escapeHtml(status)}</span></td>
+                    <td>
+                      <button type="button" class="admin-danger-btn"
+                        onclick="adminDeleteEvent('${escapeAttribute(id)}')">Delete</button>
+                    </td>
+                  </tr>`;
+              }).join("")}
+            </tbody>
+          </table>`;
+      } catch (error) {
+        console.error(error);
+        box.innerHTML = '<div class="admin-empty error-text">Unable to load events.</div>';
+      }
+    }
+
+    async function adminDeleteEvent(eventId) {
+      if (!eventId || !ensureAdminAccess()) return;
+      if (!confirm("Delete this event?")) return;
+
+      try {
+        await BloodDonationAPI.deleteEvent(eventId, getAdminUserId());
+        toast("Event deleted.");
+        await loadAdminDashboard();
+        await loadEvents();
+      } catch (error) {
+        console.error(error);
+        toast(error?.message || "Unable to delete event.");
+      }
+    }
+
+    async function loadAdminAbout() {
+      const title = document.getElementById("adminAboutTitle");
+      const content = document.getElementById("adminAboutContent");
+      if (!title || !content || !ensureAdminAccess()) return;
+
+      try {
+        const result = await BloodDonationAPI.getAbout();
+        const about = result?.about || result?.data || result || {};
+
+        title.value = value(about, "Title", "title", "About_Title") || "";
+        content.value = value(about, "Content", "content", "Description", "description", "About_Content") || "";
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    document.getElementById("adminEventForm")?.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      if (!ensureAdminAccess() || !this.checkValidity()) {
+        this.reportValidity();
+        return;
+      }
+
+      const message = document.getElementById("adminEventMessage");
+      const submit = this.querySelector("button[type=submit]");
+      const data = Object.fromEntries(new FormData(this));
+
+      try {
+        submit.disabled = true;
+        message.className = "form-message success";
+        message.textContent = "Creating event…";
+
+        await BloodDonationAPI.createEvent(data, getAdminUserId());
+
+        this.reset();
+        message.textContent = "Event created successfully.";
+        toast("Event created.");
+        await loadAdminDashboard();
+        await loadEvents();
+      } catch (error) {
+        console.error(error);
+        message.className = "form-message error";
+        message.textContent = error?.message || "Unable to create event.";
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    document.getElementById("adminAboutForm")?.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      if (!ensureAdminAccess()) return;
+
+      const message = document.getElementById("adminAboutMessage");
+      const submit = this.querySelector("button[type=submit]");
+      const data = Object.fromEntries(new FormData(this));
+
+      try {
+        submit.disabled = true;
+        message.className = "form-message success";
+        message.textContent = "Saving About content…";
+
+        await BloodDonationAPI.saveAbout(data, getAdminUserId());
+
+        message.textContent = "About content saved successfully.";
+        toast("About content saved.");
+      } catch (error) {
+        console.error(error);
+        message.className = "form-message error";
+        message.textContent = error?.message || "Unable to save About content.";
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    function adminLogout() {
+      try {
+        BloodDonationAPI.clearAdminSession();
+      } catch (error) {
+        console.error(error);
+      }
+
+      goTo("home");
+      toast("Admin logged out.");
+    }
+
     /* =========================================================
        INITIALIZE
        ========================================================= */
@@ -2837,6 +3399,11 @@
         loadEvents()
 
       ]);
+
+      if (adminIsLoggedIn()) {
+        goTo("admin");
+        await loadAdminDashboard();
+      }
 
     }
 
