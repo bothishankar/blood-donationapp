@@ -40,6 +40,7 @@
 }
 
 
+
 /* =========================================================
    RESET
 ========================================================= */
@@ -154,7 +155,7 @@ img {
   z-index: 1000;
 
   background:
-    rgba(255,255,255,.94);
+    rgba(255,255,255,.95);
 
   backdrop-filter:
     blur(18px);
@@ -176,7 +177,7 @@ img {
 
   justify-content: space-between;
 
-  gap: 24px;
+  gap: 20px;
 
 }
 
@@ -210,9 +211,9 @@ img {
 
   border-radius: 50%;
 
-  background: #fff;
+  background: #ffffff;
 
-  border: 2px solid #fff;
+  border: 2px solid #ffffff;
 
   box-shadow:
     0 8px 24px
@@ -267,7 +268,7 @@ img {
 
   align-items: center;
 
-  gap: 7px;
+  gap: 5px;
 
 }
 
@@ -281,7 +282,7 @@ img {
   color: #30415f;
 
   padding:
-    10px 13px;
+    10px 12px;
 
   border-radius: 11px;
 
@@ -304,6 +305,96 @@ img {
 }
 
 
+.header-tools {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-left: 4px;
+
+}
+
+
+.notification-btn {
+
+  position: relative;
+
+  width: 43px;
+
+  height: 43px;
+
+  border:
+    1px solid #dbe4f1;
+
+  background: white;
+
+  color: var(--navy);
+
+  border-radius: 12px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 19px;
+
+  transition: .2s ease;
+
+}
+
+
+.notification-btn:hover {
+
+  background:
+    var(--blue-soft);
+
+  border-color:
+    #cbdcf5;
+
+  transform:
+    translateY(-1px);
+
+}
+
+
+.notification-badge {
+
+  position: absolute;
+
+  top: -5px;
+
+  right: -5px;
+
+  min-width: 19px;
+
+  height: 19px;
+
+  padding: 0 5px;
+
+  border-radius: 999px;
+
+  background: var(--red);
+
+  color: white;
+
+  border: 2px solid white;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+}
+
+
 .admin-btn {
 
   border:
@@ -314,11 +405,15 @@ img {
   color: var(--navy);
 
   padding:
-    10px 15px;
+    10px 14px;
 
   border-radius: 12px;
 
   font-weight: 800;
+
+  font-size: 13px;
+
+  white-space: nowrap;
 
   transition: .2s ease;
 
@@ -331,26 +426,36 @@ img {
 
   color: white;
 
+  border-color: var(--navy);
+
 }
 
 
-.mobile-menu-btn {
+.mobile-header-tools {
 
   display: none;
 
-  width: 44px;
+  align-items: center;
 
-  height: 44px;
+  gap: 7px;
 
-  border: 0;
+}
 
-  background: var(--blue-soft);
 
-  color: var(--navy);
+.mobile-admin-btn {
 
-  border-radius: 13px;
+  width: 43px;
 
-  font-size: 23px;
+  height: 43px;
+
+  border:
+    1px solid #dbe4f1;
+
+  background: white;
+
+  border-radius: 12px;
+
+  font-size: 18px;
 
 }
 
@@ -1052,6 +1157,13 @@ main {
 
   background:
     var(--green-soft);
+
+}
+
+
+.action-copy {
+
+  min-width: 0;
 
 }
 
@@ -2125,6 +2237,448 @@ textarea.form-control {
 
 
 /* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+.notification-panel {
+
+  position: fixed;
+
+  top: 88px;
+
+  right: 24px;
+
+  z-index: 2500;
+
+  width:
+    min(390px, calc(100vw - 30px));
+
+  max-height:
+    min(600px, calc(100vh - 110px));
+
+  overflow: hidden;
+
+  background: white;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 25px 70px
+    rgba(16,42,86,.18);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  transform:
+    translateY(-10px)
+    scale(.98);
+
+  transform-origin:
+    top right;
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease,
+    visibility .2s ease;
+
+}
+
+
+.notification-panel.show {
+
+  opacity: 1;
+
+  visibility: visible;
+
+  transform:
+    translateY(0)
+    scale(1);
+
+}
+
+
+.notification-head {
+
+  padding:
+    19px 20px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  border-bottom:
+    1px solid var(--border);
+
+}
+
+
+.notification-head h3 {
+
+  color: var(--navy);
+
+  font-size: 18px;
+
+  font-weight: 900;
+
+}
+
+
+.notification-head p {
+
+  margin-top: 2px;
+
+  color: var(--muted);
+
+  font-size: 11px;
+
+}
+
+
+.notification-close {
+
+  width: 32px;
+
+  height: 32px;
+
+  border: 0;
+
+  border-radius: 9px;
+
+  background: #f2f4f7;
+
+  color: #344054;
+
+  font-size: 19px;
+
+}
+
+
+.notification-list {
+
+  max-height:
+    500px;
+
+  overflow-y: auto;
+
+}
+
+
+.notification-item {
+
+  display: flex;
+
+  gap: 12px;
+
+  padding:
+    16px 18px;
+
+  border-bottom:
+    1px solid #eef1f5;
+
+  transition:
+    background .2s ease;
+
+}
+
+
+.notification-item:hover {
+
+  background:
+    #f8faff;
+
+}
+
+
+.notification-icon {
+
+  width: 42px;
+
+  height: 42px;
+
+  min-width: 42px;
+
+  border-radius: 13px;
+
+  background:
+    var(--red-soft);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 19px;
+
+}
+
+
+.notification-content {
+
+  min-width: 0;
+
+}
+
+
+.notification-content strong {
+
+  color: var(--navy);
+
+  font-size: 13px;
+
+  font-weight: 850;
+
+}
+
+
+.notification-content p {
+
+  color: #52627b;
+
+  font-size: 12px;
+
+  margin-top: 2px;
+
+}
+
+
+.notification-content small {
+
+  display: block;
+
+  color: var(--muted);
+
+  font-size: 10px;
+
+  margin-top: 3px;
+
+}
+
+
+.notification-empty {
+
+  padding:
+    48px 25px;
+
+  text-align: center;
+
+  color: var(--muted);
+
+}
+
+
+.notification-empty-icon {
+
+  width: 54px;
+
+  height: 54px;
+
+  margin:
+    0 auto 12px;
+
+  border-radius: 17px;
+
+  background:
+    var(--blue-soft);
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 25px;
+
+}
+
+
+.notification-empty strong {
+
+  display: block;
+
+  color: var(--navy);
+
+  font-size: 14px;
+
+}
+
+
+.notification-empty p {
+
+  margin-top: 5px;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+}
+
+
+
+/* =========================================================
+   ADMIN MODAL
+========================================================= */
+
+.modal-backdrop {
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 3000;
+
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 20px;
+
+  background:
+    rgba(9,22,44,.55);
+
+  backdrop-filter:
+    blur(7px);
+
+}
+
+
+.modal-backdrop.show {
+
+  display: flex;
+
+}
+
+
+.modal {
+
+  width:
+    min(460px,100%);
+
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 27px;
+
+  box-shadow:
+    0 30px 90px
+    rgba(0,0,0,.25);
+
+  animation:
+    modalIn .22s ease;
+
+}
+
+
+@keyframes modalIn {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(.97);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+
+.modal-head {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  margin-bottom: 21px;
+
+}
+
+
+.modal-kicker {
+
+  color: var(--blue);
+
+  font-size: 9px;
+
+  font-weight: 900;
+
+  letter-spacing: .14em;
+
+  margin-bottom: 3px;
+
+}
+
+
+.modal-head h2 {
+
+  color: var(--navy);
+
+  font-size: 22px;
+
+}
+
+
+.modal-close {
+
+  width: 35px;
+
+  height: 35px;
+
+  border: 0;
+
+  border-radius: 10px;
+
+  background: #f2f4f7;
+
+  color: #344054;
+
+  font-size: 19px;
+
+}
+
+
+.login-form {
+
+  display: grid;
+
+  gap: 15px;
+
+}
+
+
+.login-btn {
+
+  width: 100%;
+
+  margin-top: 4px;
+
+}
+
+
+
+/* =========================================================
    FOOTER
 ========================================================= */
 
@@ -2173,7 +2727,7 @@ footer {
 
 
 /* =========================================================
-   MOBILE NAV
+   MOBILE BOTTOM NAV
 ========================================================= */
 
 .mobile-bottom-nav {
@@ -2256,111 +2810,6 @@ footer {
     #1c55a8;
 
   color: white;
-
-}
-
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-.modal-backdrop {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 3000;
-
-  display: none;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 20px;
-
-  background:
-    rgba(9,22,44,.55);
-
-  backdrop-filter:
-    blur(7px);
-
-}
-
-
-.modal-backdrop.show {
-
-  display: flex;
-
-}
-
-
-.modal {
-
-  width:
-    min(460px,100%);
-
-  background: white;
-
-  border-radius: 24px;
-
-  padding: 27px;
-
-  box-shadow:
-    0 30px 90px
-    rgba(0,0,0,.25);
-
-}
-
-
-.modal-head {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  margin-bottom: 18px;
-
-}
-
-
-.modal-head h2 {
-
-  color: var(--navy);
-
-  font-size: 22px;
-
-}
-
-
-.modal-close {
-
-  width: 35px;
-
-  height: 35px;
-
-  border: 0;
-
-  border-radius: 10px;
-
-  background: #f2f4f7;
-
-  color: #344054;
-
-  font-size: 19px;
-
-}
-
-
-.login-form {
-
-  display: grid;
-
-  gap: 13px;
 
 }
 
@@ -2484,6 +2933,22 @@ footer {
 
 @media (max-width: 1050px) {
 
+  .desktop-nav {
+
+    gap: 2px;
+
+  }
+
+
+  .nav-link {
+
+    padding:
+      9px 8px;
+
+    font-size: 13px;
+
+  }
+
 
   .blood-grid {
 
@@ -2508,17 +2973,15 @@ footer {
 
   }
 
-
 }
 
 
 
 /* =========================================================
-   SMALL TABLET
+   MOBILE / TABLET
 ========================================================= */
 
 @media (max-width: 850px) {
-
 
   .desktop-nav {
 
@@ -2527,9 +2990,9 @@ footer {
   }
 
 
-  .mobile-menu-btn {
+  .mobile-header-tools {
 
-    display: block;
+    display: flex;
 
   }
 
@@ -2611,6 +3074,14 @@ footer {
   }
 
 
+  .notification-panel {
+
+    top: 78px;
+
+    right: 12px;
+
+  }
+
 }
 
 
@@ -2620,7 +3091,6 @@ footer {
 ========================================================= */
 
 @media (max-width: 600px) {
-
 
   body {
 
@@ -2640,6 +3110,13 @@ footer {
   .header-inner {
 
     min-height: 70px;
+
+  }
+
+
+  .brand {
+
+    gap: 9px;
 
   }
 
@@ -2666,7 +3143,31 @@ footer {
 
   .brand-meta {
 
-    font-size: 10px;
+    font-size: 9px;
+
+  }
+
+
+  .brand-meta span {
+
+    display: none;
+
+  }
+
+
+  .mobile-header-tools {
+
+    gap: 5px;
+
+  }
+
+
+  .notification-btn,
+  .mobile-admin-btn {
+
+    width: 40px;
+
+    height: 40px;
 
   }
 
@@ -2868,6 +3369,15 @@ footer {
 
     grid-column: auto;
 
+    flex-direction: column-reverse;
+
+  }
+
+
+  .form-actions .btn {
+
+    width: 100%;
+
   }
 
 
@@ -2929,6 +3439,20 @@ footer {
   }
 
 
+  .notification-panel {
+
+    top: 76px;
+
+    right: 8px;
+
+    width:
+      calc(100vw - 16px);
+
+    max-height:
+      calc(100vh - 95px);
+
+  }
+
 }
 
 
@@ -2938,7 +3462,6 @@ footer {
 ========================================================= */
 
 @media (max-width: 390px) {
-
 
   .brand-name {
 
@@ -2966,6 +3489,5 @@ footer {
     gap: 5px;
 
   }
-
 
 }
