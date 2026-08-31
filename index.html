@@ -1326,36 +1326,38 @@
       </div>
 
 
-      <form
-        id="adminForm"
-        class="login-form"
-      >
+      <form id="adminForm" class="login-form admin-login-form" novalidate>
 
-        <input
-          id="adminUsername"
-          class="form-control"
-          placeholder="Username"
-          required
-        >
+        <div class="admin-field">
+          <label for="adminUsername">Username</label>
+          <input
+            id="adminUsername"
+            name="username"
+            class="form-control admin-input"
+            type="text"
+            autocomplete="username"
+            placeholder="Enter admin username"
+            required
+          >
+        </div>
 
-        <input
-          id="adminPassword"
-          class="form-control"
-          type="password"
-          placeholder="Password"
-          required
-        >
+        <div class="admin-field">
+          <label for="adminPassword">Password</label>
+          <input
+            id="adminPassword"
+            name="password"
+            class="form-control admin-input"
+            type="password"
+            autocomplete="current-password"
+            placeholder="Enter admin password"
+            required
+          >
+        </div>
 
-        <div
-          id="adminMessage"
-          class="form-message"
-        ></div>
+        <div id="adminMessage" class="form-message" role="alert"></div>
 
-        <button
-          class="btn btn-primary"
-          type="submit"
-        >
-          Login
+        <button class="btn btn-primary admin-login-submit" type="submit">
+          🔐 Login as Admin
         </button>
 
       </form>
@@ -2730,101 +2732,61 @@
     }
 
 
-    document
-      .getElementById("adminForm")
-      .addEventListener(
-        "submit",
-        async function(event) {
+    document.getElementById("adminForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
 
-          event.preventDefault();
+      const usernameEl = document.getElementById("adminUsername");
+      const passwordEl = document.getElementById("adminPassword");
+      const message = document.getElementById("adminMessage");
+      const submit = this.querySelector(".admin-login-submit");
 
+      const username = usernameEl.value.trim();
+      const password = passwordEl.value;
 
-          const username =
-            document.getElementById(
-              "adminUsername"
-            ).value.trim();
+      if (!username || !password) {
+        message.className = "form-message error";
+        message.textContent = "Please enter both username and password.";
+        if (!username) usernameEl.focus();
+        else passwordEl.focus();
+        return;
+      }
 
+      try {
+        submit.disabled = true;
+        submit.textContent = "Checking login...";
+        message.className = "form-message success";
+        message.textContent = "Checking login...";
 
-          const password =
-            document.getElementById(
-              "adminPassword"
-            ).value;
-
-
-          const message =
-            document.getElementById(
-              "adminMessage"
-            );
-
-
-          try {
-
-            message.className =
-              "form-message success";
-
-            message.textContent =
-              "Checking login...";
-
-
-            const result =
-              await BloodDonationAPI.login(
-                username,
-                password
-              );
-
-
-            const user =
-              result?.user ||
-              result?.data ||
-              result;
-
-
-            BloodDonationAPI.setAdminSession(
-              user
-            );
-
-
-            message.className =
-              "form-message success";
-
-            message.textContent =
-              "Login successful.";
-
-
-            toast(
-              "Admin login successful."
-            );
-
-
-            /*
-              If you already have an admin page in your
-              project, change the URL below to that page.
-
-              For now we simply close the modal because
-              this Premium V2 index is independent from
-              your admin dashboard.
-            */
-
-            setTimeout(() => {
-              closeAdmin();
-            }, 700);
-
-          } catch (error) {
-
-            console.error(error);
-
-
-            message.className =
-              "form-message error";
-
-            message.textContent =
-              error.message ||
-              "Invalid username or password.";
-
-          }
-
+        if (!window.BloodDonationAPI || typeof BloodDonationAPI.login !== "function") {
+          throw new Error("Login service is not available. Please check app.js.");
         }
-      );
+
+        const result = await BloodDonationAPI.login(username, password);
+        const user = result?.user || result?.data || result;
+
+        if (result?.success === false) {
+          throw new Error(result.error || "Invalid username or password.");
+        }
+
+        BloodDonationAPI.setAdminSession(user);
+        message.className = "form-message success";
+        message.textContent = "Login successful.";
+        toast("Admin login successful.");
+
+        setTimeout(() => {
+          closeAdmin();
+          submit.disabled = false;
+          submit.textContent = "🔐 Login as Admin";
+        }, 700);
+
+      } catch (error) {
+        console.error(error);
+        message.className = "form-message error";
+        message.textContent = error?.message || "Invalid username or password.";
+        submit.disabled = false;
+        submit.textContent = "🔐 Login as Admin";
+      }
+    });
 
 
     /* =========================================================
