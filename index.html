@@ -2028,8 +2028,13 @@
             : (
                 result?.events ||
                 result?.data ||
+                result?.result ||
                 []
               );
+
+        if (!Array.isArray(cachedEvents)) {
+          cachedEvents = [];
+        }
 
 
         /*
@@ -2101,6 +2106,23 @@
                   today.getDate()
                 );
 
+            })
+            .sort((a, b) => {
+              const da = value(a, "Event_Date", "eventDate", "EventDate");
+              const db = value(b, "Event_Date", "eventDate", "EventDate");
+
+              if (!da && !db) return 0;
+              if (!da) return 1;
+              if (!db) return -1;
+
+              const ta = new Date(da).getTime();
+              const tb = new Date(db).getTime();
+
+              if (Number.isNaN(ta) && Number.isNaN(tb)) return 0;
+              if (Number.isNaN(ta)) return 1;
+              if (Number.isNaN(tb)) return -1;
+
+              return ta - tb;
             })
             .slice(0, 3);
 
@@ -2322,35 +2344,96 @@
     }
 
 
-    function showAllEvents() {
+    async function showAllEvents() {
+      const container = document.getElementById("eventsContainer");
+      if (!container) return;
 
-      if (
-        !cachedEvents.length
-      ) {
-        toast(
-          "No events are currently available."
-        );
+      container.innerHTML = `
+        <div class="loading" style="grid-column:1/-1">
+          <span class="spinner"></span>
+          Loading all events...
+        </div>
+      `;
 
-        return;
-      }
+      try {
+        const result = await BloodDonationAPI.getEvents();
 
+        const freshEvents = Array.isArray(result)
+          ? result
+          : (
+              result?.events ||
+              result?.data ||
+              result?.result ||
+              []
+            );
 
-      const container =
-        document.getElementById(
-          "eventsContainer"
-        );
+        cachedEvents = Array.isArray(freshEvents) ? freshEvents : [];
 
+        const activeEvents = cachedEvents.filter(event => {
+          const status = String(
+            value(event, "Status", "status")
+          ).trim().toLowerCase();
 
-      container.innerHTML =
-        cachedEvents
+          return ![
+            "cancelled",
+            "canceled",
+            "deleted",
+            "inactive",
+            "removed"
+          ].includes(status);
+        });
+
+        if (!activeEvents.length) {
+          container.innerHTML = `
+            <div class="empty-events" style="grid-column:1/-1">
+              ❤️
+              <br><br>
+              No events are currently available.
+            </div>
+          `;
+          toast("No events are currently available.");
+          return;
+        }
+
+        container.innerHTML = activeEvents
           .map(renderEvent)
           .join("");
 
+        toast(`${activeEvents.length} event(s) loaded.`);
+      } catch (error) {
+        console.error("View all events error:", error);
 
-      toast(
-        `${cachedEvents.length} event(s) loaded.`
-      );
+        const fallbackEvents = (Array.isArray(cachedEvents)
+          ? cachedEvents
+          : []
+        ).filter(event => {
+          const status = String(
+            value(event, "Status", "status")
+          ).trim().toLowerCase();
 
+          return ![
+            "cancelled",
+            "canceled",
+            "deleted",
+            "inactive",
+            "removed"
+          ].includes(status);
+        });
+
+        if (fallbackEvents.length) {
+          container.innerHTML = fallbackEvents
+            .map(renderEvent)
+            .join("");
+          toast(`${fallbackEvents.length} event(s) loaded.`);
+          return;
+        }
+
+        container.innerHTML = `
+          <div class="empty-events" style="grid-column:1/-1">
+            Unable to load events right now.
+          </div>
+        `;
+      }
     }
 
 
@@ -2387,6 +2470,26 @@
             Object.fromEntries(
               new FormData(form)
             );
+
+          const donorName = String(
+            data.Name ||
+            data.name ||
+            data.Donor_Name ||
+            data.DonorName ||
+            ""
+          ).trim();
+
+          if (!donorName) {
+            message.className = "form-message error";
+            message.textContent = "Donor name is required.";
+            form.elements.namedItem("Name")?.focus();
+            return;
+          }
+
+          data.Name = donorName;
+          data.name = donorName;
+          data.Donor_Name = donorName;
+          data.DonorName = donorName;
 
 
           try {
@@ -2723,6 +2826,26 @@
             Object.fromEntries(
               new FormData(form)
             );
+
+          const patientName = String(
+            data.Patient_Name ||
+            data.PatientName ||
+            data.Name ||
+            data.name ||
+            ""
+          ).trim();
+
+          if (!patientName) {
+            message.className = "form-message error";
+            message.textContent = "Patient name is required.";
+            form.elements.namedItem("Patient_Name")?.focus();
+            return;
+          }
+
+          data.Patient_Name = patientName;
+          data.PatientName = patientName;
+          data.Name = patientName;
+          data.name = patientName;
 
 
           try {
@@ -3359,14 +3482,17 @@
       const data = {
         Title: title,
         Event_Title: title,
+        event_title: title,
         title: title,
         eventTitle: title,
 
         Event_Date: eventDate,
         EventDate: eventDate,
+        event_date: eventDate,
         eventDate: eventDate,
 
         Location: location,
+        Event_Location: location,
         location: location,
 
         Image_URL: imageUrl,
@@ -3390,7 +3516,15 @@
           throw new Error("Event service is not available. Please check app.js.");
         }
 
-        const result = await BloodDonationAPI.api("createEvent", data);
+        let result;
+
+        if (typeof BloodDonationAPI.createEvent === "function") {
+          result = await BloodDonationAPI.createEvent(data, userId);
+        } else if (typeof BloodDonationAPI.api === "function") {
+          result = await BloodDonationAPI.api("createEvent", data);
+        } else {
+          throw new Error("Event service is not available. Please check app.js.");
+        }
 
         if (result?.success === false) {
           throw new Error(result.error || "Unable to create event.");
