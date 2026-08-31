@@ -17,7 +17,7 @@
 
   <title>Poongurichi Nanbargal | Blood Donors Club</title>
 
-    <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -70,6 +70,27 @@
       </a>
 
 
+      <div class="mobile-header-actions">
+        <button
+          class="notification-btn"
+          type="button"
+          onclick="openNotifications()"
+          aria-label="Notifications"
+          title="Notifications"
+        >
+          🔔
+          <span id="notificationBadgeMobile" class="notification-badge">0</span>
+        </button>
+
+        <button
+          class="admin-btn mobile-admin-btn"
+          type="button"
+          onclick="openAdmin()"
+        >
+          🔐 Admin
+        </button>
+      </div>
+
       <nav class="desktop-nav">
 
         <button
@@ -111,17 +132,17 @@
         >
           About
         </button>
-
         <button
           class="notification-btn"
           type="button"
-          onclick="toast('No new notifications right now.')"
+          onclick="openNotifications()"
           aria-label="Notifications"
           title="Notifications"
         >
           🔔
-          <span class="notification-badge">0</span>
+          <span id="notificationBadge" class="notification-badge">0</span>
         </button>
+
 
         <button
           class="admin-btn"
@@ -1338,6 +1359,37 @@
   </div>
 
 
+
+  <!-- =======================================================
+       NOTIFICATIONS
+       ======================================================= -->
+
+  <div
+    id="notificationModal"
+    class="modal-backdrop"
+    onclick="closeNotificationsOutside(event)"
+  >
+    <div class="modal notification-modal">
+      <div class="modal-head">
+        <h2>🔔 Notifications</h2>
+        <button
+          class="modal-close"
+          type="button"
+          onclick="closeNotifications()"
+          aria-label="Close notifications"
+        >×</button>
+      </div>
+
+      <div id="notificationList" class="notification-list">
+        <div class="notification-empty">
+          <div class="notification-empty-icon">🔔</div>
+          <strong>No new notifications</strong>
+          <p>You are all caught up.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- =======================================================
        TOAST
        ======================================================= -->
@@ -2524,6 +2576,95 @@
         }
       );
 
+
+
+    /* =========================================================
+       NOTIFICATIONS
+       Added without changing existing application logic.
+       ========================================================= */
+
+    const APP_NOTIFICATIONS = [];
+
+    function openNotifications() {
+      const modal = document.getElementById("notificationModal");
+      if (!modal) return;
+
+      renderNotifications();
+      modal.classList.add("show");
+
+      const badge = document.getElementById("notificationBadge");
+      const mobileBadge = document.getElementById("notificationBadgeMobile");
+
+      if (badge) {
+        badge.textContent = "0";
+        badge.style.display = "none";
+      }
+
+      if (mobileBadge) {
+        mobileBadge.textContent = "0";
+        mobileBadge.style.display = "none";
+      }
+    }
+
+    function closeNotifications() {
+      const modal = document.getElementById("notificationModal");
+      if (modal) modal.classList.remove("show");
+    }
+
+    function closeNotificationsOutside(event) {
+      if (event.target.id === "notificationModal") {
+        closeNotifications();
+      }
+    }
+
+    function renderNotifications() {
+      const list = document.getElementById("notificationList");
+      if (!list) return;
+
+      if (!APP_NOTIFICATIONS.length) {
+        list.innerHTML = `
+          <div class="notification-empty">
+            <div class="notification-empty-icon">🔔</div>
+            <strong>No new notifications</strong>
+            <p>You are all caught up.</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = APP_NOTIFICATIONS.map(item => `
+        <div class="notification-item">
+          <div class="notification-item-icon">${item.icon || "🔔"}</div>
+          <div>
+            <strong>${item.title || ""}</strong>
+            <p>${item.message || ""}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function setAppNotification(title, message, icon = "🔔") {
+      APP_NOTIFICATIONS.unshift({
+        title,
+        message,
+        icon
+      });
+
+      const badge = document.getElementById("notificationBadge");
+      const mobileBadge = document.getElementById("notificationBadgeMobile");
+
+      if (badge) {
+        badge.textContent = String(APP_NOTIFICATIONS.length);
+        badge.style.display = "inline-flex";
+      }
+
+      if (mobileBadge) {
+        mobileBadge.textContent = String(APP_NOTIFICATIONS.length);
+        mobileBadge.style.display = "inline-flex";
+      }
+
+      renderNotifications();
+    }
 
     /* =========================================================
        ADMIN LOGIN
