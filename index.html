@@ -6,19 +6,16 @@
 
   <title>Poongurichi Nanbargal Blood Donors Club</title>
 
-  <meta name="description"
-        content="Poongurichi Nanbargal Blood Donors Club - Find blood donors, become a donor and save lives.">
-
-  <link rel="stylesheet" href="style.css">
+  <meta
+    name="description"
+    content="Poongurichi Nanbargal Blood Donors Club"
+  >
 
   <style>
-    /* =========================================================
-       POONGURICHI NANBARGAL - NEW HOME LAYOUT
-       ========================================================= */
 
     :root {
       --red: #e51d48;
-      --red-dark: #bd1239;
+      --red-dark: #b90f38;
       --pink: #fff0f4;
       --blue: #0755c9;
       --navy: #071d49;
@@ -26,12 +23,11 @@
       --muted: #65728b;
       --white: #ffffff;
       --bg: #f6f8fc;
-      --green: #0a9b61;
-      --orange: #f28a00;
+      --green: #079c63;
+      --orange: #ef8300;
       --purple: #7047d8;
-      --cyan: #009bb7;
-      --shadow: 0 8px 30px rgba(16, 35, 75, 0.08);
-      --radius: 22px;
+      --cyan: #009db9;
+      --shadow: 0 8px 30px rgba(16, 35, 75, .08);
     }
 
     * {
@@ -52,26 +48,21 @@
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
+
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
-      padding-bottom: 88px;
-    }
-
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
+      padding-bottom: 85px;
     }
 
     button {
+      font: inherit;
       cursor: pointer;
     }
 
     a {
-      color: inherit;
       text-decoration: none;
+      color: inherit;
     }
 
     .container {
@@ -79,13 +70,13 @@
       margin: auto;
     }
 
-    /* =========================================================
+    /* =====================================================
        HEADER
-       ========================================================= */
+       ===================================================== */
 
     .top-header {
-      background: rgba(255,255,255,.96);
-      border-bottom: 1px solid #e9edf5;
+      background: rgba(255,255,255,.97);
+      border-bottom: 1px solid #e7ebf2;
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -96,58 +87,71 @@
       min-height: 82px;
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 15px;
     }
 
     .menu-button {
       display: none;
       border: 0;
       background: transparent;
-      font-size: 30px;
       color: var(--navy);
+      font-size: 28px;
+    }
+
+    /* LOGO */
+
+    .logo-box {
+      width: 58px;
+      height: 58px;
+      flex: 0 0 58px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 5px 16px rgba(0,0,0,.15);
+      border: 2px solid #fff;
+    }
+
+    .logo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* fallback logo */
+
+    .logo-fallback {
+      display: none;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg,#e51d48,#a90e35);
+      color: white;
+      font-size: 30px;
+      font-weight: 900;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 13px;
-      min-width: 270px;
-    }
-
-    .brand-logo {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid white;
-      box-shadow: 0 4px 14px rgba(0,0,0,.14);
-      background: #fff;
-    }
-
-    .brand-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: linear-gradient(135deg,#e51d48,#9f1034);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 30px;
-      box-shadow: 0 5px 15px rgba(229,29,72,.25);
+      gap: 12px;
     }
 
     .brand-name {
       font-size: 19px;
-      font-weight: 900;
-      line-height: 1.05;
+      font-weight: 950;
       color: var(--navy);
+      line-height: 1.1;
     }
 
     .brand-sub {
-      font-size: 12px;
       color: var(--muted);
-      margin-top: 5px;
+      font-size: 12px;
+      margin-top: 4px;
     }
 
     .brand-sub strong {
@@ -158,171 +162,167 @@
       margin-left: auto;
       display: flex;
       align-items: center;
-      gap: 7px;
+      gap: 5px;
     }
 
     .nav-link {
-      padding: 11px 13px;
-      border-radius: 12px;
-      font-weight: 800;
+      padding: 11px 12px;
+      border-radius: 11px;
       font-size: 14px;
-      transition: .2s;
+      font-weight: 850;
     }
 
     .nav-link:hover {
-      background: #f2f5fb;
+      background: #f3f6fb;
       color: var(--red);
     }
 
     .admin-btn {
-      border: 1px solid #f3a5b8;
+      padding: 10px 15px;
+      border: 1px solid #f0a4b6;
+      background: #fff8fa;
       color: var(--red-dark);
-      background: #fff7f9;
-      padding: 11px 16px;
-      border-radius: 12px;
+      border-radius: 11px;
       font-weight: 900;
+      margin-left: 5px;
     }
 
     .notification-button {
-      margin-left: 8px;
-      width: 43px;
-      height: 43px;
+      width: 42px;
+      height: 42px;
       border: 0;
       border-radius: 50%;
-      background: #f5f7fb;
+      background: #f4f6fa;
       font-size: 21px;
+      margin-left: 5px;
       position: relative;
     }
 
     .notification-count {
       position: absolute;
-      top: -2px;
       right: -2px;
-      min-width: 19px;
-      height: 19px;
-      padding: 0 5px;
+      top: -2px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
       border-radius: 20px;
       background: var(--red);
       color: white;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    /* =========================================================
+    /* =====================================================
        MAIN
-       ========================================================= */
+       ===================================================== */
 
     main {
       padding-top: 20px;
     }
 
-    /* =========================================================
+    /* =====================================================
        HERO
-       ========================================================= */
+       ===================================================== */
 
     .hero {
-      background:
-        radial-gradient(circle at 85% 20%, rgba(255,255,255,.18), transparent 25%),
-        linear-gradient(135deg,#df163f,#8f0d2d);
-      border-radius: 28px;
-      color: white;
-      padding: 38px;
-      min-height: 260px;
-      display: flex;
-      align-items: center;
       position: relative;
       overflow: hidden;
-      margin-bottom: 22px;
+      background:
+        radial-gradient(
+          circle at 85% 20%,
+          rgba(255,255,255,.15),
+          transparent 25%
+        ),
+        linear-gradient(
+          135deg,
+          #df163f,
+          #8f0d2d
+        );
+
+      color: white;
+      border-radius: 28px;
+      padding: 38px;
+      min-height: 270px;
+      margin-bottom: 20px;
     }
 
     .hero::after {
       content: "♥";
       position: absolute;
-      right: 50px;
-      bottom: -65px;
-      font-size: 300px;
+      right: 45px;
+      bottom: -70px;
+      font-size: 310px;
+      color: rgba(255,255,255,.06);
       line-height: 1;
-      color: rgba(255,255,255,.07);
     }
 
     .hero-content {
       position: relative;
       z-index: 2;
-      max-width: 700px;
+      max-width: 760px;
     }
 
     .hero-label {
       font-size: 14px;
       font-weight: 900;
-      letter-spacing: .5px;
       margin-bottom: 10px;
-      text-transform: uppercase;
+      letter-spacing: .4px;
     }
 
     .hero h1 {
-      font-size: clamp(34px,5vw,60px);
+      font-size: clamp(38px,5vw,62px);
       line-height: .98;
-      margin-bottom: 16px;
       font-weight: 950;
+      margin-bottom: 15px;
     }
 
     .hero p {
-      font-size: 17px;
-      max-width: 700px;
-      opacity: .96;
+      font-size: 16px;
+      max-width: 690px;
     }
 
     .hero-buttons {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-top: 23px;
+      margin-top: 22px;
     }
 
-    .btn {
+    .hero-button {
       border: 0;
+      border-radius: 12px;
       padding: 13px 20px;
-      border-radius: 13px;
       font-weight: 900;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: transform .18s, box-shadow .18s;
     }
 
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-white {
+    .hero-button-white {
       background: white;
       color: var(--red-dark);
     }
 
-    .btn-outline {
-      background: rgba(255,255,255,.1);
+    .hero-button-outline {
       color: white;
-      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.3);
     }
 
-    /* =========================================================
-       QUICK STATS
-       ========================================================= */
+    /* =====================================================
+       TOP STATS
+       ===================================================== */
 
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3,1fr);
       gap: 14px;
-      margin-bottom: 28px;
+      margin-bottom: 25px;
     }
 
     .stat-card {
       background: white;
-      border: 1px solid #e9edf5;
+      border: 1px solid #e7ebf2;
       border-radius: 20px;
       padding: 20px;
       text-align: center;
@@ -330,7 +330,7 @@
     }
 
     .stat-number {
-      font-size: 35px;
+      font-size: 34px;
       font-weight: 950;
       color: var(--red-dark);
       line-height: 1;
@@ -338,81 +338,72 @@
 
     .stat-label {
       margin-top: 7px;
+      color: #566783;
       font-weight: 800;
-      color: #52627d;
       font-size: 14px;
     }
 
-    /* =========================================================
-       SECTION TITLE
-       ========================================================= */
+    /* =====================================================
+       SECTIONS
+       ===================================================== */
 
     .section {
-      margin-bottom: 25px;
+      margin-bottom: 24px;
     }
 
     .section-card {
       background: white;
+      border: 1px solid #e7ebf2;
       border-radius: 24px;
-      border: 1px solid #e8edf5;
-      box-shadow: var(--shadow);
       padding: 20px;
+      box-shadow: var(--shadow);
     }
 
     .section-heading {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 16px;
     }
 
     .section-title {
-      display: flex;
-      align-items: center;
-      gap: 9px;
       font-size: 24px;
       font-weight: 950;
       color: var(--navy);
     }
 
-    .section-title .heart {
+    .heart {
       color: var(--red);
     }
 
     .view-all {
-      color: var(--blue);
-      font-weight: 900;
-      font-size: 14px;
       border: 0;
       background: transparent;
+      color: var(--blue);
+      font-weight: 900;
     }
 
-    /* =========================================================
+    /* =====================================================
        EVENTS
-       ========================================================= */
+       ===================================================== */
 
     .event-slider {
       position: relative;
     }
 
-    .event-main {
+    .event-image-wrap {
+      width: 100%;
+      height: 320px;
       overflow: hidden;
       border-radius: 18px;
-      background: #f7f8fb;
-    }
-
-    .event-image-wrap {
-      height: 310px;
-      background: #e9edf4;
-      position: relative;
+      background: #edf1f6;
     }
 
     .event-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
     .event-placeholder {
@@ -421,23 +412,27 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg,#ffe8ee,#eef4ff);
       font-size: 80px;
+      background: linear-gradient(
+        135deg,
+        #ffe8ee,
+        #edf4ff
+      );
     }
 
     .slider-arrow {
       position: absolute;
-      top: 135px;
+      top: 136px;
       width: 48px;
       height: 48px;
-      border-radius: 50%;
       border: 0;
+      border-radius: 50%;
       background: white;
       color: var(--navy);
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 900;
-      box-shadow: 0 5px 18px rgba(0,0,0,.15);
-      z-index: 5;
+      z-index: 10;
+      box-shadow: 0 5px 20px rgba(0,0,0,.16);
     }
 
     .slider-prev {
@@ -449,269 +444,234 @@
     }
 
     .event-info {
-      padding: 20px 5px 4px;
+      padding: 17px 5px 3px;
     }
 
     .event-title {
       font-size: 23px;
       font-weight: 950;
-      margin-bottom: 9px;
       color: var(--navy);
+      margin-bottom: 8px;
     }
 
     .event-meta {
       display: grid;
-      gap: 7px;
-      color: #27395d;
-      font-size: 16px;
+      gap: 6px;
+      color: #354766;
+      font-size: 15px;
     }
 
     .event-meta-row {
       display: flex;
-      gap: 9px;
+      gap: 8px;
       align-items: center;
     }
 
-    .event-meta-icon {
-      width: 22px;
-      text-align: center;
-    }
-
     .event-description {
-      margin-top: 13px;
-      color: #344766;
-      font-size: 15px;
-      max-width: 680px;
+      margin-top: 12px;
+      color: #4c5d77;
     }
 
     .event-action {
-      margin-top: 16px;
-      display: inline-flex;
-      background: linear-gradient(135deg,#e51d48,#c6103b);
+      margin-top: 15px;
+      background: linear-gradient(
+        135deg,
+        #e51d48,
+        #c5103b
+      );
       color: white;
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-weight: 900;
       border: 0;
+      padding: 12px 18px;
+      border-radius: 11px;
+      font-weight: 900;
     }
 
     .dots {
       display: flex;
       justify-content: center;
-      gap: 9px;
-      margin: 16px 0 2px;
+      gap: 8px;
+      margin-top: 14px;
     }
 
     .dot {
-      width: 11px;
-      height: 11px;
+      width: 10px;
+      height: 10px;
+      padding: 0;
+      border: 0;
       border-radius: 50%;
       background: #dfe4ec;
-      border: 0;
-      padding: 0;
     }
 
     .dot.active {
-      background: var(--red);
       width: 18px;
       border-radius: 10px;
+      background: var(--red);
     }
 
     .no-events {
-      padding: 40px 20px;
+      padding: 35px;
       text-align: center;
+      background: #f7f9fc;
+      border-radius: 15px;
       color: var(--muted);
-      background: #f8f9fc;
-      border-radius: 16px;
     }
 
-    /* =========================================================
+    /* =====================================================
        BLOOD GROUPS
-       ========================================================= */
+       ===================================================== */
 
     .blood-grid {
       display: grid;
       grid-template-columns: repeat(4,1fr);
-      gap: 13px;
+      gap: 12px;
     }
 
     .blood-card {
       background: white;
       border: 1px solid #edf0f5;
-      border-radius: 19px;
-      padding: 17px 10px;
+      border-radius: 18px;
+      padding: 16px 8px;
       text-align: center;
       box-shadow: 0 4px 15px rgba(16,35,75,.06);
     }
 
     .blood-icon {
-      font-size: 29px;
+      font-size: 27px;
       line-height: 1;
       margin-bottom: 5px;
     }
 
     .blood-type {
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 950;
     }
 
     .blood-count {
+      margin-top: 5px;
+      color: var(--navy);
       font-size: 21px;
       font-weight: 950;
-      color: var(--navy);
-      margin-top: 5px;
     }
 
     .blood-members {
+      color: #63718a;
       font-size: 13px;
-      color: #596a85;
     }
 
-    .a-positive .blood-type,
-    .a-positive .blood-icon {
+    .a-positive .blood-icon,
+    .a-positive .blood-type {
       color: #ed4679;
     }
 
-    .a-negative .blood-type,
-    .a-negative .blood-icon {
+    .a-negative .blood-icon,
+    .a-negative .blood-type {
       color: #f07800;
     }
 
-    .b-positive .blood-type,
-    .b-positive .blood-icon {
+    .b-positive .blood-icon,
+    .b-positive .blood-type {
       color: #079c63;
     }
 
-    .b-negative .blood-type,
-    .b-negative .blood-icon {
+    .b-negative .blood-icon,
+    .b-negative .blood-type {
       color: #1761c8;
     }
 
-    .ab-positive .blood-type,
-    .ab-positive .blood-icon {
+    .ab-positive .blood-icon,
+    .ab-positive .blood-type {
       color: #7543d7;
     }
 
-    .ab-negative .blood-type,
-    .ab-negative .blood-icon {
+    .ab-negative .blood-icon,
+    .ab-negative .blood-type {
       color: #009db9;
     }
 
-    .o-positive .blood-type,
-    .o-positive .blood-icon {
+    .o-positive .blood-icon,
+    .o-positive .blood-type {
       color: #e61b48;
     }
 
-    .o-negative .blood-type,
-    .o-negative .blood-icon {
+    .o-negative .blood-icon,
+    .o-negative .blood-type {
       color: #ef8300;
     }
 
-    /* =========================================================
-       ACTION CARDS
-       ========================================================= */
+    /* =====================================================
+       FIND BLOOD
+       ===================================================== */
 
-    .action-list {
-      display: grid;
-      gap: 12px;
-    }
+    .find-card {
+      background:
+        linear-gradient(
+          110deg,
+          #edf4ff,
+          #f8fbff
+        );
 
-    .action-card {
-      min-height: 120px;
-      border-radius: 21px;
-      padding: 20px 24px;
+      border: 1px solid #dce9ff;
+      border-radius: 22px;
+      padding: 22px;
       display: flex;
       align-items: center;
       gap: 18px;
-      border: 1px solid transparent;
     }
 
-    .action-donor {
-      background: linear-gradient(110deg,#fff0f4,#fff8fa);
-      border-color: #ffdce5;
-    }
-
-    .action-search {
-      background: linear-gradient(110deg,#edf4ff,#f7faff);
-      border-color: #dbe8ff;
-    }
-
-    .action-icon {
-      width: 75px;
-      height: 75px;
-      flex: 0 0 75px;
+    .find-icon {
+      width: 72px;
+      height: 72px;
+      flex: 0 0 72px;
       border-radius: 50%;
+      background: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 44px;
+      font-size: 40px;
     }
 
-    .donor-icon {
-      background: #fff;
-      color: var(--red);
-    }
-
-    .search-icon {
-      background: #fff;
-      color: var(--blue);
-    }
-
-    .action-content {
+    .find-content {
       flex: 1;
     }
 
-    .action-content h3 {
-      font-size: 22px;
-      font-weight: 950;
-      margin-bottom: 4px;
-    }
-
-    .action-donor h3 {
-      color: var(--red-dark);
-    }
-
-    .action-search h3 {
+    .find-content h3 {
       color: var(--blue);
+      font-size: 23px;
+      font-weight: 950;
     }
 
-    .action-content p {
-      color: #334765;
-      font-size: 15px;
+    .find-content p {
+      color: #435571;
+      margin-top: 3px;
     }
 
-    .action-button {
-      min-width: 170px;
-      padding: 13px 18px;
-      border-radius: 12px;
-      color: white;
+    .find-button {
       border: 0;
+      background: linear-gradient(
+        135deg,
+        #115cc9,
+        #0646aa
+      );
+      color: white;
+      border-radius: 12px;
+      padding: 13px 22px;
       font-weight: 900;
-      font-size: 15px;
     }
 
-    .donor-action-button {
-      background: linear-gradient(135deg,#ed214c,#d51140);
-    }
+    /* =====================================================
+       SEARCH
+       ===================================================== */
 
-    .search-action-button {
-      background: linear-gradient(135deg,#115cc9,#0646aa);
-    }
-
-    /* =========================================================
-       SEARCH SECTION
-       ========================================================= */
-
-    .tool-panel {
+    .search-panel {
       display: none;
       margin-top: 14px;
       padding: 18px;
-      border-radius: 18px;
       background: #f8faff;
       border: 1px solid #dfe9fa;
+      border-radius: 18px;
     }
 
-    .tool-panel.open {
+    .search-panel.open {
       display: block;
     }
 
@@ -727,49 +687,41 @@
     }
 
     .field label {
-      font-weight: 800;
       font-size: 13px;
-      color: var(--navy);
+      font-weight: 850;
     }
 
     .field input,
-    .field select,
-    .field textarea {
+    .field select {
       width: 100%;
-      border: 1px solid #d8e0ec;
-      background: white;
-      border-radius: 11px;
       padding: 12px;
+      border: 1px solid #d8e0ec;
+      border-radius: 11px;
+      background: white;
       outline: none;
     }
 
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus {
-      border-color: var(--blue);
-    }
-
-    .form-submit {
-      margin-top: 14px;
+    .search-submit {
+      margin-top: 13px;
       border: 0;
+      border-radius: 11px;
       background: var(--blue);
       color: white;
       padding: 12px 20px;
-      border-radius: 11px;
       font-weight: 900;
     }
 
     .search-results {
-      margin-top: 15px;
+      margin-top: 14px;
       display: grid;
-      gap: 9px;
+      gap: 8px;
     }
 
     .donor-result {
+      padding: 13px;
+      border-radius: 12px;
       background: white;
-      border: 1px solid #e6ebf3;
-      border-radius: 14px;
-      padding: 14px;
+      border: 1px solid #e4e9f1;
     }
 
     .donor-result-name {
@@ -777,24 +729,24 @@
       color: var(--navy);
     }
 
-    /* =========================================================
+    /* =====================================================
        QUICK STATS
-       ========================================================= */
+       ===================================================== */
 
     .quick-grid {
       display: grid;
       grid-template-columns: repeat(4,1fr);
-      gap: 12px;
+      gap: 11px;
     }
 
     .quick-card {
-      background: white;
-      border: 1px solid #edf0f5;
-      border-radius: 17px;
-      padding: 16px;
       display: flex;
       align-items: center;
       gap: 10px;
+      padding: 15px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid #edf0f5;
     }
 
     .quick-icon {
@@ -804,14 +756,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
       background: #f6f0ff;
+      font-size: 23px;
     }
 
     .quick-label {
       font-size: 12px;
-      color: #43536e;
-      font-weight: 700;
+      color: #53627c;
+      font-weight: 750;
     }
 
     .quick-number {
@@ -820,24 +772,29 @@
       color: var(--navy);
     }
 
-    /* =========================================================
-       INFO
-       ========================================================= */
+    /* =====================================================
+       INFORMATION
+       ===================================================== */
 
     .info-box {
-      background: linear-gradient(100deg,#edf5ff,#f5f9ff);
-      border: 1px solid #d9e7fb;
-      border-radius: 18px;
-      padding: 16px 20px;
       display: flex;
       align-items: center;
       gap: 12px;
+      padding: 16px 20px;
+      border-radius: 18px;
+      background: linear-gradient(
+        100deg,
+        #edf5ff,
+        #f5f9ff
+      );
+      border: 1px solid #d9e7fb;
       color: #12429b;
     }
 
     .info-icon {
       width: 32px;
       height: 32px;
+      flex: 0 0 32px;
       border-radius: 50%;
       background: var(--blue);
       color: white;
@@ -845,52 +802,40 @@
       align-items: center;
       justify-content: center;
       font-weight: 950;
-      flex: 0 0 32px;
     }
 
-    /* =========================================================
+    /* =====================================================
        FOOTER
-       ========================================================= */
+       ===================================================== */
 
     footer {
-      margin-top: 30px;
       background: var(--navy);
       color: white;
       text-align: center;
-      padding: 24px 15px;
+      padding: 22px;
+      margin-top: 25px;
     }
 
     footer p {
       opacity: .85;
-      font-size: 14px;
     }
 
-    /* =========================================================
+    /* =====================================================
        MOBILE BOTTOM NAV
-       ========================================================= */
+       ===================================================== */
 
     .mobile-bottom-nav {
       display: none;
     }
 
-    /* =========================================================
-       LOADING
-       ========================================================= */
-
-    .loading {
-      color: #75839a;
-      text-align: center;
-      padding: 25px;
-    }
-
-    /* =========================================================
+    /* =====================================================
        MOBILE
-       ========================================================= */
+       ===================================================== */
 
-    @media (max-width: 760px) {
+    @media(max-width:760px) {
 
       body {
-        padding-bottom: 88px;
+        padding-bottom: 82px;
       }
 
       .container {
@@ -901,19 +846,14 @@
         padding-top: 10px;
       }
 
-      .top-header {
-        position: sticky;
-      }
-
       .header-inner {
-        min-height: 82px;
-        gap: 10px;
+        min-height: 78px;
       }
 
       .menu-button {
         display: block;
-        width: 38px;
-        flex: 0 0 38px;
+        width: 36px;
+        flex: 0 0 36px;
       }
 
       .desktop-nav {
@@ -921,36 +861,29 @@
       }
 
       .brand {
-        min-width: 0;
         flex: 1;
-        gap: 10px;
+        min-width: 0;
       }
 
-      .brand-logo {
-        width: 53px;
-        height: 53px;
+      .logo-box {
+        width: 52px;
+        height: 52px;
+        flex-basis: 52px;
       }
 
       .brand-name {
-        font-size: 19px;
+        font-size: 17px;
       }
 
       .brand-sub {
-        font-size: 11px;
-      }
-
-      .notification-button {
-        width: 42px;
-        height: 42px;
-        margin-left: 0;
+        font-size: 10px;
       }
 
       .hero {
-        border-radius: 0 0 25px 25px;
         margin-left: -10px;
         margin-right: -10px;
-        padding: 28px 22px;
-        min-height: 250px;
+        border-radius: 0 0 25px 25px;
+        padding: 28px 20px;
       }
 
       .hero h1 {
@@ -958,15 +891,18 @@
       }
 
       .hero p {
-        font-size: 15px;
+        font-size: 14px;
       }
 
-      .hero-buttons .btn {
-        flex: 1 1 100%;
+      .hero-buttons {
+        flex-direction: column;
+      }
+
+      .hero-button {
+        width: 100%;
       }
 
       .stats-grid {
-        grid-template-columns: repeat(3,1fr);
         gap: 8px;
       }
 
@@ -980,30 +916,26 @@
       }
 
       .stat-label {
-        font-size: 11px;
+        font-size: 10px;
       }
 
       .section-card {
-        border-radius: 20px;
         padding: 15px;
+        border-radius: 20px;
       }
 
       .section-title {
-        font-size: 21px;
+        font-size: 20px;
       }
 
       .event-image-wrap {
-        height: 250px;
+        height: 245px;
       }
 
       .slider-arrow {
-        top: 101px;
+        top: 100px;
         width: 43px;
         height: 43px;
-      }
-
-      .event-info {
-        padding: 17px 4px 3px;
       }
 
       .event-title {
@@ -1012,60 +944,57 @@
 
       .event-action {
         width: 100%;
-        justify-content: center;
       }
 
       .blood-grid {
         grid-template-columns: repeat(4,1fr);
-        gap: 8px;
+        gap: 7px;
       }
 
       .blood-card {
-        padding: 13px 4px;
-        border-radius: 15px;
+        padding: 12px 3px;
+        border-radius: 14px;
       }
 
       .blood-icon {
-        font-size: 25px;
+        font-size: 23px;
       }
 
       .blood-type {
-        font-size: 17px;
+        font-size: 16px;
       }
 
       .blood-count {
-        font-size: 19px;
-      }
-
-      .blood-members {
-        font-size: 11px;
-      }
-
-      .action-card {
-        padding: 17px;
-        min-height: 120px;
-        gap: 12px;
-      }
-
-      .action-icon {
-        width: 60px;
-        height: 60px;
-        flex: 0 0 60px;
-        font-size: 35px;
-      }
-
-      .action-content h3 {
         font-size: 18px;
       }
 
-      .action-content p {
-        font-size: 13px;
+      .blood-members {
+        font-size: 10px;
       }
 
-      .action-button {
-        min-width: 105px;
-        padding: 11px 8px;
-        font-size: 13px;
+      .find-card {
+        padding: 17px;
+        gap: 11px;
+      }
+
+      .find-icon {
+        width: 57px;
+        height: 57px;
+        flex-basis: 57px;
+        font-size: 31px;
+      }
+
+      .find-content h3 {
+        font-size: 18px;
+      }
+
+      .find-content p {
+        font-size: 12px;
+      }
+
+      .find-button {
+        padding: 11px 10px;
+        font-size: 12px;
       }
 
       .quick-grid {
@@ -1073,11 +1002,7 @@
       }
 
       .quick-card {
-        padding: 13px;
-      }
-
-      .quick-number {
-        font-size: 20px;
+        padding: 12px;
       }
 
       .form-grid {
@@ -1088,33 +1013,33 @@
         display: grid;
         grid-template-columns: repeat(5,1fr);
         position: fixed;
+        bottom: 0;
         left: 0;
         right: 0;
-        bottom: 0;
         height: 76px;
         background: #092d68;
         z-index: 2000;
-        border-radius: 22px 22px 0 0;
-        padding: 6px 7px;
-        box-shadow: 0 -8px 30px rgba(0,0,0,.15);
+        border-radius: 20px 20px 0 0;
+        padding: 6px;
+        box-shadow: 0 -8px 30px rgba(0,0,0,.16);
       }
 
       .bottom-nav-item {
-        color: white;
         border: 0;
         background: transparent;
-        border-radius: 13px;
+        color: white;
+        border-radius: 12px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 3px;
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 800;
       }
 
-      .bottom-nav-item .bottom-icon {
-        font-size: 25px;
+      .bottom-icon {
+        font-size: 24px;
         line-height: 1;
       }
 
@@ -1127,44 +1052,15 @@
       }
     }
 
-    @media (max-width: 390px) {
-
-      .brand-name {
-        font-size: 17px;
-      }
-
-      .brand-sub {
-        font-size: 10px;
-      }
-
-      .blood-grid {
-        gap: 5px;
-      }
-
-      .action-card {
-        gap: 8px;
-        padding: 14px 10px;
-      }
-
-      .action-icon {
-        width: 50px;
-        height: 50px;
-        flex-basis: 50px;
-        font-size: 28px;
-      }
-
-      .action-button {
-        min-width: 88px;
-      }
-    }
   </style>
 </head>
 
+
 <body>
 
-  <!-- =======================================================
+  <!-- =====================================================
        HEADER
-       ======================================================= -->
+       ===================================================== -->
 
   <header class="top-header">
 
@@ -1172,70 +1068,105 @@
 
       <button
         class="menu-button"
-        onclick="toggleMobileMenu()"
-        aria-label="Open menu">
+        onclick="alert('Please use the menu below to navigate.')">
         ☰
       </button>
 
-      <a href="#home" class="brand">
 
-        <img
-          id="siteLogo"
-          class="brand-logo"
-          src="poongurichi-logo.jpeg"
-          alt="Poongurichi Nanbargal">
+      <a
+        href="#home"
+        class="brand">
+
+        <div class="logo-box">
+
+          <img
+            id="siteLogo"
+            src="poongurichi-logo.jpeg"
+            alt="Poongurichi Nanbargal Logo"
+            onerror="tryNextLogo(this);"
+          >
+
+          <div
+            id="logoFallback"
+            class="logo-fallback">
+            ♥
+          </div>
+
+        </div>
+
 
         <div>
+
           <div class="brand-name">
             Poongurichi Nanbargal
           </div>
 
           <div class="brand-sub">
+
             Admin:
             <strong>Bothishankar</strong>
+
             &nbsp;•&nbsp;
+
             Ph: 9677824319
+
           </div>
+
         </div>
 
       </a>
 
+
       <nav class="desktop-nav">
 
-        <a class="nav-link" href="#home">
+        <a
+          href="#home"
+          class="nav-link">
           Home
         </a>
 
-        <a class="nav-link" href="#donor">
+        <a
+          href="become-donor.html"
+          class="nav-link">
           Become Donor
         </a>
 
-        <a class="nav-link" href="#find-blood">
+        <a
+          href="#find-blood"
+          class="nav-link">
           Find Blood
         </a>
 
-        <a class="nav-link" href="#blood-request">
+        <a
+          href="request-blood.html"
+          class="nav-link">
           Request Blood
         </a>
 
-        <a class="nav-link" href="#about">
+        <a
+          href="#about"
+          class="nav-link">
           About
         </a>
 
-        <a class="admin-btn" href="admin.html">
+        <a
+          href="admin.html"
+          class="admin-btn">
           🔐 Admin
         </a>
 
       </nav>
 
+
       <button
         class="notification-button"
-        onclick="showNotificationMessage()"
-        aria-label="Notifications">
+        onclick="showNotificationMessage()">
 
         🔔
 
-        <span class="notification-count" id="notificationCount">
+        <span
+          id="notificationCount"
+          class="notification-count">
           0
         </span>
 
@@ -1246,18 +1177,18 @@
   </header>
 
 
-  <!-- =======================================================
+  <!-- =====================================================
        MAIN
-       ======================================================= -->
+       ===================================================== -->
 
   <main id="home">
 
     <div class="container">
 
 
-      <!-- ===================================================
+      <!-- =================================================
            HERO
-           =================================================== -->
+           ================================================= -->
 
       <section class="hero">
 
@@ -1267,10 +1198,12 @@
             ❤️ POONGURICHI NANBARGAL BLOOD DONORS CLUB
           </div>
 
+
           <h1>
             Every Drop Can<br>
             Save A Life
           </h1>
+
 
           <p>
             One donor can give someone another chance.
@@ -1278,24 +1211,24 @@
             blood when it matters most.
           </p>
 
+
           <div class="hero-buttons">
 
             <button
-              class="btn btn-white"
-              onclick="scrollToSection('donor')">
+              class="hero-button hero-button-white"
+              onclick="goToDonor()">
+
               🩸 Become a Donor
+
             </button>
 
+
             <button
-              class="btn btn-white"
+              class="hero-button hero-button-white"
               onclick="scrollToSection('find-blood')">
-              🔎 Find Blood
-            </button>
 
-            <button
-              class="btn btn-outline"
-              onclick="scrollToSection('blood-request')">
-              🚨 Emergency Request
+              🔎 Find Blood
+
             </button>
 
           </div>
@@ -1305,56 +1238,62 @@
       </section>
 
 
-      <!-- ===================================================
-           THREE MAIN STATS
-           =================================================== -->
+      <!-- =================================================
+           STATS
+           ================================================= -->
 
       <section class="stats-grid">
 
         <div class="stat-card">
+
           <div
-            class="stat-number"
-            id="registeredDonors">
+            id="registeredDonors"
+            class="stat-number">
             —
           </div>
 
           <div class="stat-label">
             Registered Donors
           </div>
+
         </div>
 
 
         <div class="stat-card">
+
           <div
-            class="stat-number"
-            id="activeRequests">
+            id="activeRequests"
+            class="stat-number">
             —
           </div>
 
           <div class="stat-label">
             Active Requests
           </div>
+
         </div>
 
 
         <div class="stat-card">
+
           <div
-            class="stat-number"
-            id="bloodGroups">
+            id="bloodGroups"
+            class="stat-number">
             —
           </div>
 
           <div class="stat-label">
             Blood Groups
           </div>
+
         </div>
 
       </section>
 
 
-      <!-- ===================================================
+      <!-- =================================================
            UPCOMING EVENTS
-           =================================================== -->
+           ================================================= -->
 
       <section class="section">
 
@@ -1363,15 +1302,26 @@
           <div class="section-heading">
 
             <h2 class="section-title">
-              <span class="heart">♥</span>
+
+              <span class="heart">
+                ♥
+              </span>
+
               UPCOMING EVENTS
-              <span class="heart">♥</span>
+
+              <span class="heart">
+                ♥
+              </span>
+
             </h2>
+
 
             <button
               class="view-all"
               onclick="showAllEvents()">
+
               View All →
+
             </button>
 
           </div>
@@ -1379,7 +1329,7 @@
 
           <div id="eventsContainer">
 
-            <div class="loading">
+            <div class="no-events">
               Loading upcoming events...
             </div>
 
@@ -1390,9 +1340,9 @@
       </section>
 
 
-      <!-- ===================================================
+      <!-- =================================================
            BLOOD GROUP AVAILABILITY
-           =================================================== -->
+           ================================================= -->
 
       <section class="section">
 
@@ -1401,8 +1351,9 @@
           <div class="section-heading">
 
             <h2 class="section-title">
-              <span class="heart">🩸</span>
-              BLOOD GROUP AVAILABILITY
+
+              🩸 BLOOD GROUP AVAILABILITY
+
             </h2>
 
           </div>
@@ -1410,67 +1361,188 @@
 
           <div class="blood-grid">
 
+
             <div class="blood-card a-positive">
-              <div class="blood-icon">♥</div>
-              <div class="blood-type">A+</div>
-              <div class="blood-count" id="count-A+">0</div>
-              <div class="blood-members">Members</div>
+
+              <div class="blood-icon">
+                ♥
+              </div>
+
+              <div class="blood-type">
+                A+
+              </div>
+
+              <div
+                id="count-A+"
+                class="blood-count">
+                0
+              </div>
+
+              <div class="blood-members">
+                Members
+              </div>
+
             </div>
 
 
             <div class="blood-card a-negative">
-              <div class="blood-icon">♥</div>
-              <div class="blood-type">A-</div>
-              <div class="blood-count" id="count-A-">0</div>
-              <div class="blood-members">Members</div>
+
+              <div class="blood-icon">
+                ♥
+              </div>
+
+              <div class="blood-type">
+                A-
+              </div>
+
+              <div
+                id="count-A-"
+                class="blood-count">
+                0
+              </div>
+
+              <div class="blood-members">
+                Members
+              </div>
+
             </div>
 
 
             <div class="blood-card b-positive">
-              <div class="blood-icon">♥</div>
-              <div class="blood-type">B+</div>
-              <div class="blood-count" id="count-B+">0</div>
-              <div class="blood-members">Members</div>
+
+              <div class="blood-icon">
+                ♥
+              </div>
+
+              <div class="blood-type">
+                B+
+              </div>
+
+              <div
+                id="count-B+"
+                class="blood-count">
+                0
+              </div>
+
+              <div class="blood-members">
+                Members
+              </div>
+
             </div>
 
 
             <div class="blood-card b-negative">
-              <div class="blood-icon">♥</div>
-              <div class="blood-type">B-</div>
-              <div class="blood-count" id="count-B-">0</div>
-              <div class="blood-members">Members</div>
+
+              <div class="blood-icon">
+                ♥
+              </div>
+
+              <div class="blood-type">
+                B-
+              </div>
+
+              <div
+                id="count-B-"
+                class="blood-count">
+                0
+              </div>
+
+              <div class="blood-members">
+                Members
+              </div>
+
             </div>
 
 
             <div class="blood-card ab-positive">
-              <div class="blood-icon">♥</div>
-              <div class="blood-type">AB+</div>
-              <div class="blood-count" id="count-AB+">0</div>
-              <div class="blood-members">Members</div>
+
+              <div class="blood-icon">
+                ♥
+              </div>
+
+              <div class="blood-type">
+                AB+
+              </div>
+
+              <div
+                id="count-AB+"
+                class="blood-count">
+                0
+              </div>
+
+              <div class="blood-members">
+                Members
+              </div>
+
             </div>
 
 
             <div class="blood-card ab-negative">
-              <div class="blood-icon">♥</div>
-              <div class="blood-type">AB-</div>
-              <div class="blood-count" id="count-AB-">0</div>
-              <div class="blood-members">Members</div>
+
+              <div class="blood-icon">
+                ♥
+              </div>
+
+              <div class="blood-type">
+                AB-
+              </div>
+
+              <div
+                id="count-AB-"
+                class="blood-count">
+                0
+              </div>
+
+              <div class="blood-members">
+                Members
+              </div>
+
             </div>
 
 
             <div class="blood-card o-positive">
-              <div class="blood-icon">♥</div>
-              <div class="blood-type">O+</div>
-              <div class="blood-count" id="count-O+">0</div>
-              <div class="blood-members">Members</div>
+
+              <div class="blood-icon">
+                ♥
+              </div>
+
+              <div class="blood-type">
+                O+
+              </div>
+
+              <div
+                id="count-O+"
+                class="blood-count">
+                0
+              </div>
+
+              <div class="blood-members">
+                Members
+              </div>
+
             </div>
 
 
             <div class="blood-card o-negative">
-              <div class="blood-icon">♥</div>
-              <div class="blood-type">O-</div>
-              <div class="blood-count" id="count-O-">0</div>
-              <div class="blood-members">Members</div>
+
+              <div class="blood-icon">
+                ♥
+              </div>
+
+              <div class="blood-type">
+                O-
+              </div>
+
+              <div
+                id="count-O-"
+                class="blood-count">
+                0
+              </div>
+
+              <div class="blood-members">
+                Members
+              </div>
+
             </div>
 
           </div>
@@ -1480,208 +1552,56 @@
       </section>
 
 
-      <!-- ===================================================
-           BECOME DONOR
-           =================================================== -->
-
-      <section
-        class="section"
-        id="donor">
-
-        <div class="action-list">
-
-          <div class="action-card action-donor">
-
-            <div class="action-icon donor-icon">
-              🩸
-            </div>
-
-            <div class="action-content">
-
-              <h3>
-                Become a Donor
-              </h3>
-
-              <p>
-                Register yourself and help
-                someone in need.
-              </p>
-
-            </div>
-
-            <button
-              class="action-button donor-action-button"
-              onclick="openDonorForm()">
-              Register Now →
-            </button>
-
-          </div>
-
-        </div>
-
-
-        <div
-          id="donorFormPanel"
-          class="tool-panel">
-
-          <h3 style="margin-bottom:14px;">
-            🩸 Register as Blood Donor
-          </h3>
-
-          <form id="donorForm">
-
-            <div class="form-grid">
-
-              <div class="field">
-                <label>Name</label>
-                <input
-                  name="Name"
-                  required
-                  placeholder="Your name">
-              </div>
-
-              <div class="field">
-                <label>Mobile</label>
-                <input
-                  name="Mobile"
-                  required
-                  placeholder="Mobile number">
-              </div>
-
-              <div class="field">
-                <label>Email</label>
-                <input
-                  name="Email"
-                  type="email"
-                  placeholder="Email">
-              </div>
-
-              <div class="field">
-                <label>Blood Group</label>
-
-                <select
-                  name="Blood_Group"
-                  required>
-
-                  <option value="">
-                    Select blood group
-                  </option>
-
-                  <option>A+</option>
-                  <option>A-</option>
-                  <option>B+</option>
-                  <option>B-</option>
-                  <option>AB+</option>
-                  <option>AB-</option>
-                  <option>O+</option>
-                  <option>O-</option>
-
-                </select>
-
-              </div>
-
-              <div class="field">
-                <label>Gender</label>
-
-                <select name="Gender">
-                  <option value="">Select</option>
-                  <option>Male</option>
-                  <option>Female</option>
-                  <option>Other</option>
-                </select>
-
-              </div>
-
-              <div class="field">
-                <label>District</label>
-                <input
-                  name="District"
-                  placeholder="District">
-              </div>
-
-              <div class="field">
-                <label>City</label>
-                <input
-                  name="City"
-                  placeholder="City">
-              </div>
-
-              <div class="field">
-                <label>Address</label>
-                <input
-                  name="Address"
-                  placeholder="Address">
-              </div>
-
-              <div class="field">
-                <label>Last Donation Date</label>
-                <input
-                  name="Last_Donation_Date"
-                  type="date">
-              </div>
-
-            </div>
-
-            <button
-              class="form-submit"
-              type="submit">
-              Register Donor
-            </button>
-
-          </form>
-
-        </div>
-
-      </section>
-
-
-      <!-- ===================================================
+      <!-- =================================================
            FIND BLOOD
-           =================================================== -->
+           
+           THIS IS KEPT ON HOME.
+           DONOR REGISTRATION IS NOT.
+           ================================================= -->
 
       <section
         class="section"
         id="find-blood">
 
-        <div class="action-list">
+        <div class="find-card">
 
-          <div class="action-card action-search">
+          <div class="find-icon">
+            🔎
+          </div>
 
-            <div class="action-icon search-icon">
-              🔎
-            </div>
 
-            <div class="action-content">
+          <div class="find-content">
 
-              <h3>
-                Find Blood / Donor
-              </h3>
+            <h3>
+              Find Blood / Donor
+            </h3>
 
-              <p>
-                Search for blood donors
-                in your area.
-              </p>
-
-            </div>
-
-            <button
-              class="action-button search-action-button"
-              onclick="openSearchForm()">
-              Search Now →
-            </button>
+            <p>
+              Search for blood donors in your area.
+            </p>
 
           </div>
+
+
+          <button
+            class="find-button"
+            onclick="openSearchForm()">
+
+            Search Now →
+
+          </button>
 
         </div>
 
 
         <div
           id="searchPanel"
-          class="tool-panel">
+          class="search-panel">
 
           <h3 style="margin-bottom:14px;">
             🔎 Find Blood Donor
           </h3>
+
 
           <div class="form-grid">
 
@@ -1691,7 +1611,8 @@
                 Blood Group
               </label>
 
-              <select id="searchBloodGroup">
+              <select
+                id="searchBloodGroup">
 
                 <option value="">
                   Any blood group
@@ -1740,7 +1661,7 @@
 
 
           <button
-            class="form-submit"
+            class="search-submit"
             onclick="searchDonors()">
 
             Search Donors
@@ -1758,9 +1679,9 @@
       </section>
 
 
-      <!-- ===================================================
+      <!-- =================================================
            QUICK STATS
-           =================================================== -->
+           ================================================= -->
 
       <section class="section">
 
@@ -1777,6 +1698,7 @@
 
           <div class="quick-grid">
 
+
             <div class="quick-card">
 
               <div class="quick-icon">
@@ -1784,15 +1706,17 @@
               </div>
 
               <div>
+
                 <div class="quick-label">
                   Total Donors
                 </div>
 
                 <div
-                  class="quick-number"
-                  id="quickDonors">
+                  id="quickDonors"
+                  class="quick-number">
                   —
                 </div>
+
               </div>
 
             </div>
@@ -1805,15 +1729,17 @@
               </div>
 
               <div>
+
                 <div class="quick-label">
                   Blood Requests
                 </div>
 
                 <div
-                  class="quick-number"
-                  id="quickRequests">
+                  id="quickRequests"
+                  class="quick-number">
                   —
                 </div>
+
               </div>
 
             </div>
@@ -1826,15 +1752,17 @@
               </div>
 
               <div>
+
                 <div class="quick-label">
                   Camps Conducted
                 </div>
 
                 <div
-                  class="quick-number"
-                  id="quickEvents">
+                  id="quickEvents"
+                  class="quick-number">
                   —
                 </div>
+
               </div>
 
             </div>
@@ -1847,6 +1775,7 @@
               </div>
 
               <div>
+
                 <div class="quick-label">
                   Lives Impacted
                 </div>
@@ -1854,6 +1783,7 @@
                 <div class="quick-number">
                   500+
                 </div>
+
               </div>
 
             </div>
@@ -1865,143 +1795,12 @@
       </section>
 
 
-      <!-- ===================================================
-           BLOOD REQUEST
-           =================================================== -->
-
-      <section
-        class="section"
-        id="blood-request">
-
-        <div class="section-card">
-
-          <div class="section-heading">
-
-            <h2 class="section-title">
-              🚨 Emergency Blood Request
-            </h2>
-
-          </div>
-
-          <p style="color:#596a85;margin-bottom:15px;">
-            Need blood urgently? Submit a request
-            and our donor network can help.
-          </p>
-
-          <form id="requestForm">
-
-            <div class="form-grid">
-
-              <div class="field">
-
-                <label>
-                  Patient Name
-                </label>
-
-                <input
-                  name="Patient_Name"
-                  required>
-
-              </div>
-
-
-              <div class="field">
-
-                <label>
-                  Blood Group
-                </label>
-
-                <select
-                  name="Blood_Group"
-                  required>
-
-                  <option value="">
-                    Select
-                  </option>
-
-                  <option>A+</option>
-                  <option>A-</option>
-                  <option>B+</option>
-                  <option>B-</option>
-                  <option>AB+</option>
-                  <option>AB-</option>
-                  <option>O+</option>
-                  <option>O-</option>
-
-                </select>
-
-              </div>
-
-
-              <div class="field">
-
-                <label>
-                  Contact Mobile
-                </label>
-
-                <input
-                  name="Mobile"
-                  required>
-
-              </div>
-
-
-              <div class="field">
-
-                <label>
-                  Hospital
-                </label>
-
-                <input
-                  name="Hospital">
-
-              </div>
-
-
-              <div class="field">
-
-                <label>
-                  District
-                </label>
-
-                <input
-                  name="District">
-
-              </div>
-
-
-              <div class="field">
-
-                <label>
-                  City
-                </label>
-
-                <input
-                  name="City">
-
-              </div>
-
-            </div>
-
-
-            <button
-              class="form-submit"
-              type="submit">
-
-              Submit Emergency Request
-
-            </button>
-
-          </form>
-
-        </div>
-
-      </section>
-
-
-      <!-- ===================================================
-           ABOUT
-           =================================================== -->
+      <!-- =================================================
+           INFORMATION
+           
+           NO EMERGENCY FORM HERE
+           NO DONOR REGISTRATION HERE
+           ================================================= -->
 
       <section
         class="section"
@@ -2014,9 +1813,11 @@
           </div>
 
           <div>
+
             Blood donation is a voluntary act
             of giving blood that can save a life.
             Be a hero, donate blood. ❤️
+
           </div>
 
         </div>
@@ -2028,9 +1829,9 @@
   </main>
 
 
-  <!-- =======================================================
+  <!-- =====================================================
        FOOTER
-       ======================================================= -->
+       ===================================================== -->
 
   <footer>
 
@@ -2042,17 +1843,20 @@
   </footer>
 
 
-  <!-- =======================================================
+  <!-- =====================================================
        MOBILE BOTTOM NAV
-       ======================================================= -->
+       ===================================================== -->
 
   <nav class="mobile-bottom-nav">
 
     <button
       class="bottom-nav-item active"
-      onclick="setBottomActive(this);scrollToSection('home')">
+      onclick="setActive(this);scrollToSection('home')">
 
-      <span class="bottom-icon">⌂</span>
+      <span class="bottom-icon">
+        ⌂
+      </span>
+
       Home
 
     </button>
@@ -2060,9 +1864,12 @@
 
     <button
       class="bottom-nav-item"
-      onclick="setBottomActive(this);scrollToSection('donor')">
+      onclick="setActive(this);goToDonor()">
 
-      <span class="bottom-icon">🩸</span>
+      <span class="bottom-icon">
+        🩸
+      </span>
+
       Become Donor
 
     </button>
@@ -2070,9 +1877,12 @@
 
     <button
       class="bottom-nav-item"
-      onclick="setBottomActive(this);scrollToSection('find-blood')">
+      onclick="setActive(this);scrollToSection('find-blood')">
 
-      <span class="bottom-icon">🔎</span>
+      <span class="bottom-icon">
+        🔎
+      </span>
+
       Find Donor
 
     </button>
@@ -2080,9 +1890,12 @@
 
     <button
       class="bottom-nav-item"
-      onclick="setBottomActive(this);scrollToSection('blood-request')">
+      onclick="setActive(this);goToRequest()">
 
-      <span class="bottom-icon">🚨</span>
+      <span class="bottom-icon">
+        🚨
+      </span>
+
       Blood Request
 
     </button>
@@ -2090,9 +1903,12 @@
 
     <button
       class="bottom-nav-item"
-      onclick="setBottomActive(this);scrollToSection('about')">
+      onclick="setActive(this);scrollToSection('about')">
 
-      <span class="bottom-icon">ⓘ</span>
+      <span class="bottom-icon">
+        ⓘ
+      </span>
+
       About
 
     </button>
@@ -2100,44 +1916,70 @@
   </nav>
 
 
-  <!-- =======================================================
-       JAVASCRIPT
-       ======================================================= -->
+  <!-- =====================================================
+       EXISTING BACKEND
+       ===================================================== -->
 
   <script src="app.js"></script>
 
+
   <script>
 
-    /* =======================================================
-       GLOBAL EVENT DATA
-       ======================================================= */
+    /* =====================================================
+       LOGO FIX
+       ===================================================== */
 
-    let events = [];
-    let currentEvent = 0;
+    let logoAttempt = 0;
+
+    const logoFiles = [
+      "poongurichi-logo.jpeg",
+      "poongurichi-logo.jpg",
+      "poongurichi-logo.png",
+      "logo.jpeg",
+      "logo.jpg",
+      "logo.png"
+    ];
 
 
-    /* =======================================================
-       HELPERS
-       ======================================================= */
+    function tryNextLogo(img) {
 
-    function escapeHtml(value) {
+      logoAttempt++;
 
-      if (value === null || value === undefined) {
-        return "";
+
+      if (logoAttempt < logoFiles.length) {
+
+        img.src =
+          logoFiles[logoAttempt];
+
+        return;
+
       }
 
-      return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+      img.style.display = "none";
+
+
+      const fallback =
+        document.getElementById(
+          "logoFallback"
+        );
+
+
+      if (fallback) {
+        fallback.style.display = "flex";
+      }
+
     }
 
 
+    /* =====================================================
+       NAVIGATION
+       ===================================================== */
+
     function scrollToSection(id) {
 
-      const element = document.getElementById(id);
+      const element =
+        document.getElementById(id);
 
       if (!element) return;
 
@@ -2145,66 +1987,93 @@
         behavior: "smooth",
         block: "start"
       });
+
     }
 
 
-    function toggleMobileMenu() {
+    function goToDonor() {
 
-      alert(
-        "Use the bottom navigation to move around the website."
-      );
+      /*
+       * Donor registration is NOT shown
+       * on the Home page.
+       *
+       * It opens your existing donor page.
+       */
+
+      window.location.href =
+        "become-donor.html";
+
+    }
+
+
+    function goToRequest() {
+
+      /*
+       * Blood request is NOT shown
+       * on the Home page.
+       */
+
+      window.location.href =
+        "request-blood.html";
+
+    }
+
+
+    function setActive(button) {
+
+      document
+        .querySelectorAll(
+          ".bottom-nav-item"
+        )
+        .forEach(item => {
+
+          item.classList.remove(
+            "active"
+          );
+
+        });
+
+
+      button.classList.add("active");
+
     }
 
 
     function showNotificationMessage() {
 
       alert(
-        "Notifications will appear here when new blood requests or important updates are available."
+        "Notifications will appear here when new updates are available."
       );
+
     }
 
 
-    function setBottomActive(button) {
+    /* =====================================================
+       EVENTS
+       ===================================================== */
 
-      document
-        .querySelectorAll(".bottom-nav-item")
-        .forEach(item => item.classList.remove("active"));
-
-      button.classList.add("active");
-    }
+    let events = [];
+    let currentEvent = 0;
 
 
-    /* =======================================================
-       FORMAT EVENT DATE
-       ======================================================= */
+    function escapeHtml(value) {
 
-    function formatEventDate(value) {
-
-      if (!value) {
-        return "Date not specified";
+      if (
+        value === null ||
+        value === undefined
+      ) {
+        return "";
       }
 
-      const date = new Date(value);
+      return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
-      if (Number.isNaN(date.getTime())) {
-        return String(value);
-      }
-
-      return date.toLocaleDateString(
-        "en-IN",
-        {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-          weekday: "long"
-        }
-      );
     }
 
-
-    /* =======================================================
-       EVENT IMAGE
-       ======================================================= */
 
     function getEventImage(event) {
 
@@ -2216,17 +2085,52 @@
         event.image ||
         ""
       );
+
     }
 
 
-    /* =======================================================
-       RENDER EVENTS
-       ======================================================= */
+    function formatEventDate(value) {
+
+      if (!value) {
+        return "Date not specified";
+      }
+
+
+      const date =
+        new Date(value);
+
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return String(value);
+
+      }
+
+
+      return date.toLocaleDateString(
+        "en-IN",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+          weekday: "long"
+        }
+      );
+
+    }
+
 
     function renderEvents() {
 
       const container =
-        document.getElementById("eventsContainer");
+        document.getElementById(
+          "eventsContainer"
+        );
+
 
       if (!events.length) {
 
@@ -2237,23 +2141,33 @@
         `;
 
         return;
+
       }
 
 
-      if (currentEvent >= events.length) {
+      if (
+        currentEvent >=
+        events.length
+      ) {
+
         currentEvent = 0;
+
       }
 
 
-      const event = events[currentEvent];
+      const event =
+        events[currentEvent];
+
 
       const image =
         getEventImage(event);
+
 
       const title =
         event.Title ||
         event.title ||
         "Blood Donation Camp";
+
 
       const date =
         event.Event_Date ||
@@ -2261,10 +2175,12 @@
         event.EventDate ||
         "";
 
+
       const location =
         event.Location ||
         event.location ||
         "Poongurichi";
+
 
       const description =
         event.Description ||
@@ -2272,30 +2188,39 @@
         "";
 
 
-      let imageHtml = "";
+      let imageHtml;
+
 
       if (image) {
 
         imageHtml = `
+
           <img
             class="event-image"
             src="${escapeHtml(image)}"
             alt="${escapeHtml(title)}"
-            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+            onerror="
+              this.style.display='none';
+              this.nextElementSibling.style.display='flex';
+            "
+          >
 
           <div
             class="event-placeholder"
             style="display:none;">
             🩸
           </div>
+
         `;
 
       } else {
 
         imageHtml = `
+
           <div class="event-placeholder">
             🩸
           </div>
+
         `;
 
       }
@@ -2305,42 +2230,48 @@
 
         <div class="event-slider">
 
+
           <button
             class="slider-arrow slider-prev"
-            onclick="previousEvent()"
-            aria-label="Previous event">
+            onclick="previousEvent()">
+
             ‹
+
           </button>
 
 
           <button
             class="slider-arrow slider-next"
-            onclick="nextEvent()"
-            aria-label="Next event">
+            onclick="nextEvent()">
+
             ›
+
           </button>
 
 
-          <div class="event-main">
+          <div class="event-image-wrap">
 
-            <div class="event-image-wrap">
-              ${imageHtml}
-            </div>
+            ${imageHtml}
 
           </div>
 
 
           <div class="dots">
 
-            ${events.map((_, index) => `
+            ${events.map(
+              (_,index) => `
 
               <button
-                class="dot ${index === currentEvent ? "active" : ""}"
-                onclick="goToEvent(${index})"
-                aria-label="Event ${index + 1}">
+                class="dot ${
+                  index === currentEvent
+                    ? "active"
+                    : ""
+                }"
+                onclick="goToEvent(${index})">
               </button>
 
-            `).join("")}
+            `
+            ).join("")}
 
           </div>
 
@@ -2356,12 +2287,14 @@
 
               <div class="event-meta-row">
 
-                <span class="event-meta-icon">
+                <span>
                   📅
                 </span>
 
                 <span>
-                  ${escapeHtml(formatEventDate(date))}
+                  ${escapeHtml(
+                    formatEventDate(date)
+                  )}
                 </span>
 
               </div>
@@ -2369,7 +2302,7 @@
 
               <div class="event-meta-row">
 
-                <span class="event-meta-icon">
+                <span>
                   📍
                 </span>
 
@@ -2395,7 +2328,7 @@
 
             <button
               class="event-action"
-              onclick="joinEvent()">
+              onclick="goToDonor()">
 
               Join Us & Save Lives ❤️
 
@@ -2404,22 +2337,22 @@
           </div>
 
         </div>
+
       `;
+
     }
 
-
-    /* =======================================================
-       EVENT SLIDER
-       ======================================================= */
 
     function nextEvent() {
 
       if (!events.length) return;
 
       currentEvent =
-        (currentEvent + 1) % events.length;
+        (currentEvent + 1) %
+        events.length;
 
       renderEvents();
+
     }
 
 
@@ -2428,10 +2361,15 @@
       if (!events.length) return;
 
       currentEvent =
-        (currentEvent - 1 + events.length) %
+        (
+          currentEvent -
+          1 +
+          events.length
+        ) %
         events.length;
 
       renderEvents();
+
     }
 
 
@@ -2440,6 +2378,7 @@
       currentEvent = index;
 
       renderEvents();
+
     }
 
 
@@ -2452,35 +2391,29 @@
         );
 
         return;
-      }
 
-      scrollToSection("home");
+      }
 
       currentEvent = 0;
 
       renderEvents();
+
     }
 
-
-    function joinEvent() {
-
-      scrollToSection("blood-request");
-    }
-
-
-    /* =======================================================
-       LOAD EVENTS
-       ======================================================= */
 
     async function loadEvents() {
 
       try {
 
         const result =
-          await window.BloodDonationAPI.getEvents();
+          await window
+            .BloodDonationAPI
+            .getEvents();
 
 
-        if (Array.isArray(result)) {
+        if (
+          Array.isArray(result)
+        ) {
 
           events = result;
 
@@ -2494,41 +2427,48 @@
         }
 
 
-        events = events.filter(event => {
+        events =
+          events.filter(event => {
 
-          const status =
-            String(
-              event.Status ||
-              event.status ||
-              "Active"
-            ).toLowerCase();
+            const status =
+              String(
+                event.Status ||
+                event.status ||
+                "Active"
+              ).toLowerCase();
 
-          return (
-            status !== "deleted" &&
-            status !== "inactive"
-          );
 
-        });
+            return (
+              status !== "deleted" &&
+              status !== "inactive"
+            );
+
+          });
 
 
         renderEvents();
 
 
-      } catch (error) {
+        document.getElementById(
+          "quickEvents"
+        ).textContent =
+          events.length;
+
+
+      } catch(error) {
 
         console.error(
           "Events error:",
           error
         );
 
+
         document.getElementById(
           "eventsContainer"
         ).innerHTML = `
 
           <div class="no-events">
-
-            ❤️ Unable to load events right now.
-
+            ❤️ Unable to load events.
           </div>
 
         `;
@@ -2538,16 +2478,17 @@
     }
 
 
-    /* =======================================================
-       LOAD DASHBOARD STATS
-       ======================================================= */
+    /* =====================================================
+       STATS
+       ===================================================== */
 
     async function loadStats() {
 
       try {
 
         const result =
-          await window.BloodDonationAPI
+          await window
+            .BloodDonationAPI
             .getDashboardStats();
 
 
@@ -2586,30 +2527,35 @@
 
         document.getElementById(
           "registeredDonors"
-        ).textContent = donors;
+        ).textContent =
+          donors;
 
 
         document.getElementById(
           "activeRequests"
-        ).textContent = requests;
+        ).textContent =
+          requests;
 
 
         document.getElementById(
           "bloodGroups"
-        ).textContent = groups;
+        ).textContent =
+          groups;
 
 
         document.getElementById(
           "quickDonors"
-        ).textContent = donors;
+        ).textContent =
+          donors;
 
 
         document.getElementById(
           "quickRequests"
-        ).textContent = requests;
+        ).textContent =
+          requests;
 
 
-      } catch (error) {
+      } catch(error) {
 
         console.error(
           "Stats error:",
@@ -2621,16 +2567,18 @@
     }
 
 
-    /* =======================================================
-       LOAD DONORS / BLOOD GROUP COUNTS
-       ======================================================= */
+    /* =====================================================
+       BLOOD GROUP COUNTS
+       ===================================================== */
 
     async function loadBloodGroups() {
 
       try {
 
         const donors =
-          await window.BloodDonationAPI.getDonors();
+          await window
+            .BloodDonationAPI
+            .getDonors();
 
 
         const counts = {
@@ -2647,37 +2595,46 @@
         };
 
 
-        donors.forEach(donor => {
+        donors.forEach(
+          donor => {
 
-          const group =
-            String(
-              donor.Blood_Group ||
-              donor.BloodGroup ||
-              donor.bloodGroup ||
-              ""
-            ).trim().toUpperCase();
+            const group =
+              String(
+                donor.Blood_Group ||
+                donor.BloodGroup ||
+                donor.bloodGroup ||
+                ""
+              )
+              .trim()
+              .toUpperCase();
 
 
-          if (
-            Object.prototype.hasOwnProperty.call(
-              counts,
-              group
-            )
-          ) {
+            if (
+              Object.prototype
+                .hasOwnProperty
+                .call(
+                  counts,
+                  group
+                )
+            ) {
 
-            counts[group]++;
+              counts[group]++;
+
+            }
 
           }
+        );
 
-        });
 
-
-        Object.keys(counts).forEach(group => {
+        Object.keys(
+          counts
+        ).forEach(group => {
 
           const element =
             document.getElementById(
               "count-" + group
             );
+
 
           if (element) {
 
@@ -2689,33 +2646,10 @@
         });
 
 
-        const activeGroups =
-          Object.values(counts)
-            .filter(value => value > 0)
-            .length;
-
-
-        const groupsElement =
-          document.getElementById(
-            "bloodGroups"
-          );
-
-
-        if (
-          groupsElement &&
-          !groupsElement.dataset.backend
-        ) {
-
-          groupsElement.textContent =
-            activeGroups;
-
-        }
-
-
-      } catch (error) {
+      } catch(error) {
 
         console.error(
-          "Donor loading error:",
+          "Blood group error:",
           error
         );
 
@@ -2724,108 +2658,9 @@
     }
 
 
-    /* =======================================================
-       DONOR FORM
-       ======================================================= */
-
-    function openDonorForm() {
-
-      const panel =
-        document.getElementById(
-          "donorFormPanel"
-        );
-
-      panel.classList.toggle("open");
-
-      if (panel.classList.contains("open")) {
-
-        setTimeout(() => {
-
-          panel.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-
-        }, 100);
-
-      }
-
-    }
-
-
-    document.getElementById(
-      "donorForm"
-    ).addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-        const button =
-          this.querySelector(
-            "button[type='submit']"
-          );
-
-        button.disabled = true;
-
-        button.textContent =
-          "Registering...";
-
-
-        try {
-
-          const formData =
-            new FormData(this);
-
-          const donor = {};
-
-          formData.forEach(
-            (value, key) => {
-              donor[key] = value;
-            }
-          );
-
-
-          await window.BloodDonationAPI
-            .registerDonor(donor);
-
-
-          alert(
-            "❤️ Thank you! You have been registered as a donor."
-          );
-
-
-          this.reset();
-
-          loadStats();
-          loadBloodGroups();
-
-
-        } catch (error) {
-
-          console.error(error);
-
-          alert(
-            "Unable to register donor: " +
-            (error.message || error)
-          );
-
-        } finally {
-
-          button.disabled = false;
-
-          button.textContent =
-            "Register Donor";
-
-        }
-
-      }
-    );
-
-
-    /* =======================================================
-       SEARCH DONORS
-       ======================================================= */
+    /* =====================================================
+       SEARCH
+       ===================================================== */
 
     function openSearchForm() {
 
@@ -2834,18 +2669,29 @@
           "searchPanel"
         );
 
-      panel.classList.toggle("open");
 
-      if (panel.classList.contains("open")) {
+      panel.classList.toggle(
+        "open"
+      );
 
-        setTimeout(() => {
 
-          panel.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
+      if (
+        panel.classList.contains(
+          "open"
+        )
+      ) {
 
-        }, 100);
+        setTimeout(
+          () => {
+
+            panel.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+
+          },
+          100
+        );
 
       }
 
@@ -2859,10 +2705,12 @@
           "searchBloodGroup"
         ).value;
 
+
       const district =
         document.getElementById(
           "searchDistrict"
         ).value;
+
 
       const city =
         document.getElementById(
@@ -2876,16 +2724,18 @@
         );
 
 
-      results.innerHTML =
-        `<div class="loading">
+      results.innerHTML = `
+        <div class="no-events">
           Searching donors...
-        </div>`;
+        </div>
+      `;
 
 
       try {
 
         const donors =
-          await window.BloodDonationAPI
+          await window
+            .BloodDonationAPI
             .searchDonors({
 
               bloodGroup,
@@ -2898,76 +2748,93 @@
         if (!donors.length) {
 
           results.innerHTML = `
-
             <div class="no-events">
               No matching donors found.
             </div>
-
           `;
 
           return;
+
         }
 
 
         results.innerHTML =
-          donors.map(donor => {
+          donors.map(
+            donor => {
 
-            const name =
-              donor.Name ||
-              donor.name ||
-              "Blood Donor";
-
-            const group =
-              donor.Blood_Group ||
-              donor.BloodGroup ||
-              donor.bloodGroup ||
-              "—";
-
-            const donorCity =
-              donor.City ||
-              donor.city ||
-              "";
-
-            const donorDistrict =
-              donor.District ||
-              donor.district ||
-              "";
+              const name =
+                donor.Name ||
+                donor.name ||
+                "Blood Donor";
 
 
-            return `
+              const group =
+                donor.Blood_Group ||
+                donor.BloodGroup ||
+                donor.bloodGroup ||
+                "—";
 
-              <div class="donor-result">
 
-                <div class="donor-result-name">
-                  🩸 ${escapeHtml(name)}
-                </div>
+              const donorCity =
+                donor.City ||
+                donor.city ||
+                "";
 
-                <div>
-                  Blood Group:
-                  <strong>
-                    ${escapeHtml(group)}
-                  </strong>
-                </div>
 
-                <div>
-                  📍
-                  ${escapeHtml(
-                    [donorCity, donorDistrict]
+              const donorDistrict =
+                donor.District ||
+                donor.district ||
+                "";
+
+
+              return `
+
+                <div class="donor-result">
+
+                  <div class="donor-result-name">
+
+                    🩸
+                    ${escapeHtml(name)}
+
+                  </div>
+
+
+                  <div>
+
+                    Blood Group:
+                    <strong>
+                      ${escapeHtml(group)}
+                    </strong>
+
+                  </div>
+
+
+                  <div>
+
+                    📍
+                    ${escapeHtml(
+                      [
+                        donorCity,
+                        donorDistrict
+                      ]
                       .filter(Boolean)
                       .join(", ")
-                  )}
+                    )}
+
+                  </div>
+
                 </div>
 
-              </div>
+              `;
 
-            `;
+            }
+          ).join("");
 
-          }).join("");
 
-
-      } catch (error) {
+      } catch(error) {
 
         console.error(error);
+
 
         results.innerHTML = `
 
@@ -2982,89 +2849,17 @@
     }
 
 
-    /* =======================================================
-       BLOOD REQUEST
-       ======================================================= */
-
-    document.getElementById(
-      "requestForm"
-    ).addEventListener(
-      "submit",
-      async function(event) {
-
-        event.preventDefault();
-
-        const button =
-          this.querySelector(
-            "button[type='submit']"
-          );
-
-        button.disabled = true;
-
-        button.textContent =
-          "Submitting...";
-
-
-        try {
-
-          const formData =
-            new FormData(this);
-
-          const request = {};
-
-          formData.forEach(
-            (value, key) => {
-              request[key] = value;
-            }
-          );
-
-
-          await window.BloodDonationAPI
-            .createBloodRequest(request);
-
-
-          alert(
-            "🚨 Blood request submitted successfully."
-          );
-
-
-          this.reset();
-
-          loadStats();
-
-
-        } catch (error) {
-
-          console.error(error);
-
-          alert(
-            "Unable to submit request: " +
-            (error.message || error)
-          );
-
-        } finally {
-
-          button.disabled = false;
-
-          button.textContent =
-            "Submit Emergency Request";
-
-        }
-
-      }
-    );
-
-
-    /* =======================================================
+    /* =====================================================
        INITIALIZE
-       ======================================================= */
+       ===================================================== */
 
     async function initializeHome() {
 
       document.getElementById(
         "currentYear"
       ).textContent =
-        new Date().getFullYear();
+        new Date()
+          .getFullYear();
 
 
       await Promise.allSettled([
@@ -3079,10 +2874,6 @@
 
     }
 
-
-    /* =======================================================
-       START
-       ======================================================= */
 
     document.addEventListener(
       "DOMContentLoaded",
