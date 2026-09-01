@@ -4,7 +4,7 @@
    ============================================================ */
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycby0sigOLGqZrN77W0FsmmB7vB_rrJksidAyfFTU6duhxYzpSVhVij2DW3I078pcQXIL/exec";
+  "https://script.google.com/macros/s/AKfycbxxUtPnEPUwwcD2QtqE12wbHUqhhJ5dJ3hi6ZaqUT-NWmawdgHBWAXQAwQarJy4rOe5/exec";
 
 const ADMIN_KEY = "poongurichi_admin_session";
 const NINETY_DAYS = 90;
