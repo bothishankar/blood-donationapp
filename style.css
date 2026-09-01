@@ -3127,3 +3127,104 @@
   line-height: 1.45;
 }
 
+
+
+.notification-item small {
+  display: block;
+  margin-top: 4px;
+  color: #8a96a8;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   UPDATE V4 — ADMIN / NOTIFICATION / FOOTER
+   ========================================================= */
+.footer-created-by {
+  margin-top: 7px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.notification-head-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification-clear-self {
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.notification-item {
+  position: relative;
+}
+
+.notification-item-body {
+  min-width: 0;
+  padding-right: 30px;
+}
+
+.notification-item.read {
+  opacity: .72;
+}
+
+.notification-delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border: 1px solid #f0c9d2;
+  background: #fff5f7;
+  color: var(--red-dark);
+  border-radius: 9px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.notification-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+}
+
+.admin-notification-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 12px;
+}
+
+#editEventForm .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+@media (max-width: 600px) {
+  .notification-head-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .notification-modal-footer,
+  .admin-notification-actions,
+  #editEventForm .form-actions {
+    flex-direction: column;
+  }
+
+  .notification-modal-footer button,
+  .admin-notification-actions button,
+  #editEventForm .form-actions button {
+    width: 100%;
+  }
+}
