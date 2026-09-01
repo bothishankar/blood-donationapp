@@ -2561,16 +2561,9 @@
             form.reset();
 
 
-            setAppNotification(
-              "New donor registered",
-              `${data.Name || data.name || "A donor"} has joined the Poongurichi Nanbargal donor network.`,
-              "🩸"
-            );
-
             await Promise.all([
               loadDashboard(),
-              loadBloodGroups(),
-              loadNotifications()
+              loadBloodGroups()
             ]);
 
 
@@ -2924,16 +2917,16 @@
             form.reset();
 
 
+            await loadDashboard();
+
+
             setAppNotification(
-              "New blood request",
-              `${data.Patient_Name || data.patientName || "A patient"} requested ${data.Blood_Group || data.bloodGroup || "blood"} at ${data.Hospital || data.hospital || "the hospital"}.`,
+              "New Blood Request",
+              `${data.Patient_Name || data.patientName || "A patient"} needs ${data.Blood_Group || data.bloodGroup || "blood"} at ${data.Hospital || data.hospital || "the hospital"}.`,
               "🚨"
             );
 
-            await Promise.all([
-              loadDashboard(),
-              loadNotifications()
-            ]);
+            await loadNotifications();
 
             toast(
               "Blood request submitted 🚨"
@@ -2978,19 +2971,6 @@
       menu.setAttribute("aria-hidden", "true");
     }
 
-    function formatDateTime(value) {
-      if (!value) return "";
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return String(value);
-      return date.toLocaleString(undefined, {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
     /* =========================================================
        NOTIFICATIONS
        Added without changing existing application logic.
@@ -3000,95 +2980,45 @@
 
     async function loadNotifications() {
       try {
-        if (!window.BloodDonationAPI ||
-            typeof BloodDonationAPI.getNotifications !== "function") {
-          APP_NOTIFICATIONS = [];
-          renderNotifications();
-          return;
-        }
-
-        const result = await BloodDonationAPI.getNotifications();
-        const notifications = Array.isArray(result)
+        const result = await BloodDonationAPI.getNotifications("");
+        const list = Array.isArray(result)
           ? result
-          : (
-              result?.notifications ||
-              result?.data ||
-              result?.result ||
-              []
-            );
-
-        APP_NOTIFICATIONS = Array.isArray(notifications)
-          ? notifications
-          : [];
-
-        updateNotificationBadge();
+          : (result?.notifications || result?.data || result?.result || []);
+        APP_NOTIFICATIONS = Array.isArray(list) ? list : [];
         renderNotifications();
+        updateNotificationBadges();
       } catch (error) {
         console.warn("Notifications API:", error);
         APP_NOTIFICATIONS = [];
-        updateNotificationBadge();
         renderNotifications();
+        updateNotificationBadges();
       }
     }
 
-    function updateNotificationBadge() {
-      const unreadCount = APP_NOTIFICATIONS.filter(item => {
-        const status = String(
-          item.readStatus ||
-          item.Read_Status ||
-          item.status ||
-          ""
-        ).toLowerCase();
-
-        return !status || status === "unread";
-      }).length;
-
-      const badges = [
-        document.getElementById("notificationBadge"),
-        document.getElementById("notificationBadgeMobile")
-      ];
-
-      badges.forEach(badge => {
+    function updateNotificationBadges() {
+      const unread = APP_NOTIFICATIONS.filter(n =>
+        String(n.readStatus || n.Read_Status || "Unread").toLowerCase() !== "read"
+      ).length;
+      ["notificationBadge", "notificationBadgeMobile"].forEach(id => {
+        const badge = document.getElementById(id);
         if (!badge) return;
-        badge.textContent = String(unreadCount);
-        badge.style.display = unreadCount > 0 ? "inline-flex" : "none";
+        badge.textContent = String(unread);
+        badge.style.display = unread > 0 ? "inline-flex" : "none";
       });
     }
 
     async function openNotifications() {
       const modal = document.getElementById("notificationModal");
       if (!modal) return;
-
       modal.classList.add("show");
-
       const list = document.getElementById("notificationList");
-      if (list) {
-        list.innerHTML = `
-          <div class="notification-empty">
-            <div class="notification-empty-icon">⏳</div>
-            <strong>Loading notifications…</strong>
-            <p>Please wait.</p>
-          </div>
-        `;
-      }
-
+      if (list) list.innerHTML = `
+        <div class="notification-empty">
+          <div class="notification-empty-icon">⏳</div>
+          <strong>Loading notifications…</strong>
+          <p>Please wait.</p>
+        </div>`;
       await loadNotifications();
-
-      /* Opening the notification panel marks only the UI badge as read.
-         The database rows remain unchanged until an explicit read action
-         is available. */
-      const badge = document.getElementById("notificationBadge");
-      const mobileBadge = document.getElementById("notificationBadgeMobile");
-
-      if (badge) {
-        badge.textContent = "0";
-        badge.style.display = "none";
-      }
-
-      if (mobileBadge) {
-        mobileBadge.textContent = "0";
-        mobileBadge.style.display = "none";
-      }
     }
 
     function closeNotifications() {
@@ -3097,57 +3027,49 @@
     }
 
     function closeNotificationsOutside(event) {
-      if (event.target.id === "notificationModal") {
-        closeNotifications();
-      }
+      if (event.target.id === "notificationModal") closeNotifications();
     }
 
     function renderNotifications() {
       const list = document.getElementById("notificationList");
       if (!list) return;
-
       if (!APP_NOTIFICATIONS.length) {
         list.innerHTML = `
           <div class="notification-empty">
             <div class="notification-empty-icon">🔔</div>
-            <strong>No new notifications</strong>
-            <p>You are all caught up.</p>
-          </div>
-        `;
+            <strong>No notifications yet</strong>
+            <p>New donors, blood requests and events will appear here.</p>
+          </div>`;
         return;
       }
-
       list.innerHTML = APP_NOTIFICATIONS.map(item => {
-        const title = item.title || item.Title || "Notification";
-        const message = item.message || item.Message || "";
         const type = item.type || item.Type || "General";
-        const created = item.createdDate || item.Created_Date || "";
-
+        const icon = type === "Blood Request" ? "🚨" : type === "Event" ? "📅" : "🩸";
         return `
           <div class="notification-item">
-            <div class="notification-item-icon">${item.icon || "🔔"}</div>
+            <div class="notification-item-icon">${icon}</div>
             <div>
-              <strong>${escapeHtml(title)}</strong>
-              <p>${escapeHtml(message)}</p>
-              <small>${escapeHtml(type)}${created ? " • " + escapeHtml(formatDateTime(created)) : ""}</small>
+              <strong>${escapeHtml(item.title || item.Title || "Notification")}</strong>
+              <p>${escapeHtml(item.message || item.Message || "")}</p>
+              <small>${escapeHtml(item.createdDate || item.Created_Date || "")}</small>
             </div>
-          </div>
-        `;
+          </div>`;
       }).join("");
     }
 
     function setAppNotification(title, message, icon = "🔔") {
       APP_NOTIFICATIONS.unshift({
-        title,
-        message,
-        type: "General",
-        readStatus: "Unread",
-        icon,
+        title, message, type: "General", readStatus: "Unread", icon,
         createdDate: new Date().toISOString()
       });
-
-      updateNotificationBadge();
       renderNotifications();
+      updateNotificationBadges();
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;"
+      }[c]));
     }
 
     /* =========================================================
@@ -3754,9 +3676,7 @@
 
         loadBloodGroups(),
 
-        loadEvents(),
-
-        loadNotifications()
+        loadEvents()
 
       ]);
 
