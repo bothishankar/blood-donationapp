@@ -381,7 +381,7 @@
               </div>
 
               <h2 class="section-title">
-                Upcoming Events
+                Blood Camps & Events
               </h2>
 
               <p class="section-description">
@@ -796,10 +796,24 @@
 
               <input
                 class="form-control"
+                id="donorLastDonationDate"
                 name="Last_Donation_Date"
                 type="date"
-                required
               >
+
+              <label class="new-donor-option">
+                <input
+                  id="newDonorNA"
+                  type="checkbox"
+                  name="New_Donor_NA"
+                  value="NA"
+                >
+                <span>New donor — no previous donation (NA)</span>
+              </label>
+
+              <small class="field-help">
+                Enter the last donation date, or select NA if this is the donor's first donation.
+              </small>
 
             </div>
 
@@ -2064,8 +2078,12 @@
                 status &&
                 [
                   "cancelled",
+                  "canceled",
                   "deleted",
-                  "inactive"
+                  "inactive",
+                  "archived",
+                  "draft",
+                  "removed"
                 ].includes(status)
               ) {
                 return false;
@@ -2087,14 +2105,10 @@
 
 
               const date =
-                new Date(dateText);
+                parseLocalDate(dateText);
 
 
-              if (
-                Number.isNaN(
-                  date.getTime()
-                )
-              ) {
+              if (!date) {
                 return true;
               }
 
@@ -2115,8 +2129,10 @@
               if (!da) return 1;
               if (!db) return -1;
 
-              const ta = new Date(da).getTime();
-              const tb = new Date(db).getTime();
+              const parsedA = parseLocalDate(da);
+              const parsedB = parseLocalDate(db);
+              const ta = parsedA ? parsedA.getTime() : Number.MAX_SAFE_INTEGER;
+              const tb = parsedB ? parsedB.getTime() : Number.MAX_SAFE_INTEGER;
 
               if (Number.isNaN(ta) && Number.isNaN(tb)) return 0;
               if (Number.isNaN(ta)) return 1;
@@ -2317,10 +2333,21 @@
     }
 
 
+    function parseLocalDate(value) {
+      const text = String(value ?? "").trim();
+      const match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+      if (match) {
+        const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+        return Number.isNaN(date.getTime()) ? null : date;
+      }
+      const date = new Date(text);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
     function formatDate(value) {
 
       const date =
-        new Date(value);
+        parseLocalDate(value);
 
 
       if (
@@ -2470,6 +2497,20 @@
             Object.fromEntries(
               new FormData(form)
             );
+
+          const lastDateEl = document.getElementById("donorLastDonationDate");
+          const newDonorNA = document.getElementById("newDonorNA");
+          const lastDonationDate = String(lastDateEl?.value || "").trim();
+
+          if (!lastDonationDate && !newDonorNA?.checked) {
+            message.className = "form-message error";
+            message.textContent = "Last donation date is required, or select NA for a new donor.";
+            lastDateEl?.focus();
+            return;
+          }
+
+          data.Last_Donation_Date = newDonorNA?.checked ? "NA" : lastDonationDate;
+          data.lastDonationDate = data.Last_Donation_Date;
 
           const donorName = String(
             data.Name ||
