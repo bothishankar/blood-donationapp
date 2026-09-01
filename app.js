@@ -1,3717 +1,454 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
-  >
-
-  <meta
-    name="description"
-    content="Poongurichi Nanbargal Blood Donors Club - Find blood donors, become a donor and help save lives."
-  >
-
-  <meta name="theme-color" content="#123b82">
-
-  <title>Poongurichi Nanbargal | Blood Donors Club</title>
-
-  <link rel="stylesheet" href="style.css">
-
-</head>
-
-
-<body>
-
-  <!-- =======================================================
-       HEADER
-       ======================================================= -->
-
-  <header class="site-header">
-
-    <div class="container header-inner">
-
-      <button
-        class="mobile-menu-btn"
-        type="button"
-        onclick="toggleMobileMenu()"
-        aria-label="Open menu"
-      >
-        ☰
-      </button>
-
-      <a
-        href="#"
-        class="brand"
-        onclick="goTo('home'); return false;"
-      >
-
-        <img
-          class="brand-logo"
-          src="icons/poongurichi-logo.jpeg"
-          alt="Poongurichi Nanbargal logo"
-        >
-
-        <div class="brand-copy">
-
-          <div class="brand-name">
-            Poongurichi Nanbargal
-          </div>
-
-          <div class="brand-meta">
-            Admin:
-            <strong>Bothishankar</strong>
-            &nbsp;•&nbsp;
-            Ph: 9677824319
-          </div>
-
-        </div>
-
-      </a>
-
-
-      <div class="mobile-header-actions">
-        <button
-          class="notification-btn"
-          type="button"
-          onclick="openNotifications()"
-          aria-label="Notifications"
-          title="Notifications"
-        >
-          🔔
-          <span id="notificationBadgeMobile" class="notification-badge">0</span>
-        </button>
-
-      </div>
-
-      <nav class="desktop-nav">
-
-        <button
-          class="nav-link active"
-          data-page="home"
-          onclick="goTo('home')"
-        >
-          Home
-        </button>
-
-        <button
-          class="nav-link"
-          data-page="donor"
-          onclick="goTo('donor')"
-        >
-          Become Donor
-        </button>
-
-        <button
-          class="nav-link"
-          data-page="find"
-          onclick="goTo('find')"
-        >
-          Find Blood
-        </button>
-
-        <button
-          class="nav-link"
-          data-page="request"
-          onclick="goTo('request')"
-        >
-          Request Blood
-        </button>
-
-        <button
-          class="nav-link"
-          data-page="about"
-          onclick="goTo('about')"
-        >
-          About
-        </button>
-        <button
-          class="notification-btn"
-          type="button"
-          onclick="openNotifications()"
-          aria-label="Notifications"
-          title="Notifications"
-        >
-          🔔
-          <span id="notificationBadge" class="notification-badge">0</span>
-        </button>
-
-
-        <button
-          class="admin-btn"
-          onclick="openAdmin()"
-        >
-          🔐 Admin
-        </button>
-
-      </nav>
-
-    </div>
-
-  </header>
-
-  <!-- Mobile menu: Admin Login is available from the hamburger button. -->
-  <div id="mobileMenu" class="mobile-menu-panel" aria-hidden="true">
-    <button
-      class="mobile-menu-admin"
-      type="button"
-      onclick="openAdmin(); closeMobileMenu();"
-    >
-      <span class="mobile-menu-admin-icon">🔐</span>
-      <span>Admin Login</span>
-    </button>
-  </div>
-
-
-  <!-- =======================================================
-       MAIN
-       ======================================================= -->
-
-  <main>
-
-
-    <!-- =====================================================
-         HOME
-         ===================================================== -->
-
-    <section
-      id="page-home"
-      class="page-section active"
-    >
-
-      <div class="container">
-
-
-        <!-- HERO -->
-
-        <div class="hero">
-
-          <div class="hero-content">
-
-            <div class="hero-badge">
-              <span class="hero-badge-dot"></span>
-              Community Blood Donor Network
-            </div>
-
-            <h1 class="hero-title">
-              One donation.
-              <br>
-              <span>Many lives.</span>
-            </h1>
-
-            <p class="hero-text">
-              Connect people who need blood with people
-              willing to help. Find a donor near you,
-              become a donor, and make a real difference
-              in your community.
-            </p>
-
-            <div class="hero-actions">
-
-              <button
-                class="btn btn-primary"
-                onclick="goTo('find')"
-              >
-                🔎 Find Blood
-              </button>
-
-              <button
-                class="btn btn-danger"
-                onclick="goTo('donor')"
-              >
-                🩸 Become a Donor
-              </button>
-
-              <button
-                class="btn btn-light"
-                onclick="goTo('request')"
-              >
-                🚨 Request Blood
-              </button>
-
-            </div>
-
-          </div>
-
-
-          <div class="hero-visual">
-
-            <div class="hero-orbit">
-
-              <div class="hero-drop">
-
-                <div class="hero-drop-inner">
-
-                  <div class="hero-drop-heart">
-                    ♥
-                  </div>
-
-                  <div class="hero-drop-label">
-                    SAVE LIVES
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <div class="floating-card floating-one">
-
-              <strong id="heroDonorCount">
-                —
-              </strong>
-
-              <small>
-                Registered donors
-              </small>
-
-            </div>
-
-
-            <div class="floating-card floating-two">
-
-              <strong>
-                24/7
-              </strong>
-
-              <small>
-                Community support
-              </small>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- QUICK ACTIONS -->
-
-        <div class="quick-actions">
-
-          <div
-            class="action-card"
-            onclick="goTo('find')"
-          >
-
-            <div class="action-icon blue">
-              🔎
-            </div>
-
-            <div>
-              <h3>Find Blood / Donor</h3>
-
-              <p>
-                Search available donors by blood group
-                and location.
-              </p>
-            </div>
-
-            <div class="action-arrow">
-              →
-            </div>
-
-          </div>
-
-
-          <div
-            class="action-card"
-            onclick="goTo('donor')"
-          >
-
-            <div class="action-icon red">
-              🩸
-            </div>
-
-            <div>
-              <h3>Become a Donor</h3>
-
-              <p>
-                Register your details and help someone
-                in need.
-              </p>
-            </div>
-
-            <div class="action-arrow">
-              →
-            </div>
-
-          </div>
-
-
-          <div
-            class="action-card"
-            onclick="goTo('request')"
-          >
-
-            <div class="action-icon green">
-              🚑
-            </div>
-
-            <div>
-              <h3>Need Blood?</h3>
-
-              <p>
-                Send a blood request to the donor network.
-              </p>
-            </div>
-
-            <div class="action-arrow">
-              →
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- EVENTS -->
-
-        <div class="events-section">
-
-          <div class="section-heading-row">
-
-            <div class="section-head">
-
-              <div class="section-kicker">
-                ❤️ Community
-              </div>
-
-              <h2 class="section-title">
-                Blood Camps & Events
-              </h2>
-
-              <p class="section-description">
-                Blood donation camps and community
-                activities.
-              </p>
-
-            </div>
-
-            <button
-              class="view-all-btn"
-              onclick="showAllEvents()"
-            >
-              View All →
-            </button>
-
-          </div>
-
-
-          <div
-            id="eventsContainer"
-            class="events-grid"
-          >
-
-            <div class="loading">
-              <span class="spinner"></span>
-              Loading events...
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- BLOOD GROUP -->
-
-        <div class="blood-section">
-
-          <div class="section-head">
-
-            <div class="section-kicker">
-              🩸 Availability
-            </div>
-
-            <h2 class="section-title">
-              Blood Group Availability
-            </h2>
-
-            <p class="section-description">
-              Live member counts from registered donors.
-            </p>
-
-          </div>
-
-
-          <div
-            id="bloodGrid"
-            class="blood-grid"
-          >
-
-            <div class="loading">
-              <span class="spinner"></span>
-              Loading...
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- STATS -->
-
-        <div class="stats-grid">
-
-          <div class="stat-card">
-
-            <div class="stat-top">
-
-              <div class="stat-icon">
-                👥
-              </div>
-
-              <div class="stat-label">
-                Total Donors
-              </div>
-
-            </div>
-
-            <div
-              id="statDonors"
-              class="stat-value"
-            >
-              —
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div class="stat-top">
-
-              <div class="stat-icon">
-                🩸
-              </div>
-
-              <div class="stat-label">
-                Blood Requests
-              </div>
-
-            </div>
-
-            <div
-              id="statRequests"
-              class="stat-value"
-            >
-              —
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div class="stat-top">
-
-              <div class="stat-icon">
-                📅
-              </div>
-
-              <div class="stat-label">
-                Camps / Events
-              </div>
-
-            </div>
-
-            <div
-              id="statEvents"
-              class="stat-value"
-            >
-              —
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div class="stat-top">
-
-              <div class="stat-icon">
-                ❤️
-              </div>
-
-              <div class="stat-label">
-                Blood Groups
-              </div>
-
-            </div>
-
-            <div
-              id="statGroups"
-              class="stat-value"
-            >
-              —
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- INFO -->
-
-        <div class="info-banner">
-
-          <div class="info-icon">
-            i
-          </div>
-
-          <p>
-            Blood donation is a voluntary act that can
-            save a life. Be a hero — donate blood and
-            help your community.
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         DONOR PAGE
-         ===================================================== -->
-
-    <section
-      id="page-donor"
-      class="page-section"
-    >
-
-      <div class="container">
-
-        <div class="section-head">
-
-          <div class="section-kicker">
-            🩸 Give Hope
-          </div>
-
-          <h1 class="section-title">
-            Become a Blood Donor
-          </h1>
-
-          <p class="section-description">
-            Register your details with Poongurichi
-            Nanbargal Blood Donors Club.
-          </p>
-
-        </div>
-
-
-        <div class="content-card">
-
-          <form
-            id="donorForm"
-            class="form-grid"
-          >
-            <div class="required-notice full">
-              <strong>* Mandatory fields</strong> must be completed before registration.
-            </div>
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Name <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="Name"
-                required
-                placeholder="Your full name"
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Mobile <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="Mobile"
-                required
-                type="tel"
-                inputmode="numeric"
-                autocomplete="tel"
-                pattern="[6-9][0-9]{9}"
-                minlength="10"
-                maxlength="10"
-                title="Enter a valid 10-digit Indian mobile number"
-                placeholder="Mobile number"
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Email
-              </label>
-
-              <input
-                class="form-control"
-                name="Email"
-                type="email"
-                placeholder="Email address"
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Blood Group <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <select
-                class="form-control"
-                name="Blood_Group"
-                required
-              >
-
-                <option value="">
-                  Select blood group
-                </option>
-
-                <option>A+</option>
-                <option>A-</option>
-                <option>B+</option>
-                <option>B-</option>
-                <option>AB+</option>
-                <option>AB-</option>
-                <option>O+</option>
-                <option>O-</option>
-
-              </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Gender <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <select
-                class="form-control"
-                name="Gender"
-                required
-              >
-
-                <option value="">
-                  Select
-                </option>
-
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-
-              </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Date of Birth <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="DOB"
-                type="date"
-                required
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                District <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="District"
-                placeholder="District"
-                required
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                City <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="City"
-                placeholder="City"
-                required
-              >
-
-            </div>
-
-
-            <div class="form-group full">
-
-              <label class="form-label">
-                Address <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <textarea
-                class="form-control"
-                name="Address"
-                placeholder="Your address"
-                required
-              ></textarea>
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Last Donation Date <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                id="donorLastDonationDate"
-                name="Last_Donation_Date"
-                type="date"
-              >
-
-              <label class="new-donor-option">
-                <input
-                  id="newDonorNA"
-                  type="checkbox"
-                  name="New_Donor_NA"
-                  value="NA"
-                >
-                <span>New donor — no previous donation (NA)</span>
-              </label>
-
-              <small class="field-help">
-                Enter the last donation date, or select NA if this is the donor's first donation.
-              </small>
-
-            </div>
-
-
-            <div
-              id="donorMessage"
-              class="form-message"
-            ></div>
-
-
-            <div class="form-actions">
-
-              <button
-                type="button"
-                class="btn btn-light"
-                onclick="goTo('home')"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                class="btn btn-danger"
-              >
-                🩸 Register as Donor
-              </button>
-
-            </div>
-
-          </form>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         FIND BLOOD
-         ===================================================== -->
-
-    <section
-      id="page-find"
-      class="page-section"
-    >
-
-      <div class="container">
-
-        <div class="section-head">
-
-          <div class="section-kicker">
-            🔎 Search
-          </div>
-
-          <h1 class="section-title">
-            Find Blood / Donor
-          </h1>
-
-          <p class="section-description">
-            Search available registered donors by blood
-            group and location.
-          </p>
-
-        </div>
-
-
-        <div class="content-card">
-
-          <div class="search-toolbar">
-
-            <select
-              id="searchBloodGroup"
-              class="form-control"
-            >
-
-              <option value="">
-                All Blood Groups
-              </option>
-
-              <option>A+</option>
-              <option>A-</option>
-              <option>B+</option>
-              <option>B-</option>
-              <option>AB+</option>
-              <option>AB-</option>
-              <option>O+</option>
-              <option>O-</option>
-
-            </select>
-
-
-            <input
-              id="searchDistrict"
-              class="form-control"
-              placeholder="District"
-            >
-
-
-            <input
-              id="searchCity"
-              class="form-control"
-              placeholder="City"
-            >
-
-
-            <button
-              class="btn btn-primary"
-              onclick="searchDonors()"
-            >
-              🔎 Search
-            </button>
-
-          </div>
-
-
-          <div
-            id="donorResults"
-            class="donor-results"
-          >
-
-            <div class="loading">
-              Search for available donors.
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         REQUEST BLOOD
-         ===================================================== -->
-
-    <section
-      id="page-request"
-      class="page-section"
-    >
-
-      <div class="container">
-
-        <div class="section-head">
-
-          <div class="section-kicker">
-            🚨 Urgent Help
-          </div>
-
-          <h1 class="section-title">
-            Request Blood
-          </h1>
-
-          <p class="section-description">
-            Submit a request and our donor network can
-            help connect you with available donors.
-          </p>
-
-        </div>
-
-
-        <div class="content-card">
-
-          <form
-            id="requestForm"
-            class="form-grid"
-          >
-            <div class="required-notice full">
-              <strong>* Mandatory fields</strong> must be completed before submitting a blood request.
-            </div>
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Patient Name <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="Patient_Name"
-                required
-                placeholder="Patient name"
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Blood Group <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <select
-                class="form-control"
-                name="Blood_Group"
-                required
-              >
-
-                <option value="">
-                  Select
-                </option>
-
-                <option>A+</option>
-                <option>A-</option>
-                <option>B+</option>
-                <option>B-</option>
-                <option>AB+</option>
-                <option>AB-</option>
-                <option>O+</option>
-                <option>O-</option>
-
-              </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Contact Mobile <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="Contact_Mobile"
-                required
-                type="tel"
-                inputmode="numeric"
-                autocomplete="tel"
-                pattern="[6-9][0-9]{9}"
-                minlength="10"
-                maxlength="10"
-                title="Enter a valid 10-digit Indian mobile number"
-                placeholder="Contact number"
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Hospital <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="Hospital"
-                placeholder="Hospital name"
-                required
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                District <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="District"
-                placeholder="District"
-                required
-              >
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
-                City <span class="required-mark">* Mandatory</span>
-              </label>
-
-              <input
-                class="form-control"
-                name="City"
-                placeholder="City"
-                required
-              >
-
-            </div>
-
-
-            <div class="form-group full">
-
-              <label class="form-label">
-                Additional Details
-              </label>
-
-              <textarea
-                class="form-control"
-                name="Description"
-                placeholder="Any additional information..."
-              ></textarea>
-
-            </div>
-
-
-            <div
-              id="requestMessage"
-              class="form-message"
-            ></div>
-
-
-            <div class="form-actions">
-
-              <button
-                type="button"
-                class="btn btn-light"
-                onclick="goTo('home')"
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                class="btn btn-primary"
-              >
-                🚨 Submit Request
-              </button>
-
-            </div>
-
-          </form>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         ABOUT
-         ===================================================== -->
-
-    <section
-      id="page-about"
-      class="page-section"
-    >
-
-      <div class="container">
-
-        <div class="section-head">
-
-          <div class="section-kicker">
-            ❤️ Our Mission
-          </div>
-
-          <h1 class="section-title">
-            About Poongurichi Nanbargal
-          </h1>
-
-          <p class="section-description">
-            A community-driven blood donor network
-            created to make finding help easier when
-            every minute matters.
-          </p>
-
-        </div>
-
-
-        <div class="about-layout">
-
-          <div class="about-highlight">
-
-            <div>
-
-              <h2>
-                Together, we can make blood available
-                when it matters most.
-              </h2>
-
-              <p>
-                Our goal is to connect donors and people
-                in need through a simple, accessible
-                community platform.
-              </p>
-
-            </div>
-
-            <div class="about-heart">
-              ❤️
-            </div>
-
-          </div>
-
-
-          <div class="about-card">
-
-            <h3>
-              Poongurichi Nanbargal Blood Donors Club
-            </h3>
-
-            <p id="aboutDynamicText">
-              We believe that a small act of kindness
-              can become someone's second chance.
-              Register as a donor, search for available
-              blood, or submit a request when your family
-              needs help.
-            </p>
-
-            <br>
-
-            <h3>
-              Our Community
-            </h3>
-
-            <p>
-              Every registered donor helps strengthen
-              the local donor network and makes it easier
-              for families to find support.
-            </p>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-  </main>
-
-
-  <!-- =======================================================
-       FOOTER
-       ======================================================= -->
-
-
-    <!-- =====================================================
-         ADMIN DASHBOARD
-         ===================================================== -->
-    <section id="page-admin" class="page-section admin-page">
-      <div class="container">
-
-        <div class="admin-page-head">
-          <div>
-            <div class="section-kicker">🔐 Administration</div>
-            <h1 class="section-title">Admin Dashboard</h1>
-            <p class="section-description">
-              Manage donors, blood requests, upcoming events and About content.
-            </p>
-          </div>
-          <button type="button" class="btn btn-light admin-logout-btn" onclick="adminLogout()">
-            🚪 Logout
-          </button>
-        </div>
-
-        <div id="adminGuardMessage" class="admin-guard-message"></div>
-
-        <div class="admin-stat-grid">
-          <div class="admin-stat-card">
-            <span>👥</span>
-            <strong id="adminStatDonors">0</strong>
-            <small>Registered Donors</small>
-          </div>
-          <div class="admin-stat-card">
-            <span>🚨</span>
-            <strong id="adminStatRequests">0</strong>
-            <small>Active Requests</small>
-          </div>
-          <div class="admin-stat-card">
-            <span>📅</span>
-            <strong id="adminStatEvents">0</strong>
-            <small>Events</small>
-          </div>
-          <div class="admin-stat-card">
-            <span>🩸</span>
-            <strong id="adminStatGroups">0</strong>
-            <small>Blood Groups</small>
-          </div>
-        </div>
-
-        <div class="admin-grid">
-
-          <div class="admin-card admin-wide">
-            <div class="admin-card-head">
-              <div>
-                <h2>👥 Registered Donors</h2>
-                <p>View donor details and manage registrations.</p>
-              </div>
-              <button type="button" class="admin-small-btn" onclick="loadAdminDonors()">↻ Refresh</button>
-            </div>
-            <div id="adminDonorTable" class="admin-table-wrap">
-              <div class="admin-loading">Loading donors…</div>
-            </div>
-          </div>
-
-          <div class="admin-card admin-wide">
-            <div class="admin-card-head">
-              <div>
-                <h2>🚨 Blood Requests</h2>
-                <p>Review active and submitted blood requests.</p>
-              </div>
-              <button type="button" class="admin-small-btn" onclick="loadAdminRequests()">↻ Refresh</button>
-            </div>
-            <div id="adminRequestTable" class="admin-table-wrap">
-              <div class="admin-loading">Loading requests…</div>
-            </div>
-          </div>
-
-          <div class="admin-card">
-            <div class="admin-card-head">
-              <div>
-                <h2>📅 Add Event</h2>
-                <p>Create a new upcoming blood donation event.</p>
-              </div>
-            </div>
-
-            <form id="adminEventForm" class="admin-form">
-              <label>Event Title <span class="required-mark">* Mandatory</span></label>
-              <input class="form-control" name="Title" required placeholder="Blood Donation Camp">
-
-              <label>Event Date <span class="required-mark">* Mandatory</span></label>
-              <input class="form-control" name="Event_Date" type="date" required>
-
-              <label>Location <span class="required-mark">* Mandatory</span></label>
-              <input class="form-control" name="Location" required placeholder="Poongurichi">
-
-              <label>Image URL</label>
-              <input class="form-control" name="Image_URL" type="text" placeholder="https://... or image reference">
-
-              <label>Description</label>
-              <textarea class="form-control" name="Description" placeholder="Event details..."></textarea>
-
-              <div id="adminEventMessage" class="form-message"></div>
-
-              <button class="btn btn-primary" type="submit">➕ Create Event</button>
-            </form>
-          </div>
-
-          <div class="admin-card">
-            <div class="admin-card-head">
-              <div>
-                <h2>ℹ️ About Content</h2>
-                <p>Edit the public About section.</p>
-              </div>
-            </div>
-
-            <form id="adminAboutForm" class="admin-form">
-              <label>About Title</label>
-              <input id="adminAboutTitle" class="form-control" name="Title" placeholder="Poongurichi Nanbargal">
-
-              <label>About Content</label>
-              <textarea id="adminAboutContent" class="form-control admin-about-textarea" name="Content"
-                placeholder="Write your About content..."></textarea>
-
-              <div id="adminAboutMessage" class="form-message"></div>
-
-              <button class="btn btn-primary" type="submit">💾 Save About</button>
-            </form>
-          </div>
-
-          <div class="admin-card admin-wide">
-            <div class="admin-card-head">
-              <div>
-                <h2>📅 Existing Events</h2>
-                <p>Remove events that are no longer needed.</p>
-              </div>
-              <button type="button" class="admin-small-btn" onclick="loadAdminEvents()">↻ Refresh</button>
-            </div>
-            <div id="adminEventTable" class="admin-table-wrap">
-              <div class="admin-loading">Loading events…</div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-  <footer>
-
-    <div class="container footer-inner">
-
-      <div>
-
-        <div class="footer-brand">
-          Poongurichi Nanbargal
-        </div>
-
-        <div class="footer-copy">
-          Blood Donors Club
-        </div>
-
-      </div>
-
-      <div class="footer-copy">
-        © <span id="currentYear"></span>
-        Poongurichi Nanbargal. All rights reserved.
-      </div>
-
-    </div>
-
-  </footer>
-
-
-  <!-- =======================================================
-       MOBILE BOTTOM NAVIGATION
-       ======================================================= -->
-
-  <div class="mobile-bottom-nav">
-
-    <div class="mobile-nav-inner">
-
-      <button
-        class="mobile-nav-btn active"
-        data-mobile-page="home"
-        onclick="goTo('home')"
-      >
-        <span>⌂</span>
-        <span>Home</span>
-      </button>
-
-
-      <button
-        class="mobile-nav-btn"
-        data-mobile-page="donor"
-        onclick="goTo('donor')"
-      >
-        <span>🩸</span>
-        <span>Donate</span>
-      </button>
-
-
-      <button
-        class="mobile-nav-btn"
-        data-mobile-page="find"
-        onclick="goTo('find')"
-      >
-        <span>⌕</span>
-        <span>Find</span>
-      </button>
-
-
-      <button
-        class="mobile-nav-btn"
-        data-mobile-page="request"
-        onclick="goTo('request')"
-      >
-        <span>🚨</span>
-        <span>Request</span>
-      </button>
-
-
-      <button
-        class="mobile-nav-btn"
-        data-mobile-page="about"
-        onclick="goTo('about')"
-      >
-        <span>ⓘ</span>
-        <span>About</span>
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- =======================================================
-       ADMIN MODAL
-       ======================================================= -->
-
-  <div
-    id="adminModal"
-    class="modal-backdrop"
-    onclick="closeAdminOutside(event)"
-  >
-
-    <div class="modal">
-
-      <div class="modal-head">
-
-        <h2>
-          🔐 Admin Login
-        </h2>
-
-        <button
-          class="modal-close"
-          onclick="closeAdmin()"
-        >
-          ×
-        </button>
-
-      </div>
-
-
-      <form id="adminForm" class="login-form admin-login-form" novalidate>
-
-        <div class="admin-field">
-          <label for="adminUsername">Username</label>
-          <input
-            id="adminUsername"
-            name="username"
-            class="form-control admin-input"
-            type="text"
-            autocomplete="username"
-            placeholder="Enter admin username"
-            required
-          >
-        </div>
-
-        <div class="admin-field">
-          <label for="adminPassword">Password</label>
-          <input
-            id="adminPassword"
-            name="password"
-            class="form-control admin-input"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Enter admin password"
-            required
-          >
-        </div>
-
-        <div id="adminMessage" class="form-message" role="alert"></div>
-
-        <button class="btn btn-primary admin-login-submit" type="submit">
-          🔐 Login as Admin
-        </button>
-
-      </form>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =======================================================
-       NOTIFICATIONS
-       ======================================================= -->
-
-  <div
-    id="notificationModal"
-    class="modal-backdrop"
-    onclick="closeNotificationsOutside(event)"
-  >
-    <div class="modal notification-modal">
-      <div class="modal-head">
-        <h2>🔔 Notifications</h2>
-        <button
-          class="modal-close"
-          type="button"
-          onclick="closeNotifications()"
-          aria-label="Close notifications"
-        >×</button>
-      </div>
-
-      <div id="notificationList" class="notification-list">
-        <div class="notification-empty">
-          <div class="notification-empty-icon">🔔</div>
-          <strong>No new notifications</strong>
-          <p>You are all caught up.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- =======================================================
-       TOAST
-       ======================================================= -->
-
-  <div
-    id="toast"
-    class="toast"
-  ></div>
-
-
-  <!-- =======================================================
-       EXISTING API
-       IMPORTANT: app.js must remain in your repository
-       ======================================================= -->
-
-  <script src="app.js"></script>
-
-
-  <!-- =======================================================
-       PREMIUM V2 JAVASCRIPT
-       ======================================================= -->
-
-  <script>
-
-    /* =========================================================
-       GLOBAL
-       ========================================================= */
-
-    const bloodGroups = [
-      "A+",
-      "A-",
-      "B+",
-      "B-",
-      "AB+",
-      "AB-",
-      "O+",
-      "O-"
-    ];
-
-
-    /* =========================================================
-       NAVIGATION
-       ========================================================= */
-
-    function goTo(page) {
-
-      /* Admin dashboard is protected by the existing admin session. */
-      if (page === "admin" && !adminIsLoggedIn()) {
-        openAdmin();
-        return;
-      }
-
-      document
-        .querySelectorAll(".page-section")
-        .forEach(section => {
-          section.classList.remove("active");
-        });
-
-
-      const target =
-        document.getElementById(
-          "page-" + page
-        );
-
-
-      if (target) {
-        target.classList.add("active");
-      }
-
-
-      document
-        .querySelectorAll(".nav-link")
-        .forEach(button => {
-
-          button.classList.toggle(
-            "active",
-            button.dataset.page === page
-          );
-
-        });
-
-
-      document
-        .querySelectorAll(".mobile-nav-btn")
-        .forEach(button => {
-
-          button.classList.toggle(
-            "active",
-            button.dataset.mobilePage === page
-          );
-
-        });
-
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-
-      if (page === "find") {
-        setTimeout(() => {
-
-          const result =
-            document.getElementById(
-              "donorResults"
-            );
-
-          if (
-            result &&
-            result.children.length === 0
-          ) {
-            result.innerHTML =
-              '<div class="loading">Search for available donors.</div>';
-          }
-
-        }, 50);
-      }
-
+/* ============================================================
+   POONGURICHI NANBARGAL BLOOD DONATION APP
+   Frontend API bridge + 90-day donor eligibility
+   ============================================================ */
+
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbzGvAVPbdgBpRGgFlIqjVwz4CI6m6grQaz42XvK-GiSHdD8S2gdZnRPFazGA0LT6DEz/exec";
+
+const ADMIN_KEY = "poongurichi_admin_session";
+const NINETY_DAYS = 90;
+
+async function api(action, data = {}) {
+  if (!action) throw new Error("API action is required.");
+
+  const response = await fetch(API_URL, {
+    method: "POST",
+    redirect: "follow",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify({ action, ...data })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Server error (${response.status}). Please try again.`);
+  }
+
+  const text = await response.text();
+  let result;
+
+  try {
+    result = JSON.parse(text);
+  } catch {
+    throw new Error("Google Apps Script returned an invalid response.");
+  }
+
+  if (result && result.success === false) {
+    throw new Error(result.error || "Request failed.");
+  }
+
+  return result;
+}
+
+function adminSession() {
+  try {
+    const raw = sessionStorage.getItem(ADMIN_KEY);
+    if (!raw) return null;
+    const user = JSON.parse(raw);
+    return user && typeof user === "object" ? user : null;
+  } catch {
+    return null;
+  }
+}
+
+function setAdminSession(user) {
+  if (!user || typeof user !== "object") {
+    throw new Error("Invalid administrator session.");
+  }
+  sessionStorage.setItem(ADMIN_KEY, JSON.stringify(user));
+}
+
+function clearAdminSession() {
+  sessionStorage.removeItem(ADMIN_KEY);
+}
+
+function clean(value) {
+  return String(value ?? "").trim();
+}
+
+function first(obj, ...keys) {
+  for (const key of keys) {
+    if (obj && obj[key] !== undefined && obj[key] !== null) {
+      return obj[key];
     }
+  }
+  return "";
+}
 
+function parseDonationDate(value) {
+  if (!value) return null;
 
-    /* =========================================================
-       TOAST
-       ========================================================= */
+  const text = clean(value);
+  if (!text || /^n\.?\s*a\.?$/i.test(text) || /^new\s+donor$/i.test(text)) {
+    return null;
+  }
 
-    let toastTimer;
-
-    function toast(message) {
-
-      const element =
-        document.getElementById("toast");
-
-      element.textContent = message;
-
-      element.classList.add("show");
-
-      clearTimeout(toastTimer);
-
-      toastTimer =
-        setTimeout(() => {
-          element.classList.remove("show");
-        }, 3000);
-
+  if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+    const [y, m, d] = text.split("-").map(Number);
+    const date = new Date(y, m - 1, d);
+    if (
+      date.getFullYear() === y &&
+      date.getMonth() === m - 1 &&
+      date.getDate() === d
+    ) {
+      return date;
     }
+    return null;
+  }
 
-
-    /* =========================================================
-       SAFE VALUE
-       ========================================================= */
-
-    function value(obj, ...keys) {
-
-      for (const key of keys) {
-
-        if (
-          obj &&
-          obj[key] !== undefined &&
-          obj[key] !== null &&
-          obj[key] !== ""
-        ) {
-          return obj[key];
-        }
-
-      }
-
-      return "";
-
+  if (/^\d{1,2}[/-]\d{1,2}[/-]\d{4}$/.test(text)) {
+    const [d, m, y] = text.split(/[/-]/).map(Number);
+    const date = new Date(y, m - 1, d);
+    if (
+      date.getFullYear() === y &&
+      date.getMonth() === m - 1 &&
+      date.getDate() === d
+    ) {
+      return date;
     }
-
-
-    /* =========================================================
-       DASHBOARD
-       ========================================================= */
-
-    async function loadDashboard() {
-
-      try {
-
-        if (
-          !window.BloodDonationAPI
-        ) {
-          throw new Error(
-            "app.js / BloodDonationAPI is not available."
-          );
-        }
-
-
-        const result =
-          await BloodDonationAPI.getDashboardStats();
-
-
-        const stats =
-          result?.stats ||
-          result?.data ||
-          result ||
-          {};
-
-
-        const donors =
-          Number(
-            value(
-              stats,
-              "registeredDonors",
-              "totalDonors",
-              "donors",
-              "Registered_Donors"
-            )
-          ) || 0;
-
-
-        const requests =
-          Number(
-            value(
-              stats,
-              "openRequests",
-              "totalRequests",
-              "activeRequests",
-              "bloodRequests",
-              "requests",
-              "Open_Requests",
-              "Total_Requests",
-              "Active_Requests"
-            )
-          ) || 0;
-
-
-        const groups =
-          Number(
-            value(
-              stats,
-              "bloodGroups",
-              "groups",
-              "Blood_Groups"
-            )
-          ) || 0;
-
-
-        const events =
-          Number(
-            value(
-              stats,
-              "events",
-              "totalEvents",
-              "camps",
-              "Events"
-            )
-          ) || 0;
-
-
-        document.getElementById(
-          "statDonors"
-        ).textContent = donors;
-
-
-        document.getElementById(
-          "statRequests"
-        ).textContent = requests;
-
-
-        document.getElementById(
-          "statGroups"
-        ).textContent = groups;
-
-
-        document.getElementById(
-          "statEvents"
-        ).textContent = events;
-
-
-        document.getElementById(
-          "heroDonorCount"
-        ).textContent = donors;
-
-      } catch (error) {
-
-        console.error(
-          "Dashboard error:",
-          error
-        );
-
-        /*
-          Do not destroy the layout if the backend
-          temporarily fails.
-        */
-
-        [
-          "statDonors",
-          "statRequests",
-          "statGroups",
-          "statEvents",
-          "heroDonorCount"
-        ].forEach(id => {
-
-          const el =
-            document.getElementById(id);
-
-          if (
-            el &&
-            el.textContent === "—"
-          ) {
-            el.textContent = "0";
-          }
-
-        });
-
-      }
-
-    }
-
-
-    /* =========================================================
-       BLOOD GROUP COUNTS
-       ========================================================= */
-
-    async function loadBloodGroups() {
-
-      const container =
-        document.getElementById(
-          "bloodGrid"
-        );
-
-
-      try {
-
-        const donors =
-          await BloodDonationAPI.getDonors();
-
-
-        const counts = {};
-
-        bloodGroups.forEach(group => {
-          counts[group] = 0;
-        });
-
-
-        donors.forEach(donor => {
-
-          const group =
-            String(
-              value(
-                donor,
-                "Blood_Group",
-                "bloodGroup",
-                "BloodGroup"
-              )
-            )
-            .trim()
-            .toUpperCase();
-
-
-          if (
-            Object.prototype.hasOwnProperty.call(
-              counts,
-              group
-            )
-          ) {
-            counts[group]++;
-          }
-
-        });
-
-
-        container.innerHTML =
-          bloodGroups
-            .map(group => {
-
-              const count =
-                counts[group] || 0;
-
-
-              return `
-
-                <div class="blood-card">
-
-                  <div class="blood-drop">
-                    🩸
-                  </div>
-
-                  <div class="blood-type">
-                    ${escapeHtml(group)}
-                  </div>
-
-                  <div class="blood-count">
-                    ${count}
-                  </div>
-
-                  <div class="blood-members">
-                    ${count === 1 ? "Member" : "Members"}
-                  </div>
-
-                </div>
-
-              `;
-
-            })
-            .join("");
-
-      } catch (error) {
-
-        console.error(
-          "Blood groups error:",
-          error
-        );
-
-
-        container.innerHTML =
-          bloodGroups
-            .map(group => `
-
-              <div class="blood-card">
-
-                <div class="blood-drop">
-                  🩸
-                </div>
-
-                <div class="blood-type">
-                  ${group}
-                </div>
-
-                <div class="blood-count">
-                  0
-                </div>
-
-                <div class="blood-members">
-                  Members
-                </div>
-
-              </div>
-
-            `)
-            .join("");
-
-      }
-
-    }
-
-
-    /* =========================================================
-       EVENTS
-       ========================================================= */
-
-    let cachedEvents = [];
-
-
-    async function loadEvents() {
-
-      const container =
-        document.getElementById(
-          "eventsContainer"
-        );
-
-
-      try {
-
-        const result =
-          await BloodDonationAPI.getEvents();
-
-
-        cachedEvents =
-          Array.isArray(result)
-            ? result
-            : (
-                result?.events ||
-                result?.data ||
-                result?.result ||
-                []
-              );
-
-        if (!Array.isArray(cachedEvents)) {
-          cachedEvents = [];
-        }
-
-
-        /*
-          Only show active/upcoming events when
-          status is available.
-        */
-
-        const today =
-          new Date();
-
-        const events =
-          cachedEvents
-            .filter(event => {
-
-              const status =
-                String(
-                  value(
-                    event,
-                    "Status",
-                    "status"
-                  )
-                )
-                .toLowerCase();
-
-
-              if (
-                status &&
-                [
-                  "cancelled",
-                  "canceled",
-                  "deleted",
-                  "inactive",
-                  "archived",
-                  "draft",
-                  "removed"
-                ].includes(status)
-              ) {
-                return false;
-              }
-
-
-              const dateText =
-                value(
-                  event,
-                  "Event_Date",
-                  "eventDate",
-                  "EventDate"
-                );
-
-
-              if (!dateText) {
-                return true;
-              }
-
-
-              const date =
-                parseLocalDate(dateText);
-
-
-              if (!date) {
-                return true;
-              }
-
-
-              return date >=
-                new Date(
-                  today.getFullYear(),
-                  today.getMonth(),
-                  today.getDate()
-                );
-
-            })
-            .sort((a, b) => {
-              const da = value(a, "Event_Date", "eventDate", "EventDate");
-              const db = value(b, "Event_Date", "eventDate", "EventDate");
-
-              if (!da && !db) return 0;
-              if (!da) return 1;
-              if (!db) return -1;
-
-              const parsedA = parseLocalDate(da);
-              const parsedB = parseLocalDate(db);
-              const ta = parsedA ? parsedA.getTime() : Number.MAX_SAFE_INTEGER;
-              const tb = parsedB ? parsedB.getTime() : Number.MAX_SAFE_INTEGER;
-
-              if (Number.isNaN(ta) && Number.isNaN(tb)) return 0;
-              if (Number.isNaN(ta)) return 1;
-              if (Number.isNaN(tb)) return -1;
-
-              return ta - tb;
-            })
-            .slice(0, 3);
-
-
-        if (!events.length) {
-
-          container.innerHTML = `
-
-            <div class="empty-events"
-                 style="grid-column:1/-1">
-
-              ❤️
-
-              <br><br>
-
-              No upcoming events
-              are currently available.
-
-            </div>
-
-          `;
-
-          return;
-
-        }
-
-
-        container.innerHTML =
-          events
-            .map(renderEvent)
-            .join("");
-
-      } catch (error) {
-
-        console.error(
-          "Events error:",
-          error
-        );
-
-
-        container.innerHTML = `
-
-          <div class="empty-events"
-               style="grid-column:1/-1">
-
-            Unable to load events right now.
-
-          </div>
-
-        `;
-
-      }
-
-    }
-
-
-    function renderEvent(event) {
-
-      const title =
-        value(
-          event,
-          "Title",
-          "title",
-          "Event_Title"
-        ) ||
-        "Blood Donation Camp";
-
-
-      const date =
-        value(
-          event,
-          "Event_Date",
-          "eventDate",
-          "EventDate"
-        );
-
-
-      const location =
-        value(
-          event,
-          "Location",
-          "location"
-        ) ||
-        "Poongurichi";
-
-
-      const image =
-        value(
-          event,
-          "Image_URL",
-          "imageUrl",
-          "ImageURL"
-        );
-
-
-      const description =
-        value(
-          event,
-          "Description",
-          "description"
-        ) ||
-        "Join us and help save lives in our community.";
-
-
-      const status =
-        value(
-          event,
-          "Status",
-          "status"
-        ) ||
-        "Upcoming";
-
-
-      return `
-
-        <article class="event-card">
-
-          <div class="event-image-wrap">
-
-            ${
-              image
-              ? `
-                <img
-                  class="event-image"
-                  src="${escapeAttribute(image)}"
-                  alt="${escapeAttribute(title)}"
-                  loading="lazy"
-                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                >
-
-                <div
-                  class="event-placeholder"
-                  style="display:none"
-                >
-                  🩸
-                </div>
-              `
-              : `
-                <div class="event-placeholder">
-                  🩸
-                </div>
-              `
-            }
-
-          </div>
-
-
-          <div class="event-body">
-
-            <h3 class="event-title">
-              ${escapeHtml(title)}
-            </h3>
-
-
-            <div class="event-meta">
-
-              ${
-                date
-                ? `
-                  <span>
-                    📅
-                    ${escapeHtml(formatDate(date))}
-                  </span>
-                `
-                : ""
-              }
-
-
-              <span>
-                📍
-                ${escapeHtml(location)}
-              </span>
-
-            </div>
-
-
-            <p class="event-description">
-              ${escapeHtml(description)}
-            </p>
-
-
-            <span class="event-status">
-              ${escapeHtml(status)}
-            </span>
-
-          </div>
-
-        </article>
-
-      `;
-
-    }
-
-
-    function parseLocalDate(value) {
-      const text = String(value ?? "").trim();
-      const match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-      if (match) {
-        const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-        return Number.isNaN(date.getTime()) ? null : date;
-      }
-      const date = new Date(text);
-      return Number.isNaN(date.getTime()) ? null : date;
-    }
-
-    function formatDate(value) {
-
-      const date =
-        parseLocalDate(value);
-
-
-      if (
-        Number.isNaN(
-          date.getTime()
-        )
-      ) {
-        return String(value);
-      }
-
-
-      return date.toLocaleDateString(
-        "en-IN",
-        {
-          day: "2-digit",
-          month: "short",
-          year: "numeric"
-        }
-      );
-
-    }
-
-
-    async function showAllEvents() {
-      const container = document.getElementById("eventsContainer");
-      if (!container) return;
-
-      container.innerHTML = `
-        <div class="loading" style="grid-column:1/-1">
-          <span class="spinner"></span>
-          Loading all events...
-        </div>
-      `;
-
-      try {
-        const result = await BloodDonationAPI.getEvents();
-
-        const freshEvents = Array.isArray(result)
-          ? result
-          : (
-              result?.events ||
-              result?.data ||
-              result?.result ||
-              []
-            );
-
-        cachedEvents = Array.isArray(freshEvents) ? freshEvents : [];
-
-        const activeEvents = cachedEvents.filter(event => {
-          const status = String(
-            value(event, "Status", "status")
-          ).trim().toLowerCase();
-
-          return ![
-            "cancelled",
-            "canceled",
-            "deleted",
-            "inactive",
-            "removed"
-          ].includes(status);
-        });
-
-        if (!activeEvents.length) {
-          container.innerHTML = `
-            <div class="empty-events" style="grid-column:1/-1">
-              ❤️
-              <br><br>
-              No events are currently available.
-            </div>
-          `;
-          toast("No events are currently available.");
-          return;
-        }
-
-        container.innerHTML = activeEvents
-          .map(renderEvent)
-          .join("");
-
-        toast(`${activeEvents.length} event(s) loaded.`);
-      } catch (error) {
-        console.error("View all events error:", error);
-
-        const fallbackEvents = (Array.isArray(cachedEvents)
-          ? cachedEvents
-          : []
-        ).filter(event => {
-          const status = String(
-            value(event, "Status", "status")
-          ).trim().toLowerCase();
-
-          return ![
-            "cancelled",
-            "canceled",
-            "deleted",
-            "inactive",
-            "removed"
-          ].includes(status);
-        });
-
-        if (fallbackEvents.length) {
-          container.innerHTML = fallbackEvents
-            .map(renderEvent)
-            .join("");
-          toast(`${fallbackEvents.length} event(s) loaded.`);
-          return;
-        }
-
-        container.innerHTML = `
-          <div class="empty-events" style="grid-column:1/-1">
-            Unable to load events right now.
-          </div>
-        `;
-      }
-    }
-
-
-    /* =========================================================
-       DONOR REGISTRATION
-       ========================================================= */
-
-    document
-      .getElementById("donorForm")
-      .addEventListener(
-        "submit",
-        async function(event) {
-
-          event.preventDefault();
-
-
-          const form =
-            event.target;
-
-          const message =
-            document.getElementById(
-              "donorMessage"
-            );
-
-          if (!form.checkValidity()) {
-            form.reportValidity();
-            message.className = "form-message error";
-            message.textContent = "Please complete all mandatory fields before submitting.";
-            return;
-          }
-
-
-          const data =
-            Object.fromEntries(
-              new FormData(form)
-            );
-
-          const lastDateEl = document.getElementById("donorLastDonationDate");
-          const newDonorNA = document.getElementById("newDonorNA");
-          const lastDonationDate = String(lastDateEl?.value || "").trim();
-
-          if (!lastDonationDate && !newDonorNA?.checked) {
-            message.className = "form-message error";
-            message.textContent = "Last donation date is required, or select NA for a new donor.";
-            lastDateEl?.focus();
-            return;
-          }
-
-          data.Last_Donation_Date = newDonorNA?.checked ? "NA" : lastDonationDate;
-          data.lastDonationDate = data.Last_Donation_Date;
-
-          const donorName = String(
-            data.Name ||
-            data.name ||
-            data.Donor_Name ||
-            data.DonorName ||
-            ""
-          ).trim();
-
-          if (!donorName) {
-            message.className = "form-message error";
-            message.textContent = "Donor name is required.";
-            form.elements.namedItem("Name")?.focus();
-            return;
-          }
-
-          data.Name = donorName;
-          data.name = donorName;
-          data.Donor_Name = donorName;
-          data.DonorName = donorName;
-
-
-          try {
-
-            message.className =
-              "form-message success";
-
-            message.textContent =
-              "Submitting your registration...";
-
-
-            await BloodDonationAPI.registerDonor(
-              data
-            );
-
-
-            message.className =
-              "form-message success";
-
-            message.textContent =
-              "Registration successful. Thank you for becoming a donor!";
-
-
-            form.reset();
-
-
-            await Promise.all([
-              loadDashboard(),
-              loadBloodGroups()
-            ]);
-
-
-            toast(
-              "Donor registration successful ❤️"
-            );
-
-          } catch (error) {
-
-            console.error(error);
-
-
-            message.className =
-              "form-message error";
-
-            message.textContent =
-              error.message ||
-              "Unable to register donor.";
-
-          }
-
-        }
-      );
-
-
-    /* =========================================================
-       SEARCH DONORS
-       ========================================================= */
-
-    async function searchDonors() {
-
-      const container =
-        document.getElementById(
-          "donorResults"
-        );
-
-
-      const bloodGroup =
-        document.getElementById(
-          "searchBloodGroup"
-        ).value;
-
-
-      const district =
-        document.getElementById(
-          "searchDistrict"
-        ).value;
-
-
-      const city =
-        document.getElementById(
-          "searchCity"
-        ).value;
-
-
-      container.innerHTML = `
-
-        <div
-          class="loading"
-          style="grid-column:1/-1"
-        >
-          <span class="spinner"></span>
-          Searching donors...
-        </div>
-
-      `;
-
-
-      try {
-
-        const donors =
-          await BloodDonationAPI.searchDonors({
-
-            bloodGroup,
-            district,
-            city
-
-          });
-
-
-        if (!donors.length) {
-
-          container.innerHTML = `
-
-            <div
-              class="empty-events"
-              style="grid-column:1/-1"
-            >
-
-              🔎
-
-              <br><br>
-
-              No available donors found
-              for your search.
-
-            </div>
-
-          `;
-
-          return;
-
-        }
-
-
-        container.innerHTML =
-          donors
-            .map(renderDonor)
-            .join("");
-
-      } catch (error) {
-
-        console.error(error);
-
-
-        container.innerHTML = `
-
-          <div
-            class="empty-events"
-            style="grid-column:1/-1"
-          >
-
-            Unable to search donors.
-            Please try again.
-
-          </div>
-
-        `;
-
-      }
-
-    }
-
-
-    function renderDonor(donor) {
-
-      const name =
-        value(
-          donor,
-          "Name",
-          "name"
-        ) ||
-        "Blood Donor";
-
-
-      const group =
-        value(
-          donor,
-          "Blood_Group",
-          "bloodGroup",
-          "BloodGroup"
-        ) ||
-        "—";
-
-
-      const mobile =
-        value(
-          donor,
-          "Mobile",
-          "mobile",
-          "Phone"
-        );
-
-
-      const district =
-        value(
-          donor,
-          "District",
-          "district"
-        );
-
-
-      const city =
-        value(
-          donor,
-          "City",
-          "city"
-        );
-
-
-      const eligibility =
-        donor.eligibility || {};
-
-
-      const initials =
-        name
-          .trim()
-          .split(/\s+/)
-          .slice(0, 2)
-          .map(word =>
-            word.charAt(0)
-          )
-          .join("")
-          .toUpperCase();
-
-
-      return `
-
-        <article class="donor-card">
-
-          <div class="donor-head">
-
-            <div class="donor-avatar">
-              ${escapeHtml(initials)}
-            </div>
-
-            <div>
-
-              <div class="donor-name">
-                ${escapeHtml(name)}
-              </div>
-
-              <div class="donor-group">
-                🩸 ${escapeHtml(group)}
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <div class="donor-details">
-
-            ${
-              mobile
-              ? `
-                <div>
-                  📞 ${escapeHtml(mobile)}
-                </div>
-              `
-              : ""
-            }
-
-
-            ${
-              district || city
-              ? `
-                <div>
-                  📍
-                  ${escapeHtml(
-                    [city, district]
-                      .filter(Boolean)
-                      .join(", ")
-                  )}
-                </div>
-              `
-              : ""
-            }
-
-          </div>
-
-
-          <div
-            class="eligibility ${escapeAttribute(
-              eligibility.className || "unknown"
-            )}"
-          >
-
-            ${
-              escapeHtml(
-                eligibility.status ||
-                "Eligibility unknown"
-              )
-            }
-
-          </div>
-
-        </article>
-
-      `;
-
-    }
-
-
-    /* =========================================================
-       BLOOD REQUEST
-       ========================================================= */
-
-    document
-      .getElementById("requestForm")
-      .addEventListener(
-        "submit",
-        async function(event) {
-
-          event.preventDefault();
-
-
-          const form =
-            event.target;
-
-          const message =
-            document.getElementById(
-              "requestMessage"
-            );
-
-          if (!form.checkValidity()) {
-            form.reportValidity();
-            message.className = "form-message error";
-            message.textContent = "Please complete all mandatory fields before submitting.";
-            return;
-          }
-
-
-          const data =
-            Object.fromEntries(
-              new FormData(form)
-            );
-
-          const patientName = String(
-            data.Patient_Name ||
-            data.PatientName ||
-            data.Name ||
-            data.name ||
-            ""
-          ).trim();
-
-          if (!patientName) {
-            message.className = "form-message error";
-            message.textContent = "Patient name is required.";
-            form.elements.namedItem("Patient_Name")?.focus();
-            return;
-          }
-
-          data.Patient_Name = patientName;
-          data.PatientName = patientName;
-          data.Name = patientName;
-          data.name = patientName;
-
-
-          try {
-
-            message.className =
-              "form-message success";
-
-            message.textContent =
-              "Submitting your blood request...";
-
-
-            await BloodDonationAPI.createBloodRequest(
-              data
-            );
-
-
-            message.className =
-              "form-message success";
-
-            message.textContent =
-              "Blood request submitted successfully. Our network can now respond.";
-
-
-            form.reset();
-
-
-            await loadDashboard();
-
-
-            setAppNotification(
-              "New Blood Request",
-              `${data.Patient_Name || data.patientName || "A patient"} needs ${data.Blood_Group || data.bloodGroup || "blood"} at ${data.Hospital || data.hospital || "the hospital"}.`,
-              "🚨"
-            );
-
-            await loadNotifications();
-
-            toast(
-              "Blood request submitted 🚨"
-            );
-
-          } catch (error) {
-
-            console.error(error);
-
-
-            message.className =
-              "form-message error";
-
-            message.textContent =
-              error.message ||
-              "Unable to submit blood request.";
-
-          }
-
-        }
-      );
-
-
-
-    /* =========================================================
-       MOBILE MENU
-       ========================================================= */
-
-    function toggleMobileMenu() {
-      const menu = document.getElementById("mobileMenu");
-      if (!menu) return;
-
-      const isOpen = menu.classList.toggle("show");
-      menu.setAttribute("aria-hidden", String(!isOpen));
-    }
-
-    function closeMobileMenu() {
-      const menu = document.getElementById("mobileMenu");
-      if (!menu) return;
-
-      menu.classList.remove("show");
-      menu.setAttribute("aria-hidden", "true");
-    }
-
-    /* =========================================================
-       NOTIFICATIONS
-       Added without changing existing application logic.
-       ========================================================= */
-
-    let APP_NOTIFICATIONS = [];
-
-    async function loadNotifications() {
-      try {
-        const result = await BloodDonationAPI.getNotifications("");
-        const list = Array.isArray(result)
-          ? result
-          : (result?.notifications || result?.data || result?.result || []);
-        APP_NOTIFICATIONS = Array.isArray(list) ? list : [];
-        renderNotifications();
-        updateNotificationBadges();
-      } catch (error) {
-        console.warn("Notifications API:", error);
-        APP_NOTIFICATIONS = [];
-        renderNotifications();
-        updateNotificationBadges();
-      }
-    }
-
-    function updateNotificationBadges() {
-      const unread = APP_NOTIFICATIONS.filter(n =>
-        String(n.readStatus || n.Read_Status || "Unread").toLowerCase() !== "read"
-      ).length;
-      ["notificationBadge", "notificationBadgeMobile"].forEach(id => {
-        const badge = document.getElementById(id);
-        if (!badge) return;
-        badge.textContent = String(unread);
-        badge.style.display = unread > 0 ? "inline-flex" : "none";
-      });
-    }
-
-    async function openNotifications() {
-      const modal = document.getElementById("notificationModal");
-      if (!modal) return;
-      modal.classList.add("show");
-      const list = document.getElementById("notificationList");
-      if (list) list.innerHTML = `
-        <div class="notification-empty">
-          <div class="notification-empty-icon">⏳</div>
-          <strong>Loading notifications…</strong>
-          <p>Please wait.</p>
-        </div>`;
-      await loadNotifications();
-    }
-
-    function closeNotifications() {
-      const modal = document.getElementById("notificationModal");
-      if (modal) modal.classList.remove("show");
-    }
-
-    function closeNotificationsOutside(event) {
-      if (event.target.id === "notificationModal") closeNotifications();
-    }
-
-    function renderNotifications() {
-      const list = document.getElementById("notificationList");
-      if (!list) return;
-      if (!APP_NOTIFICATIONS.length) {
-        list.innerHTML = `
-          <div class="notification-empty">
-            <div class="notification-empty-icon">🔔</div>
-            <strong>No notifications yet</strong>
-            <p>New donors, blood requests and events will appear here.</p>
-          </div>`;
-        return;
-      }
-      list.innerHTML = APP_NOTIFICATIONS.map(item => {
-        const type = item.type || item.Type || "General";
-        const icon = type === "Blood Request" ? "🚨" : type === "Event" ? "📅" : "🩸";
-        return `
-          <div class="notification-item">
-            <div class="notification-item-icon">${icon}</div>
-            <div>
-              <strong>${escapeHtml(item.title || item.Title || "Notification")}</strong>
-              <p>${escapeHtml(item.message || item.Message || "")}</p>
-              <small>${escapeHtml(item.createdDate || item.Created_Date || "")}</small>
-            </div>
-          </div>`;
-      }).join("");
-    }
-
-    function setAppNotification(title, message, icon = "🔔") {
-      APP_NOTIFICATIONS.unshift({
-        title, message, type: "General", readStatus: "Unread", icon,
-        createdDate: new Date().toISOString()
-      });
-      renderNotifications();
-      updateNotificationBadges();
-    }
-
-    function escapeHtml(value) {
-      return String(value ?? "").replace(/[&<>"']/g, c => ({
-        "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;"
-      }[c]));
-    }
-
-    /* =========================================================
-       ADMIN LOGIN
-       ========================================================= */
-
-    function openAdmin() {
-
-      document
-        .getElementById(
-          "adminModal"
-        )
-        .classList.add("show");
-
-    }
-
-
-    function closeAdmin() {
-
-      document
-        .getElementById(
-          "adminModal"
-        )
-        .classList.remove("show");
-
-    }
-
-
-    function closeAdminOutside(event) {
-
-      if (
-        event.target.id ===
-        "adminModal"
-      ) {
-        closeAdmin();
-      }
-
-    }
-
-
-    document.getElementById("adminForm").addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      const usernameEl = document.getElementById("adminUsername");
-      const passwordEl = document.getElementById("adminPassword");
-      const message = document.getElementById("adminMessage");
-      const submit = this.querySelector(".admin-login-submit");
-
-      const username = usernameEl.value.trim();
-      const password = passwordEl.value;
-
-      if (!username || !password) {
-        message.className = "form-message error";
-        message.textContent = "Please enter both username and password.";
-        if (!username) usernameEl.focus();
-        else passwordEl.focus();
-        return;
-      }
-
-      try {
-        submit.disabled = true;
-        submit.textContent = "Checking login...";
-        message.className = "form-message success";
-        message.textContent = "Checking login...";
-
-        if (!window.BloodDonationAPI || typeof BloodDonationAPI.login !== "function") {
-          throw new Error("Login service is not available. Please check app.js.");
-        }
-
-        const result = await BloodDonationAPI.login(username, password);
-        const user = result?.user || result?.data || result;
-
-        if (result?.success === false) {
-          throw new Error(result.error || "Invalid username or password.");
-        }
-
-        BloodDonationAPI.setAdminSession(user);
-        message.className = "form-message success";
-        message.textContent = "Login successful.";
-        toast("Admin login successful.");
-
-        setTimeout(async () => {
-          closeAdmin();
-          closeMobileMenu();
-          submit.disabled = false;
-          submit.textContent = "🔐 Login as Admin";
-          goTo("admin");
-          await loadAdminDashboard();
-        }, 450);
-
-      } catch (error) {
-        console.error(error);
-        message.className = "form-message error";
-        message.textContent = error?.message || "Invalid username or password.";
-        submit.disabled = false;
-        submit.textContent = "🔐 Login as Admin";
-      }
+    return null;
+  }
+
+  const date = new Date(text);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function getEligibility(lastDonationDate) {
+  const raw = clean(lastDonationDate);
+
+  /* New donors have no previous donation. They are eligible. */
+  if (!raw || /^n\.?\s*a\.?$/i.test(raw) || /^new\s+donor$/i.test(raw)) {
+    return {
+      eligible: true,
+      status: "Eligible to Donate",
+      className: "eligible",
+      daysPassed: null,
+      daysRemaining: 0,
+      message: "New donor — eligible to donate."
+    };
+  }
+
+  const last = parseDonationDate(raw);
+  if (!last) {
+    return {
+      eligible: false,
+      status: "Invalid Date",
+      className: "unknown",
+      daysPassed: null,
+      daysRemaining: null,
+      message: "Last donation date is invalid."
+    };
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  last.setHours(0, 0, 0, 0);
+
+  const daysPassed = Math.floor((today - last) / 86400000);
+
+  /* Future donation dates are never eligible. */
+  if (daysPassed < 0) {
+    return {
+      eligible: false,
+      status: "Invalid Date",
+      className: "unknown",
+      daysPassed: 0,
+      daysRemaining: null,
+      message: "Last donation date cannot be in the future."
+    };
+  }
+
+  if (daysPassed >= NINETY_DAYS) {
+    return {
+      eligible: true,
+      status: "Eligible to Donate",
+      className: "eligible",
+      daysPassed,
+      daysRemaining: 0,
+      message: "Eligible to donate."
+    };
+  }
+
+  const daysRemaining = NINETY_DAYS - daysPassed;
+
+  return {
+    eligible: false,
+    status: "Not Eligible Yet",
+    className: "not-eligible",
+    daysPassed,
+    daysRemaining,
+    message: `Eligible in ${daysRemaining} day${daysRemaining === 1 ? "" : "s"}.`
+  };
+}
+
+function enrichDonor(donor = {}) {
+  const last = first(
+    donor,
+    "Last_Donation_Date",
+    "lastDonationDate",
+    "LastDonationDate"
+  );
+
+  const eligibility = getEligibility(last);
+
+  return {
+    ...donor,
+    eligibility,
+    eligible: eligibility.eligible,
+    eligibilityStatus: eligibility.status,
+    eligibilityMessage: eligibility.message,
+    daysSinceDonation: eligibility.daysPassed,
+    daysRemaining: eligibility.daysRemaining
+  };
+}
+
+function normalizeDonor(donor = {}) {
+  const name = clean(first(donor, "name", "Name", "Donor_Name", "DonorName"));
+  const mobile = clean(first(donor, "mobile", "Mobile", "Phone"));
+  const email = clean(first(donor, "email", "Email"));
+  const bloodGroup = clean(first(donor, "bloodGroup", "Blood_Group", "BloodGroup"));
+  const gender = clean(first(donor, "gender", "Gender"));
+  const dob = clean(first(donor, "dob", "DOB", "Date_of_Birth"));
+  const district = clean(first(donor, "district", "District"));
+  const city = clean(first(donor, "city", "City"));
+  const address = clean(first(donor, "address", "Address"));
+  const lastDonationDate = clean(
+    first(donor, "lastDonationDate", "Last_Donation_Date", "LastDonationDate")
+  );
+  const available = clean(first(donor, "available", "Available")) || "Yes";
+
+  return {
+    name,
+    Name: name,
+    Donor_Name: name,
+    DonorName: name,
+    mobile,
+    Mobile: mobile,
+    email,
+    Email: email,
+    bloodGroup,
+    Blood_Group: bloodGroup,
+    gender,
+    Gender: gender,
+    dob,
+    DOB: dob,
+    district,
+    District: district,
+    city,
+    City: city,
+    address,
+    Address: address,
+    lastDonationDate,
+    Last_Donation_Date: lastDonationDate,
+    LastDonationDate: lastDonationDate,
+    available,
+    Available: available
+  };
+}
+
+function normalizeRequest(request = {}) {
+  const patientName = clean(
+    first(request, "patientName", "Patient_Name", "PatientName", "Name", "name")
+  );
+  const hospital = clean(first(request, "hospital", "Hospital", "Medical_Centre"));
+  const contactNumber = clean(
+    first(request, "contactNumber", "Contact_Number", "Contact_Mobile", "Mobile", "Phone")
+  );
+  const bloodGroup = clean(first(request, "bloodGroup", "Blood_Group", "BloodGroup"));
+  const unitsRequired = clean(first(request, "unitsRequired", "Units_Required", "Units"));
+  const district = clean(first(request, "district", "District"));
+  const location = clean(first(request, "location", "Location", "City", "city"));
+  const priority = clean(first(request, "priority", "Priority")) || "Normal";
+  const requiredDate = clean(first(request, "requiredDate", "Required_Date", "Date"));
+  const requiredTime = clean(first(request, "requiredTime", "Required_Time", "Time"));
+  const description = clean(first(request, "description", "Description", "Additional_Details"));
+
+  return {
+    patientName,
+    Patient_Name: patientName,
+    PatientName: patientName,
+    Name: patientName,
+    name: patientName,
+    hospital,
+    Hospital: hospital,
+    contactNumber,
+    Contact_Number: contactNumber,
+    Contact_Mobile: contactNumber,
+    bloodGroup,
+    Blood_Group: bloodGroup,
+    unitsRequired,
+    Units_Required: unitsRequired,
+    district,
+    District: district,
+    location,
+    Location: location,
+    priority,
+    Priority: priority,
+    requiredDate,
+    Required_Date: requiredDate,
+    requiredTime,
+    Required_Time: requiredTime,
+    description,
+    Description: description
+  };
+}
+
+function normalizeEvent(event = {}) {
+  const title = clean(first(event, "title", "Title", "Event_Title", "eventTitle"));
+  const eventDate = clean(first(event, "eventDate", "Event_Date", "EventDate", "event_date"));
+  const location = clean(first(event, "location", "Location", "Event_Location"));
+  const imageUrl = clean(first(event, "imageUrl", "Image_URL", "ImageUrl", "imageURL"));
+  const description = clean(first(event, "description", "Description", "Info"));
+  const status = clean(first(event, "status", "Status")) || "Published";
+  const eventId = clean(first(event, "eventId", "Event_ID", "EventID", "id", "ID"));
+
+  return {
+    eventId,
+    Event_ID: eventId,
+    title,
+    Title: title,
+    Event_Title: title,
+    eventDate,
+    Event_Date: eventDate,
+    EventDate: eventDate,
+    location,
+    Location: location,
+    imageUrl,
+    Image_URL: imageUrl,
+    description,
+    Description: description,
+    status,
+    Status: status
+  };
+}
+
+function resultArray(result, key) {
+  if (Array.isArray(result)) return result;
+  return Array.isArray(result?.[key])
+    ? result[key]
+    : Array.isArray(result?.data)
+      ? result.data
+      : Array.isArray(result?.result)
+        ? result.result
+        : [];
+}
+
+window.BloodDonationAPI = {
+  api,
+  adminSession,
+  setAdminSession,
+  clearAdminSession,
+  getEligibility,
+
+  getSettings: () => api("getSettings"),
+  getDashboard: () => api("getDashboard"),
+  getDashboardStats: () => api("getDashboardStats"),
+
+  getDonors: async () => {
+    const donors = resultArray(await api("getDonors"), "donors");
+    return donors.map(enrichDonor);
+  },
+
+  searchDonors: async (filters = {}) => {
+    const result = await api("searchDonors", {
+      bloodGroup: clean(filters.bloodGroup),
+      district: clean(filters.district),
+      city: clean(filters.city),
+      available: true
     });
-
-
-    /* =========================================================
-       ESCAPE HTML
-       ========================================================= */
-
-    function escapeHtml(value) {
-
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-    }
-
-
-    function escapeAttribute(value) {
-      return escapeHtml(value);
-    }
-
-
-
-    /* =========================================================
-       ADMIN DASHBOARD
-       ========================================================= */
-
-    function adminIsLoggedIn() {
-      try {
-        return !!(window.BloodDonationAPI &&
-          typeof BloodDonationAPI.adminSession === "function" &&
-          BloodDonationAPI.adminSession());
-      } catch (error) {
-        return false;
-      }
-    }
-
-    function getAdminUser() {
-      try {
-        return BloodDonationAPI.adminSession() || {};
-      } catch (error) {
-        return {};
-      }
-    }
-
-    function getAdminUserId() {
-      const user = getAdminUser();
-      return value(user, "User_ID", "userId", "UserId", "ID", "id", "Username", "username");
-    }
-
-    function ensureAdminAccess() {
-      if (!adminIsLoggedIn()) {
-        document.getElementById("adminGuardMessage").innerHTML =
-          '<div class="form-message error">Please log in as an administrator to access this page.</div>';
-        return false;
-      }
-
-      const guard = document.getElementById("adminGuardMessage");
-      if (guard) guard.innerHTML = "";
-      return true;
-    }
-
-    async function loadAdminDashboard() {
-      if (!ensureAdminAccess()) return;
-
-      const stats = await Promise.resolve()
-        .then(() => BloodDonationAPI.getDashboardStats())
-        .catch(() => ({}));
-
-      const s = stats?.stats || stats?.data || stats || {};
-
-      document.getElementById("adminStatDonors").textContent =
-        Number(value(s, "registeredDonors", "totalDonors", "donors", "Registered_Donors")) || 0;
-
-      document.getElementById("adminStatRequests").textContent =
-        Number(value(s, "activeRequests", "bloodRequests", "requests", "Active_Requests")) || 0;
-
-      document.getElementById("adminStatEvents").textContent =
-        Number(value(s, "events", "totalEvents", "camps", "Events")) || 0;
-
-      document.getElementById("adminStatGroups").textContent =
-        Number(value(s, "bloodGroups", "groups", "Blood_Groups")) || 0;
-
-      await Promise.allSettled([
-        loadAdminDonors(),
-        loadAdminRequests(),
-        loadAdminEvents(),
-        loadAdminAbout()
-      ]);
-    }
-
-    async function loadAdminDonors() {
-      const box = document.getElementById("adminDonorTable");
-      if (!box || !ensureAdminAccess()) return;
-
-      box.innerHTML = '<div class="admin-loading">Loading donors…</div>';
-
-      try {
-        const donors = await BloodDonationAPI.getDonors();
-
-        if (!donors.length) {
-          box.innerHTML = '<div class="admin-empty">No registered donors found.</div>';
-          return;
-        }
-
-        box.innerHTML = `
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Blood</th>
-                <th>Mobile</th>
-                <th>Location</th>
-                <th>90-Day Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${donors.map(donor => {
-                const id = value(donor, "Donor_ID", "donorId", "DonorID", "ID", "id");
-                const name = value(donor, "Name", "name") || "—";
-                const group = value(donor, "Blood_Group", "bloodGroup", "BloodGroup") || "—";
-                const mobile = value(donor, "Mobile", "mobile", "Phone") || "—";
-                const location = [value(donor, "City", "city"), value(donor, "District", "district")]
-                  .filter(Boolean).join(", ") || "—";
-                const eligibility = donor.eligibility?.status || "Unknown";
-
-                return `
-                  <tr>
-                    <td><strong>${escapeHtml(name)}</strong></td>
-                    <td>${escapeHtml(group)}</td>
-                    <td>${escapeHtml(mobile)}</td>
-                    <td>${escapeHtml(location)}</td>
-                    <td><span class="admin-status-pill">${escapeHtml(eligibility)}</span></td>
-                    <td>
-                      <button type="button" class="admin-danger-btn"
-                        onclick="adminDeleteDonor('${escapeAttribute(id)}')">Delete</button>
-                    </td>
-                  </tr>`;
-              }).join("")}
-            </tbody>
-          </table>`;
-      } catch (error) {
-        console.error(error);
-        box.innerHTML = '<div class="admin-empty error-text">Unable to load donors.</div>';
-      }
-    }
-
-    async function adminDeleteDonor(donorId) {
-      if (!donorId || !ensureAdminAccess()) return;
-      if (!confirm("Delete this donor registration?")) return;
-
-      try {
-        await BloodDonationAPI.deleteDonor(donorId, getAdminUserId());
-        toast("Donor deleted.");
-        await loadAdminDashboard();
-      } catch (error) {
-        console.error(error);
-        toast(error?.message || "Unable to delete donor.");
-      }
-    }
-
-    async function loadAdminRequests() {
-      const box = document.getElementById("adminRequestTable");
-      if (!box || !ensureAdminAccess()) return;
-
-      box.innerHTML = '<div class="admin-loading">Loading requests…</div>';
-
-      try {
-        const result = await BloodDonationAPI.getBloodRequests();
-        const requests = Array.isArray(result)
-          ? result
-          : (result?.requests || result?.data || []);
-
-        if (!requests.length) {
-          box.innerHTML = '<div class="admin-empty">No blood requests found.</div>';
-          return;
-        }
-
-        box.innerHTML = `
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Patient</th>
-                <th>Blood</th>
-                <th>Mobile</th>
-                <th>Hospital</th>
-                <th>Location</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${requests.map(req => {
-                const id = value(req, "Request_ID", "requestId", "RequestID", "ID", "id");
-                const patient = value(req, "Patient_Name", "patientName", "PatientName") || "—";
-                const group = value(req, "Blood_Group", "bloodGroup", "BloodGroup") || "—";
-                const mobile = value(req, "Contact_Mobile", "contactMobile", "Mobile", "Phone") || "—";
-                const hospital = value(req, "Hospital", "hospital") || "—";
-                const location = [value(req, "City", "city"), value(req, "District", "district")]
-                  .filter(Boolean).join(", ") || "—";
-
-                return `
-                  <tr>
-                    <td><strong>${escapeHtml(patient)}</strong></td>
-                    <td>${escapeHtml(group)}</td>
-                    <td>${escapeHtml(mobile)}</td>
-                    <td>${escapeHtml(hospital)}</td>
-                    <td>${escapeHtml(location)}</td>
-                    <td>
-                      <button type="button" class="admin-danger-btn"
-                        onclick="adminDeleteRequest('${escapeAttribute(id)}')">Delete</button>
-                    </td>
-                  </tr>`;
-              }).join("")}
-            </tbody>
-          </table>`;
-      } catch (error) {
-        console.error(error);
-        box.innerHTML = '<div class="admin-empty error-text">Unable to load blood requests.</div>';
-      }
-    }
-
-    async function adminDeleteRequest(requestId) {
-      if (!requestId || !ensureAdminAccess()) return;
-      if (!confirm("Delete this blood request?")) return;
-
-      try {
-        await BloodDonationAPI.deleteRequest(requestId, getAdminUserId());
-        toast("Blood request deleted.");
-        await loadAdminDashboard();
-      } catch (error) {
-        console.error(error);
-        toast(error?.message || "Unable to delete request.");
-      }
-    }
-
-    async function loadAdminEvents() {
-      const box = document.getElementById("adminEventTable");
-      if (!box || !ensureAdminAccess()) return;
-
-      box.innerHTML = '<div class="admin-loading">Loading events…</div>';
-
-      try {
-        const result = await BloodDonationAPI.getEvents();
-        const events = Array.isArray(result)
-          ? result
-          : (result?.events || result?.data || []);
-
-        if (!events.length) {
-          box.innerHTML = '<div class="admin-empty">No events found.</div>';
-          return;
-        }
-
-        box.innerHTML = `
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${events.map(event => {
-                const id = value(event, "Event_ID", "eventId", "EventID", "ID", "id");
-                const title = value(event, "Title", "title", "Event_Title") || "Blood Donation Camp";
-                const date = value(event, "Event_Date", "eventDate", "EventDate") || "—";
-                const location = value(event, "Location", "location") || "—";
-                const status = value(event, "Status", "status") || "Active";
-
-                return `
-                  <tr>
-                    <td><strong>${escapeHtml(title)}</strong></td>
-                    <td>${escapeHtml(formatDate(date))}</td>
-                    <td>${escapeHtml(location)}</td>
-                    <td><span class="admin-status-pill">${escapeHtml(status)}</span></td>
-                    <td>
-                      <button type="button" class="admin-danger-btn"
-                        onclick="adminDeleteEvent('${escapeAttribute(id)}')">Delete</button>
-                    </td>
-                  </tr>`;
-              }).join("")}
-            </tbody>
-          </table>`;
-      } catch (error) {
-        console.error(error);
-        box.innerHTML = '<div class="admin-empty error-text">Unable to load events.</div>';
-      }
-    }
-
-    async function adminDeleteEvent(eventId) {
-      if (!eventId || !ensureAdminAccess()) return;
-      if (!confirm("Delete this event?")) return;
-
-      try {
-        await BloodDonationAPI.deleteEvent(eventId, getAdminUserId());
-        toast("Event deleted.");
-        await loadAdminDashboard();
-        await loadEvents();
-      } catch (error) {
-        console.error(error);
-        toast(error?.message || "Unable to delete event.");
-      }
-    }
-
-    async function loadAdminAbout() {
-      const title = document.getElementById("adminAboutTitle");
-      const content = document.getElementById("adminAboutContent");
-      if (!title || !content || !ensureAdminAccess()) return;
-
-      try {
-        const result = await BloodDonationAPI.getAbout();
-        const about = result?.about || result?.data || result || {};
-
-        title.value = value(about, "Title", "title", "About_Title") || "";
-        content.value = value(about, "Content", "content", "Description", "description", "About_Content") || "";
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    /* =========================================================
-       CREATE EVENT
-       Explicit validation + normalized API payload.
-       ========================================================= */
-    document.getElementById("adminEventForm")?.addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      if (!ensureAdminAccess()) return;
-
-      const message = document.getElementById("adminEventMessage");
-      const submit = this.querySelector("button[type=submit]");
-
-      const titleEl = this.elements.namedItem("Title");
-      const dateEl = this.elements.namedItem("Event_Date");
-      const locationEl = this.elements.namedItem("Location");
-      const imageEl = this.elements.namedItem("Image_URL");
-      const descriptionEl = this.elements.namedItem("Description");
-
-      const title = String(titleEl?.value || "").trim();
-      const eventDate = String(dateEl?.value || "").trim();
-      const location = String(locationEl?.value || "").trim();
-      const imageUrl = String(imageEl?.value || "").trim();
-      const description = String(descriptionEl?.value || "").trim();
-
-      /* Validate the three mandatory event fields directly.
-         This avoids the old checkValidity() path and gives a clear
-         message for the exact field that is missing. */
-      if (!title) {
-        message.className = "form-message error";
-        message.textContent = "Event title is required.";
-        titleEl?.focus();
-        return;
-      }
-
-      if (!eventDate) {
-        message.className = "form-message error";
-        message.textContent = "Event date is required.";
-        dateEl?.focus();
-        return;
-      }
-
-      if (!location) {
-        message.className = "form-message error";
-        message.textContent = "Event location is required.";
-        locationEl?.focus();
-        return;
-      }
-
-      const userId = getAdminUserId();
-
-      /* Apps Script versions can use different property names.
-         Sending the aliases together prevents the backend from
-         receiving an empty title/date/location. */
-      const data = {
-        Title: title,
-        Event_Title: title,
-        event_title: title,
-        title: title,
-        eventTitle: title,
-
-        Event_Date: eventDate,
-        EventDate: eventDate,
-        event_date: eventDate,
-        eventDate: eventDate,
-
-        Location: location,
-        Event_Location: location,
-        location: location,
-
-        Image_URL: imageUrl,
-        ImageUrl: imageUrl,
-        imageURL: imageUrl,
-        imageUrl: imageUrl,
-
-        Description: description,
-        description: description,
-
-        userId: userId,
-        User_ID: userId
-      };
-
-      try {
-        submit.disabled = true;
-        message.className = "form-message success";
-        message.textContent = "Creating event…";
-
-        if (!window.BloodDonationAPI || typeof BloodDonationAPI.api !== "function") {
-          throw new Error("Event service is not available. Please check app.js.");
-        }
-
-        let result;
-
-        if (typeof BloodDonationAPI.createEvent === "function") {
-          result = await BloodDonationAPI.createEvent(data, userId);
-        } else if (typeof BloodDonationAPI.api === "function") {
-          result = await BloodDonationAPI.api("createEvent", data);
-        } else {
-          throw new Error("Event service is not available. Please check app.js.");
-        }
-
-        if (result?.success === false) {
-          throw new Error(result.error || "Unable to create event.");
-        }
-
-        this.reset();
-        message.className = "form-message success";
-        message.textContent = "Event created successfully.";
-        toast("Event created.");
-
-        await Promise.allSettled([
-          loadAdminDashboard(),
-          loadEvents()
-        ]);
-      } catch (error) {
-        console.error("Create event error:", error);
-        message.className = "form-message error";
-        message.textContent = error?.message || "Unable to create event.";
-      } finally {
-        submit.disabled = false;
-      }
-    });
-
-
-    document.getElementById("adminAboutForm")?.addEventListener("submit", async function(event) {
-      event.preventDefault();
-      if (!ensureAdminAccess()) return;
-
-      const message = document.getElementById("adminAboutMessage");
-      const submit = this.querySelector("button[type=submit]");
-      const data = Object.fromEntries(new FormData(this));
-
-      try {
-        submit.disabled = true;
-        message.className = "form-message success";
-        message.textContent = "Saving About content…";
-
-        await BloodDonationAPI.saveAbout(data, getAdminUserId());
-
-        message.textContent = "About content saved successfully.";
-        toast("About content saved.");
-      } catch (error) {
-        console.error(error);
-        message.className = "form-message error";
-        message.textContent = error?.message || "Unable to save About content.";
-      } finally {
-        submit.disabled = false;
-      }
-    });
-
-    function adminLogout() {
-      try {
-        BloodDonationAPI.clearAdminSession();
-      } catch (error) {
-        console.error(error);
-      }
-
-      goTo("home");
-      toast("Admin logged out.");
-    }
-
-    /* =========================================================
-       INITIALIZE
-       ========================================================= */
-
-    async function initializeApp() {
-
-      document.getElementById(
-        "currentYear"
-      ).textContent =
-        new Date().getFullYear();
-
-
-      /*
-        Load everything independently.
-        If one backend function fails, the rest
-        of the page remains usable.
-      */
-
-      await Promise.allSettled([
-
-        loadDashboard(),
-
-        loadBloodGroups(),
-
-        loadEvents()
-
-      ]);
-
-      if (adminIsLoggedIn()) {
-        goTo("admin");
-        await loadAdminDashboard();
-      }
-
-    }
-
-
-    document.addEventListener(
-      "DOMContentLoaded",
-      initializeApp
-    );
-
-
-    /* =========================================================
-       KEYBOARD
-       ========================================================= */
-
-    document.addEventListener(
-      "keydown",
-      function(event) {
-
-        if (
-          event.key === "Escape"
-        ) {
-          closeAdmin();
-        }
-
-      }
-    );
-
-  </script>
-
-</body>
-</html>
+    return resultArray(result, "donors").map(enrichDonor);
+  },
+
+  registerDonor: (donor = {}) =>
+    api("registerDonor", normalizeDonor(donor)),
+
+  createBloodRequest: (request = {}) =>
+    api("createRequest", normalizeRequest(request)),
+
+  getBloodRequests: async () => {
+    const result = await api("getRequests");
+    return resultArray(result, "requests");
+  },
+
+  login: (username, password) =>
+    api("login", {
+      username: clean(username),
+      password: String(password ?? "")
+    }),
+
+  saveSetting: (setting, value, userId) =>
+    api("saveSetting", {
+      setting: clean(setting),
+      value: value ?? "",
+      userId: clean(userId)
+    }),
+
+  deleteDonor: (donorId, userId) =>
+    api("deleteDonor", {
+      donorId: clean(donorId),
+      userId: clean(userId)
+    }),
+
+  deleteRequest: (requestId, userId) =>
+    api("deleteRequest", {
+      requestId: clean(requestId),
+      userId: clean(userId)
+    }),
+
+  updateDonor: (donor = {}, userId) =>
+    api("updateDonor", {
+      ...normalizeDonor(donor),
+      donorId: clean(first(donor, "donorId", "Donor_ID", "DonorID", "id", "ID")),
+      userId: clean(userId)
+    }),
+
+  /* EVENTS */
+  getEvents: async () => {
+    const result = await api("getEvents");
+    return resultArray(result, "events").map(normalizeEvent);
+  },
+
+  createEvent: (event = {}, userId) =>
+    api("createEvent", {
+      ...normalizeEvent(event),
+      userId: clean(userId)
+    }),
+
+  updateEvent: (event = {}, userId) =>
+    api("updateEvent", {
+      ...normalizeEvent(event),
+      userId: clean(userId)
+    }),
+
+  deleteEvent: (eventId, userId) =>
+    api("deleteEvent", {
+      eventId: clean(eventId),
+      userId: clean(userId)
+    }),
+
+  uploadEventImage: (payload = {}) =>
+    api("uploadEventImage", payload),
+
+  /* ABOUT */
+  getAbout: () => api("getAbout"),
+
+  saveAbout: (about = {}, userId) =>
+    api("saveAbout", {
+      ...about,
+      userId: clean(userId)
+    }),
+
+  /* NOTIFICATIONS */
+  getNotifications: (userId = "") =>
+    api("getNotifications", { userId: clean(userId) }),
+
+  addNotification: (notification = {}) =>
+    api("addNotification", notification),
+
+  markNotificationRead: (notificationId, userId) =>
+    api("markNotificationRead", {
+      notificationId: clean(notificationId),
+      userId: clean(userId)
+    })
+};
