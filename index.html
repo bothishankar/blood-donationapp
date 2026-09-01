@@ -60,10 +60,7 @@
           </div>
 
           <div class="brand-meta">
-            Admin:
-            <strong>Bothishankar</strong>
-            &nbsp;•&nbsp;
-            Ph: 9677824319
+            Poongurichi Nanbargal Donor's Club
           </div>
 
         </div>
@@ -1357,6 +1354,19 @@
           <div class="admin-card">
             <div class="admin-card-head">
               <div>
+                <h2>🔔 Notification Control</h2>
+                <p>Remove one notification or clear all notifications.</p>
+              </div>
+            </div>
+
+            <div id="adminNotificationTable" class="admin-table-wrap">
+              <div class="admin-loading">Loading notifications…</div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-head">
+              <div>
                 <h2>ℹ️ About Content</h2>
                 <p>Edit the public About section.</p>
               </div>
@@ -1412,6 +1422,10 @@
       <div class="footer-copy">
         © <span id="currentYear"></span>
         Poongurichi Nanbargal. All rights reserved.
+        <div class="footer-created-by">
+          App Created by: <strong>Bothishankar.Natarajan</strong>
+          <br>Contact: <strong>9677824319</strong>
+        </div>
       </div>
 
     </div>
@@ -1552,6 +1566,57 @@
 
 
   <!-- =======================================================
+       ADMIN EVENT EDITOR
+       ======================================================= -->
+
+  <div
+    id="editEventModal"
+    class="modal-backdrop"
+    onclick="closeEditEventOutside(event)"
+  >
+    <div class="modal notification-modal">
+      <div class="modal-head">
+        <h2>✏️ Edit Event</h2>
+        <button type="button" class="modal-close" onclick="closeEditEvent()">×</button>
+      </div>
+
+      <form id="editEventForm" class="admin-form">
+        <input type="hidden" name="eventId">
+
+        <label>Event Title <span class="required-mark">* Mandatory</span></label>
+        <input class="form-control" name="title" required>
+
+        <label>Event Date <span class="required-mark">* Mandatory</span></label>
+        <input class="form-control" name="eventDate" type="date" required>
+
+        <label>Location <span class="required-mark">* Mandatory</span></label>
+        <input class="form-control" name="location" required>
+
+        <label>Image URL</label>
+        <input class="form-control" name="imageUrl" type="text">
+
+        <label>Description</label>
+        <textarea class="form-control" name="description"></textarea>
+
+        <label>Status</label>
+        <select class="form-control" name="status">
+          <option value="Published">Published</option>
+          <option value="Draft">Draft</option>
+          <option value="Cancelled">Cancelled</option>
+          <option value="Archived">Archived</option>
+        </select>
+
+        <div id="editEventMessage" class="form-message"></div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-light" onclick="closeEditEvent()">Cancel</button>
+          <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =======================================================
        NOTIFICATIONS
        ======================================================= -->
 
@@ -1562,7 +1627,10 @@
   >
     <div class="modal notification-modal">
       <div class="modal-head">
-        <h2>🔔 Notifications</h2>
+        <div class="notification-head-title">
+          <h2>🔔 Notifications</h2>
+          <button type="button" class="notification-clear-self" onclick="markAllNotificationsRead()">Mark all read</button>
+        </div>
         <button
           class="modal-close"
           type="button"
@@ -1577,6 +1645,10 @@
           <strong>No new notifications</strong>
           <p>You are all caught up.</p>
         </div>
+      </div>
+      <div class="notification-modal-footer">
+        <button type="button" class="btn btn-light" onclick="enablePhoneNotifications()">📱 Enable Phone Notifications</button>
+        ${adminIsLoggedIn() ? `<button type="button" class="admin-danger-btn" onclick="clearAllNotifications()">🗑️ Remove All Notifications</button>` : ``}
       </div>
     </div>
   </div>
@@ -2126,6 +2198,14 @@
 
             })
             .sort((a, b) => {
+              const ca = value(a, "Created_Date", "createdDate", "CreatedDate") || "";
+              const cb = value(b, "Created_Date", "createdDate", "CreatedDate") || "";
+              const taCreated = new Date(ca).getTime();
+              const tbCreated = new Date(cb).getTime();
+              if (!Number.isNaN(taCreated) && !Number.isNaN(tbCreated) && taCreated !== tbCreated) {
+                return tbCreated - taCreated;
+              }
+
               const da = value(a, "Event_Date", "eventDate", "EventDate");
               const db = value(b, "Event_Date", "eventDate", "EventDate");
 
@@ -2144,7 +2224,7 @@
 
               return ta - tb;
             })
-            .slice(0, 3);
+            .slice(0, 1);
 
 
         if (!events.length) {
@@ -2561,9 +2641,16 @@
             form.reset();
 
 
+            setAppNotification(
+              "New donor registered",
+              `${data.Name || data.name || "A donor"} has joined the Poongurichi Nanbargal donor network.`,
+              "🩸"
+            );
+
             await Promise.all([
               loadDashboard(),
-              loadBloodGroups()
+              loadBloodGroups(),
+              loadNotifications()
             ]);
 
 
@@ -2917,16 +3004,16 @@
             form.reset();
 
 
-            await loadDashboard();
-
-
             setAppNotification(
-              "New Blood Request",
-              `${data.Patient_Name || data.patientName || "A patient"} needs ${data.Blood_Group || data.bloodGroup || "blood"} at ${data.Hospital || data.hospital || "the hospital"}.`,
+              "New blood request",
+              `${data.Patient_Name || data.patientName || "A patient"} requested ${data.Blood_Group || data.bloodGroup || "blood"} at ${data.Hospital || data.hospital || "the hospital"}.`,
               "🚨"
             );
 
-            await loadNotifications();
+            await Promise.all([
+              loadDashboard(),
+              loadNotifications()
+            ]);
 
             toast(
               "Blood request submitted 🚨"
@@ -2971,6 +3058,19 @@
       menu.setAttribute("aria-hidden", "true");
     }
 
+    function formatDateTime(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return date.toLocaleString(undefined, {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
     /* =========================================================
        NOTIFICATIONS
        Added without changing existing application logic.
@@ -2980,45 +3080,95 @@
 
     async function loadNotifications() {
       try {
-        const result = await BloodDonationAPI.getNotifications("");
-        const list = Array.isArray(result)
+        if (!window.BloodDonationAPI ||
+            typeof BloodDonationAPI.getNotifications !== "function") {
+          APP_NOTIFICATIONS = [];
+          renderNotifications();
+          return;
+        }
+
+        const result = await BloodDonationAPI.getNotifications();
+        const notifications = Array.isArray(result)
           ? result
-          : (result?.notifications || result?.data || result?.result || []);
-        APP_NOTIFICATIONS = Array.isArray(list) ? list : [];
+          : (
+              result?.notifications ||
+              result?.data ||
+              result?.result ||
+              []
+            );
+
+        APP_NOTIFICATIONS = Array.isArray(notifications)
+          ? notifications
+          : [];
+
+        updateNotificationBadge();
         renderNotifications();
-        updateNotificationBadges();
       } catch (error) {
         console.warn("Notifications API:", error);
         APP_NOTIFICATIONS = [];
+        updateNotificationBadge();
         renderNotifications();
-        updateNotificationBadges();
       }
     }
 
-    function updateNotificationBadges() {
-      const unread = APP_NOTIFICATIONS.filter(n =>
-        String(n.readStatus || n.Read_Status || "Unread").toLowerCase() !== "read"
-      ).length;
-      ["notificationBadge", "notificationBadgeMobile"].forEach(id => {
-        const badge = document.getElementById(id);
+    function updateNotificationBadge() {
+      const unreadCount = APP_NOTIFICATIONS.filter(item => {
+        const status = String(
+          item.readStatus ||
+          item.Read_Status ||
+          item.status ||
+          ""
+        ).toLowerCase();
+
+        return !status || status === "unread";
+      }).length;
+
+      const badges = [
+        document.getElementById("notificationBadge"),
+        document.getElementById("notificationBadgeMobile")
+      ];
+
+      badges.forEach(badge => {
         if (!badge) return;
-        badge.textContent = String(unread);
-        badge.style.display = unread > 0 ? "inline-flex" : "none";
+        badge.textContent = String(unreadCount);
+        badge.style.display = unreadCount > 0 ? "inline-flex" : "none";
       });
     }
 
     async function openNotifications() {
       const modal = document.getElementById("notificationModal");
       if (!modal) return;
+
       modal.classList.add("show");
+
       const list = document.getElementById("notificationList");
-      if (list) list.innerHTML = `
-        <div class="notification-empty">
-          <div class="notification-empty-icon">⏳</div>
-          <strong>Loading notifications…</strong>
-          <p>Please wait.</p>
-        </div>`;
+      if (list) {
+        list.innerHTML = `
+          <div class="notification-empty">
+            <div class="notification-empty-icon">⏳</div>
+            <strong>Loading notifications…</strong>
+            <p>Please wait.</p>
+          </div>
+        `;
+      }
+
       await loadNotifications();
+
+      /* Opening the notification panel marks only the UI badge as read.
+         The database rows remain unchanged until an explicit read action
+         is available. */
+      const badge = document.getElementById("notificationBadge");
+      const mobileBadge = document.getElementById("notificationBadgeMobile");
+
+      if (badge) {
+        badge.textContent = "0";
+        badge.style.display = "none";
+      }
+
+      if (mobileBadge) {
+        mobileBadge.textContent = "0";
+        mobileBadge.style.display = "none";
+      }
     }
 
     function closeNotifications() {
@@ -3027,49 +3177,219 @@
     }
 
     function closeNotificationsOutside(event) {
-      if (event.target.id === "notificationModal") closeNotifications();
+      if (event.target.id === "notificationModal") {
+        closeNotifications();
+      }
     }
 
     function renderNotifications() {
       const list = document.getElementById("notificationList");
       if (!list) return;
+
       if (!APP_NOTIFICATIONS.length) {
         list.innerHTML = `
           <div class="notification-empty">
             <div class="notification-empty-icon">🔔</div>
-            <strong>No notifications yet</strong>
-            <p>New donors, blood requests and events will appear here.</p>
-          </div>`;
+            <strong>No notifications</strong>
+            <p>You are all caught up.</p>
+          </div>
+        `;
         return;
       }
+
       list.innerHTML = APP_NOTIFICATIONS.map(item => {
+        const id = item.notificationId || item.Notification_ID || "";
+        const title = item.title || item.Title || "Notification";
+        const message = item.message || item.Message || "";
         const type = item.type || item.Type || "General";
-        const icon = type === "Blood Request" ? "🚨" : type === "Event" ? "📅" : "🩸";
+        const created = item.createdDate || item.Created_Date || "";
+        const icon = type === "Blood Request" ? "🚨" : type === "Donor" ? "🩸" : type === "Event" ? "📅" : "🔔";
+
         return `
-          <div class="notification-item">
+          <div class="notification-item ${String(item.readStatus || "").toLowerCase() === "read" ? "read" : "unread"}">
             <div class="notification-item-icon">${icon}</div>
-            <div>
-              <strong>${escapeHtml(item.title || item.Title || "Notification")}</strong>
-              <p>${escapeHtml(item.message || item.Message || "")}</p>
-              <small>${escapeHtml(item.createdDate || item.Created_Date || "")}</small>
+            <div class="notification-item-body">
+              <strong>${escapeHtml(title)}</strong>
+              <p>${escapeHtml(message)}</p>
+              <small>${escapeHtml(type)}${created ? " • " + escapeHtml(formatDateTime(created)) : ""}</small>
             </div>
-          </div>`;
+            ${id && adminIsLoggedIn() ? `<button type="button" class="notification-delete-btn" onclick="removeOneNotification('${escapeAttribute(id)}')" title="Remove notification">×</button>` : ""}
+          </div>
+        `;
       }).join("");
     }
 
     function setAppNotification(title, message, icon = "🔔") {
       APP_NOTIFICATIONS.unshift({
-        title, message, type: "General", readStatus: "Unread", icon,
+        title,
+        message,
+        type: "General",
+        readStatus: "Unread",
+        icon,
         createdDate: new Date().toISOString()
       });
+
+      updateNotificationBadge();
       renderNotifications();
-      updateNotificationBadges();
     }
 
-    function escapeHtml(value) {
-      return String(value ?? "").replace(/[&<>"']/g, c => ({
-        "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;", "'":"&#39;"
-      }[c]));
+    async function removeOneNotification(notificationId) {
+      if (!notificationId) return;
+      if (!adminIsLoggedIn()) {
+        toast("Admin login required.");
+        return;
+      }
+
+      if (!confirm("Remove this notification?")) return;
+
+      try {
+        await BloodDonationAPI.deleteNotification(notificationId, getAdminUserId());
+        APP_NOTIFICATIONS = APP_NOTIFICATIONS.filter(n =>
+          String(n.notificationId || n.Notification_ID || "") !== String(notificationId)
+        );
+        updateNotificationBadge();
+        renderNotifications();
+        if (document.getElementById("adminNotificationTable")) await loadAdminNotifications();
+        toast("Notification removed.");
+      } catch (error) {
+        console.error(error);
+        toast(error?.message || "Unable to remove notification.");
+      }
+    }
+
+    async function clearAllNotifications() {
+      if (!adminIsLoggedIn()) {
+        toast("Admin login required.");
+        return;
+      }
+
+      if (!confirm("Remove all notifications? This cannot be undone.")) return;
+
+      try {
+        await BloodDonationAPI.clearNotifications(getAdminUserId());
+        APP_NOTIFICATIONS = [];
+        updateNotificationBadge();
+        renderNotifications();
+        if (document.getElementById("adminNotificationTable")) await loadAdminNotifications();
+        toast("All notifications removed.");
+      } catch (error) {
+        console.error(error);
+        toast(error?.message || "Unable to clear notifications.");
+      }
+    }
+
+    async function markAllNotificationsRead() {
+      if (!APP_NOTIFICATIONS.length) return;
+
+      for (const item of APP_NOTIFICATIONS) {
+        const id = item.notificationId || item.Notification_ID;
+        if (!id) continue;
+        try {
+          await BloodDonationAPI.markNotificationRead(id, getAdminUserId() || "");
+          item.readStatus = "Read";
+        } catch (error) {
+          console.warn("Mark read:", error);
+        }
+      }
+
+      updateNotificationBadge();
+      renderNotifications();
+    }
+
+    let lastNotificationIds = new Set();
+    let firstNotificationPoll = true;
+
+    async function pollPhoneNotifications() {
+      try {
+        const result = await BloodDonationAPI.getNotifications();
+        const rows = Array.isArray(result) ? result : (result?.notifications || result?.data || []);
+        if (!Array.isArray(rows)) return;
+
+        const current = new Set(rows.map(n => String(n.notificationId || n.Notification_ID || "")));
+
+        if (!firstNotificationPoll && "Notification" in window && Notification.permission === "granted") {
+          rows.forEach(item => {
+            const id = String(item.notificationId || item.Notification_ID || "");
+            if (id && !lastNotificationIds.has(id)) {
+              const title = item.title || item.Title || "Poongurichi Nanbargal";
+              const body = item.message || item.Message || "New notification";
+              new Notification(title, {
+                body,
+                icon: "icons/icon-192.png",
+                badge: "icons/icon-192.png"
+              });
+            }
+          });
+        }
+
+        lastNotificationIds = current;
+        firstNotificationPoll = false;
+      } catch (error) {
+        console.warn("Phone notification poll:", error);
+      }
+    }
+
+    async function enablePhoneNotifications() {
+      if (!("Notification" in window)) {
+        toast("Phone browser notifications are not supported on this device.");
+        return false;
+      }
+
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        toast("Phone notifications enabled.");
+        await pollPhoneNotifications();
+        return true;
+      }
+
+      toast("Notification permission was not granted.");
+      return false;
+    }
+
+    async function loadAdminNotifications() {
+      const box = document.getElementById("adminNotificationTable");
+      if (!box || !ensureAdminAccess()) return;
+
+      try {
+        const result = await BloodDonationAPI.getNotifications();
+        const rows = Array.isArray(result) ? result : (result?.notifications || result?.data || []);
+
+        if (!rows.length) {
+          box.innerHTML = '<div class="admin-empty">No notifications in the database.</div>';
+          return;
+        }
+
+        box.innerHTML = `
+          <table class="admin-table">
+            <thead>
+              <tr><th>Notification</th><th>Type</th><th>Status</th><th>Created</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+              ${rows.map(row => {
+                const id = value(row, "notificationId", "Notification_ID", "id", "ID");
+                const title = value(row, "title", "Title") || "Notification";
+                const message = value(row, "message", "Message") || "";
+                const type = value(row, "type", "Type") || "General";
+                const status = value(row, "readStatus", "Read_Status") || "Unread";
+                const created = value(row, "createdDate", "Created_Date") || "";
+                return `<tr>
+                  <td><strong>${escapeHtml(title)}</strong><br><small>${escapeHtml(message)}</small></td>
+                  <td>${escapeHtml(type)}</td>
+                  <td>${escapeHtml(status)}</td>
+                  <td>${escapeHtml(formatDateTime(created))}</td>
+                  <td><button type="button" class="admin-danger-btn" onclick="removeOneNotification('${escapeAttribute(id)}')">Remove</button></td>
+                </tr>`;
+              }).join("")}
+            </tbody>
+          </table>
+          <div class="admin-notification-actions">
+            <button type="button" class="btn btn-light" onclick="enablePhoneNotifications()">📱 Enable Phone Notifications</button>
+            <button type="button" class="admin-danger-btn" onclick="clearAllNotifications()">🗑️ Remove All</button>
+          </div>`;
+      } catch (error) {
+        console.error(error);
+        box.innerHTML = '<div class="admin-empty error-text">Unable to load notifications.</div>';
+      }
     }
 
     /* =========================================================
@@ -3244,7 +3564,7 @@
         Number(value(s, "registeredDonors", "totalDonors", "donors", "Registered_Donors")) || 0;
 
       document.getElementById("adminStatRequests").textContent =
-        Number(value(s, "activeRequests", "bloodRequests", "requests", "Active_Requests")) || 0;
+        Number(value(s, "openRequests", "totalRequests", "activeRequests", "bloodRequests", "requests", "Open_Requests", "Total_Requests", "Active_Requests")) || 0;
 
       document.getElementById("adminStatEvents").textContent =
         Number(value(s, "events", "totalEvents", "camps", "Events")) || 0;
@@ -3256,6 +3576,7 @@
         loadAdminDonors(),
         loadAdminRequests(),
         loadAdminEvents(),
+        loadAdminNotifications(),
         loadAdminAbout()
       ]);
     }
@@ -3448,6 +3769,8 @@
                     <td>${escapeHtml(location)}</td>
                     <td><span class="admin-status-pill">${escapeHtml(status)}</span></td>
                     <td>
+                      <button type="button" class="admin-small-btn"
+                        onclick="openEditEvent('${escapeAttribute(id)}')">Edit</button>
                       <button type="button" class="admin-danger-btn"
                         onclick="adminDeleteEvent('${escapeAttribute(id)}')">Delete</button>
                     </td>
@@ -3460,6 +3783,95 @@
         box.innerHTML = '<div class="admin-empty error-text">Unable to load events.</div>';
       }
     }
+
+    async function openEditEvent(eventId) {
+      if (!eventId || !ensureAdminAccess()) return;
+
+      try {
+        const result = await BloodDonationAPI.getEvents();
+        const events = Array.isArray(result) ? result : (result?.events || result?.data || []);
+        const event = events.find(item => String(value(item, "Event_ID", "eventId", "EventID", "ID", "id")) === String(eventId));
+
+        if (!event) {
+          toast("Event not found.");
+          return;
+        }
+
+        const form = document.getElementById("editEventForm");
+        if (!form) return;
+
+        form.elements.namedItem("eventId").value = eventId;
+        form.elements.namedItem("title").value = value(event, "Title", "title", "Event_Title") || "";
+        form.elements.namedItem("eventDate").value = toDateInputValue(value(event, "Event_Date", "eventDate", "EventDate"));
+        form.elements.namedItem("location").value = value(event, "Location", "location") || "";
+        form.elements.namedItem("imageUrl").value = value(event, "Image_URL", "imageUrl", "ImageUrl") || "";
+        form.elements.namedItem("description").value = value(event, "Description", "description") || "";
+        form.elements.namedItem("status").value = value(event, "Status", "status") || "Published";
+
+        document.getElementById("editEventMessage").textContent = "";
+        document.getElementById("editEventModal").classList.add("show");
+      } catch (error) {
+        console.error(error);
+        toast(error?.message || "Unable to open event.");
+      }
+    }
+
+    function toDateInputValue(value) {
+      if (!value) return "";
+      const text = String(value).trim();
+      if (/^\\d{4}-\\d{2}-\\d{2}$/.test(text)) return text;
+      const m = text.match(/^(\\d{1,2})[\\/\\-](\\d{1,2})[\\/\\-](\\d{4})/);
+      if (m) return `${m[3]}-${String(m[2]).padStart(2,"0")}-${String(m[1]).padStart(2,"0")}`;
+      const d = new Date(text);
+      if (Number.isNaN(d.getTime())) return "";
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    }
+
+    function closeEditEvent() {
+      document.getElementById("editEventModal")?.classList.remove("show");
+    }
+
+    function closeEditEventOutside(event) {
+      if (event.target.id === "editEventModal") closeEditEvent();
+    }
+
+    document.getElementById("editEventForm")?.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      if (!ensureAdminAccess()) return;
+
+      const message = document.getElementById("editEventMessage");
+      const button = this.querySelector("button[type=submit]");
+      const data = Object.fromEntries(new FormData(this));
+
+      const required = ["eventId", "title", "eventDate", "location"];
+      for (const key of required) {
+        if (!String(data[key] || "").trim()) {
+          message.className = "form-message error";
+          message.textContent = `${key === "eventId" ? "Event ID" : key === "eventDate" ? "Event date" : key === "location" ? "Event location" : "Event title"} is required.`;
+          return;
+        }
+      }
+
+      try {
+        button.disabled = true;
+        message.className = "form-message success";
+        message.textContent = "Saving event…";
+
+        await BloodDonationAPI.updateEvent(data, getAdminUserId());
+
+        message.textContent = "Event updated successfully.";
+        toast("Event updated.");
+        closeEditEvent();
+        await loadAdminDashboard();
+        await loadEvents();
+      } catch (error) {
+        console.error(error);
+        message.className = "form-message error";
+        message.textContent = error?.message || "Unable to update event.";
+      } finally {
+        button.disabled = false;
+      }
+    });
 
     async function adminDeleteEvent(eventId) {
       if (!eventId || !ensureAdminAccess()) return;
@@ -3676,7 +4088,9 @@
 
         loadBloodGroups(),
 
-        loadEvents()
+        loadEvents(),
+
+        loadNotifications()
 
       ]);
 
@@ -3692,6 +4106,11 @@
       "DOMContentLoaded",
       initializeApp
     );
+
+    window.setInterval(async () => {
+      await loadNotifications();
+      await pollPhoneNotifications();
+    }, 60000);
 
 
     /* =========================================================
