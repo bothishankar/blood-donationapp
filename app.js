@@ -4,7 +4,7 @@
    ============================================================ */
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbzGvAVPbdgBpRGgFlIqjVwz4CI6m6grQaz42XvK-GiSHdD8S2gdZnRPFazGA0LT6DEz/exec";
+  "https://script.google.com/macros/s/AKfycby0sigOLGqZrN77W0FsmmB7vB_rrJksidAyfFTU6duhxYzpSVhVij2DW3I078pcQXIL/exec";
 
 const ADMIN_KEY = "poongurichi_admin_session";
 const NINETY_DAYS = 90;
@@ -449,6 +449,17 @@ window.BloodDonationAPI = {
   markNotificationRead: (notificationId, userId) =>
     api("markNotificationRead", {
       notificationId: clean(notificationId),
+      userId: clean(userId)
+    }),
+
+  deleteNotification: (notificationId, userId) =>
+    api("deleteNotification", {
+      notificationId: clean(notificationId),
+      userId: clean(userId)
+    }),
+
+  clearNotifications: (userId) =>
+    api("clearNotifications", {
       userId: clean(userId)
     })
 };
