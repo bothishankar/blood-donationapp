@@ -4,41 +4,98 @@
    ============================================================ */
 
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbziK4NZUaqnPAGSVYirsH3YuA5oJWhR64bG3Yt4JcKj6Xux3CTkX-OqT27gpNm7hKf3/exec";
+  "https://script.google.com/macros/s/AKfycbyWFFv8_N9PfG9QZV7DqfUYBZEfvbD6VmJnXr60RxmMjp1GXCHvpXPDB2m_bCZXvplB/exec";
 
 const ADMIN_KEY = "poongurichi_admin_session";
 const NINETY_DAYS = 90;
 
+const API_READ_CACHE = new Map();
+const API_INFLIGHT = new Map();
+const API_CACHE_TTL = 15000;
+
 async function api(action, data = {}) {
   if (!action) throw new Error("API action is required.");
 
-  const response = await fetch(API_URL, {
-    method: "POST",
-    redirect: "follow",
-    headers: {
-      "Content-Type": "text/plain;charset=utf-8"
-    },
-    body: JSON.stringify({ action, ...data })
-  });
+  const readActions = new Set([
+    "health", "getSettings", "getDashboard", "getDashboardStats",
+    "getDonors", "searchDonors", "getRequests", "getEvents",
+    "getAbout", "getNotifications", "getDonorPhotos"
+  ]);
 
-  if (!response.ok) {
-    throw new Error(`Server error (${response.status}). Please try again.`);
+  const isRead = readActions.has(action);
+  const paramsKey = isRead
+    ? action + "?" + new URLSearchParams(Object.entries(data || {}).sort())
+    : "";
+
+  if (isRead) {
+    const cached = API_READ_CACHE.get(paramsKey);
+    if (cached && (Date.now() - cached.time) < API_CACHE_TTL) return cached.value;
+    if (API_INFLIGHT.has(paramsKey)) return API_INFLIGHT.get(paramsKey);
   }
 
-  const text = await response.text();
-  let result;
+  const requestPromise = (async () => {
+    let lastError = null;
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        let response;
+        if (isRead) {
+          const params = new URLSearchParams({ action });
+          Object.entries(data || {}).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) params.set(key, String(value));
+          });
+          response = await fetch(`${API_URL}?${params.toString()}`, {
+            method: "GET",
+            redirect: "follow",
+            cache: "default"
+          });
+        } else {
+          response = await fetch(API_URL, {
+            method: "POST",
+            redirect: "follow",
+            cache: "no-store",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action, ...data })
+          });
+        }
 
+        if (!response.ok) throw new Error(`Server error (${response.status}).`);
+        const text = await response.text();
+        if (!text.trim()) throw new Error("The database returned an empty response.");
+
+        let result;
+        try { result = JSON.parse(text); }
+        catch { throw new Error("Google Apps Script returned an invalid response."); }
+        if (result && result.success === false) throw new Error(result.error || "Request failed.");
+
+        if (isRead) API_READ_CACHE.set(paramsKey, { time: Date.now(), value: result });
+        else invalidateApiCache();
+        return result;
+      } catch (error) {
+        lastError = error;
+        if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 400));
+      }
+    }
+    throw lastError || new Error("Unable to connect to database.");
+  })();
+
+  if (isRead) API_INFLIGHT.set(paramsKey, requestPromise);
   try {
-    result = JSON.parse(text);
-  } catch {
-    throw new Error("Google Apps Script returned an invalid response.");
+    return await requestPromise;
+  } finally {
+    if (isRead) API_INFLIGHT.delete(paramsKey);
   }
+}
 
-  if (result && result.success === false) {
-    throw new Error(result.error || "Request failed.");
+function invalidateApiCache(...actions) {
+  if (!actions.length) {
+    API_READ_CACHE.clear();
+    return;
   }
-
-  return result;
+  for (const key of API_READ_CACHE.keys()) {
+    if (actions.some(action => key === action || key.startsWith(action + "?"))) {
+      API_READ_CACHE.delete(key);
+    }
+  }
 }
 
 function adminSession() {
@@ -217,6 +274,8 @@ function normalizeDonor(donor = {}) {
     first(donor, "lastDonationDate", "Last_Donation_Date", "LastDonationDate")
   );
   const available = clean(first(donor, "available", "Available")) || "Yes";
+  const aadhaarNumber = clean(first(donor, "aadhaarNumber", "Aadhaar_Number", "Aadhaar", "aadhaar"));
+  const referredBy = clean(first(donor, "referredBy", "Referred_By", "ReferredBy"));
 
   return {
     name,
@@ -242,6 +301,10 @@ function normalizeDonor(donor = {}) {
     lastDonationDate,
     Last_Donation_Date: lastDonationDate,
     LastDonationDate: lastDonationDate,
+    aadhaarNumber,
+    Aadhaar_Number: aadhaarNumber,
+    referredBy,
+    Referred_By: referredBy,
     available,
     Available: available
   };
@@ -430,6 +493,23 @@ window.BloodDonationAPI = {
   uploadEventImage: (payload = {}) =>
     api("uploadEventImage", payload),
 
+  getDonorPhotos: async (admin = false) => {
+    const result = await api("getDonorPhotos", { admin: admin ? "true" : "false" });
+    return resultArray(result, "photos");
+  },
+
+  createDonorPhoto: (photo = {}, userId) =>
+    api("createDonorPhoto", { ...photo, userId: clean(userId) }),
+
+  updateDonorPhoto: (photo = {}, userId) =>
+    api("updateDonorPhoto", { ...photo, userId: clean(userId) }),
+
+  deleteDonorPhoto: (photoId, userId) =>
+    api("deleteDonorPhoto", { photoId: clean(photoId), userId: clean(userId) }),
+
+  uploadDonorPhoto: (payload = {}) =>
+    api("uploadDonorPhoto", payload),
+
   /* ABOUT */
   getAbout: () => api("getAbout"),
 
@@ -459,7 +539,5 @@ window.BloodDonationAPI = {
     }),
 
   clearNotifications: (userId) =>
-    api("clearNotifications", {
-      userId: clean(userId)
-    })
+    api("clearNotifications", { userId: clean(userId) })
 };
