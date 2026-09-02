@@ -3102,129 +3102,174 @@
     font-size: 12px;
   }
 }
-/* New donor / NA option */
-.new-donor-option {
+
+/* =========================================================
+   PREMIUM V2 - DONOR PHOTO GALLERY
+   ========================================================= */
+.donor-gallery-section {
+  margin: 48px 0;
+}
+
+.donor-photo-gallery {
+  width: min(100%, 760px);
+  margin: 0 auto;
+}
+
+.donor-photo-card {
+  position: relative;
+  min-height: 280px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  box-shadow: var(--shadow-md);
+}
+
+.donor-photo-card img {
+  width: 100%;
+  height: clamp(260px, 42vw, 440px);
+  object-fit: cover;
+  background: var(--blue-soft);
+}
+
+.donor-photo-card.image-error img {
+  visibility: hidden;
+}
+
+.donor-photo-caption {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 52px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(16, 42, 86, .88);
+  color: #fff;
+  font-weight: 700;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+.donor-photo-nav {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translateY(-50%);
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  color: var(--navy);
+  font-size: 30px;
+  line-height: 1;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+}
+
+.donor-photo-nav.prev { left: 14px; }
+.donor-photo-nav.next { right: 14px; }
+
+.donor-photo-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  z-index: 3;
+}
+
+.donor-photo-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.65);
+}
+
+.donor-photo-dot.active {
+  width: 22px;
+  border-radius: 99px;
+  background: #fff;
+}
+
+.donor-photo-loading {
+  padding: 50px 20px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  text-align: center;
+  color: var(--muted);
+}
+
+.optional-mark {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  margin-top: 10px;
-  color: var(--navy);
-  font-size: 13px;
-  font-weight: 800;
-  cursor: pointer;
-}
-.new-donor-option input {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: var(--red);
-}
-.field-help {
-  display: block;
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.45;
-}
-
-
-
-.notification-item small {
-  display: block;
-  margin-top: 4px;
-  color: #8a96a8;
-  font-size: 10px;
+  margin-left: 5px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--blue-soft);
+  color: var(--blue);
+  font-size: .78em;
   font-weight: 700;
 }
 
-
-/* =========================================================
-   UPDATE V4 — ADMIN / NOTIFICATION / FOOTER
-   ========================================================= */
-.footer-created-by {
-  margin-top: 7px;
-  font-size: 11px;
-  line-height: 1.6;
+@media (max-width: 640px) {
+  .donor-gallery-section { margin: 34px 0; }
+  .donor-photo-card { border-radius: 22px; }
+  .donor-photo-card img { height: 300px; }
+  .donor-photo-nav { width: 40px; height: 40px; font-size: 26px; }
+  .donor-photo-caption { bottom: 48px; font-size: 14px; }
 }
 
-.notification-head-title {
+.notification-permission-row {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--blue-soft);
 }
 
-.notification-clear-self {
-  border: 0;
-  background: transparent;
-  color: var(--blue);
-  font-size: 11px;
-  font-weight: 800;
-  cursor: pointer;
+.notification-permission-row small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.notification-admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
 }
 
 .notification-item {
   position: relative;
 }
 
-.notification-item-body {
+.notification-item-content {
   min-width: 0;
-  padding-right: 30px;
-}
-
-.notification-item.read {
-  opacity: .72;
+  padding-right: 28px;
 }
 
 .notification-delete-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 28px;
-  height: 28px;
-  border: 1px solid #f0c9d2;
-  background: #fff5f7;
-  color: var(--red-dark);
-  border-radius: 9px;
-  font-weight: 900;
-  cursor: pointer;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: #eef2f7;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
 }
 
-.notification-modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding-top: 12px;
-}
-
-.admin-notification-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 12px;
-}
-
-#editEventForm .form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 6px;
-}
-
-@media (max-width: 600px) {
-  .notification-head-title {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 3px;
-  }
-
-  .notification-modal-footer,
-  .admin-notification-actions,
-  #editEventForm .form-actions {
-    flex-direction: column;
-  }
-
-  .notification-modal-footer button,
-  .admin-notification-actions button,
-  #editEventForm .form-actions button {
-    width: 100%;
-  }
+.notification-delete-btn:hover {
+  background: #e5eaf2;
+  color: var(--text);
 }
