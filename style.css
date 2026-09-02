@@ -3273,3 +3273,183 @@
   background: #e5eaf2;
   color: var(--text);
 }
+
+
+/* =========================================================
+   PREMIUM V2.1 — PROFESSIONAL BLUE MOBILE-FIRST LAYOUT
+   Inspired by the supplied reference screen.
+   Existing component names/logic are intentionally preserved.
+   ========================================================= */
+:root {
+  --navy: #0b2b5b;
+  --navy-2: #123f86;
+  --blue: #1f62d1;
+  --blue-2: #2d70e6;
+  --blue-soft: #eef5ff;
+  --bg: #f4f7fc;
+  --border: #dbe5f3;
+  --text: #132541;
+  --muted: #687891;
+  --green: #16a56f;
+  --green-soft: #eafaf3;
+  --red: #e3294f;
+  --red-dark: #c7193e;
+}
+
+body {
+  background:
+    radial-gradient(circle at 5% 0%, rgba(45,112,230,.09), transparent 28%),
+    radial-gradient(circle at 95% 20%, rgba(20,72,150,.07), transparent 26%),
+    #f4f7fc;
+}
+
+.site-header {
+  background: rgba(255,255,255,.97);
+  box-shadow: 0 8px 30px rgba(11,43,91,.07);
+}
+
+.header-inner {
+  min-height: 76px;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44px;
+}
+
+.brand { flex: 1 1 auto; min-width: 0; }
+.brand-logo { width: 54px; height: 54px; }
+.brand-name { font-size: clamp(17px, 2vw, 22px); letter-spacing: -.02em; }
+.brand-meta { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mobile-header-actions { flex: 0 0 auto; }
+.mobile-header-actions .notification-btn { width: 46px; height: 46px; border-radius: 14px; font-size: 20px; }
+.desktop-nav { display: none; }
+
+.page-section { padding: 26px 0 110px; }
+.container { width: min(calc(100% - 28px), 1180px); }
+
+.hero {
+  margin-top: 12px;
+  border-radius: 28px;
+  min-height: 0;
+  display: block;
+  background: linear-gradient(135deg,#edf5ff 0%,#fff 58%,#f1f6ff 100%);
+  border-color: #dfe9f7;
+}
+.hero-content { padding: 28px 22px 10px; }
+.hero-badge { font-size: 11px; margin-bottom: 20px; }
+.hero-title { font-size: clamp(44px, 11vw, 74px); color: #0b2b5b; }
+.hero-title span { color: #245bd0; }
+.hero-text { font-size: 15px; line-height: 1.7; margin-top: 18px; }
+.hero-actions { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 22px; }
+.hero-actions .btn { min-height: 54px; border-radius: 14px; font-size: 16px; }
+.btn-danger { background: linear-gradient(135deg,#2c72e8,#234fbb); box-shadow: 0 10px 24px rgba(35,79,187,.2); }
+.btn-primary { background: linear-gradient(135deg,#2470e7,#174da9); }
+.hero-visual { min-height: 250px; }
+
+.stats-grid { gap: 10px; margin-top: 18px; }
+.stat-card { border-radius: 18px; min-height: 112px; padding: 14px; }
+.stat-label { font-size: 11px; }
+.stat-value { font-size: 28px; }
+
+.events-section, .blood-section, .donor-gallery-section { margin-top: 34px; }
+.section-title { font-size: clamp(28px, 8vw, 42px); color: #0b2b5b; }
+.section-kicker { color: #245fd1; font-size: 11px; }
+.section-description { font-size: 13px; }
+.section-heading-row { align-items: center; margin-bottom: 14px; }
+.view-all-btn { color: #1d5dcc; font-size: 12px; }
+
+.events-grid, .donor-results { grid-template-columns: 1fr; gap: 13px; }
+.event-card, .donor-card, .content-card { border-radius: 20px; box-shadow: 0 10px 30px rgba(11,43,91,.07); border-color: #dfe7f2; }
+.event-image-wrap { height: 205px; background: linear-gradient(135deg,#edf5ff,#f7faff); }
+.event-body { padding: 17px; }
+.event-title { font-size: 19px; }
+.event-status { background: #e8f8f0; color: #0d8c5d; }
+
+.blood-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.blood-card { padding: 13px 5px; border-radius: 16px; }
+.blood-drop { font-size: 22px; }
+.blood-type { font-size: 17px; }
+.blood-count { font-size: 20px; color: #1e63d6; }
+
+.content-card { padding: 18px 14px; }
+.form-grid { grid-template-columns: 1fr; gap: 13px; }
+.form-group.full, .form-actions, .form-message { grid-column: auto; }
+.form-label { font-size: 11px; }
+.form-control { min-height: 46px; border-radius: 12px; background: #fbfdff; }
+textarea.form-control { min-height: 108px; }
+.form-actions { display: grid; grid-template-columns: 1fr 1.6fr; }
+.form-actions .btn { width: 100%; min-height: 50px; }
+
+.search-toolbar { grid-template-columns: 1fr; gap: 10px; }
+.search-toolbar .btn { grid-column: auto; min-height: 50px; }
+.donor-card { padding: 16px; }
+.donor-avatar { width: 50px; height: 50px; border-radius: 16px; }
+
+.donor-gallery-section { margin-bottom: 36px; }
+.donor-photo-gallery { width: 100%; }
+.donor-photo-card { border-radius: 22px; box-shadow: 0 15px 40px rgba(11,43,91,.09); }
+.donor-photo-card img { height: min(64vw, 360px); }
+
+.admin-page { padding-top: 22px; }
+.admin-stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.admin-grid { grid-template-columns: 1fr; gap: 13px; }
+.admin-card { border-radius: 19px; padding: 16px; box-shadow: 0 10px 30px rgba(11,43,91,.07); }
+.admin-wide { grid-column: auto; }
+.admin-card-head { gap: 10px; }
+.admin-table-wrap { border-radius: 13px; }
+.admin-table { min-width: 700px; }
+
+/* Notifications / Admin modal remain prominent and clean on mobile. */
+.notification-modal { width: min(560px, calc(100vw - 28px)); border-radius: 24px; }
+.notification-item { border-radius: 15px; }
+
+footer {
+  background: linear-gradient(135deg,#0b2b5b,#123f86);
+  margin-top: 20px;
+  padding: 28px 0 115px;
+}
+.footer-inner { flex-direction: column; align-items: stretch; gap: 18px; }
+.footer-brand { font-size: 18px; }
+.footer-contact-title { color: #fff; font-weight: 900; margin-bottom: 9px; }
+.footer-contact-buttons { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.footer-call-btn { display: flex; justify-content: space-between; gap: 12px; padding: 11px 13px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.08); border-radius: 12px; color: #fff; font-size: 12px; font-weight: 750; }
+.footer-call-btn span { opacity: .9; }
+.footer-developer { color: rgba(255,255,255,.76); line-height: 1.8; }
+.footer-developer strong, .footer-developer a { color: #fff; }
+
+.mobile-bottom-nav {
+  left: 10px; right: 10px; bottom: 10px;
+  border-radius: 21px;
+  padding: 7px;
+  background: rgba(11,43,91,.98);
+  box-shadow: 0 16px 50px rgba(11,43,91,.28);
+}
+.mobile-nav-btn { min-height: 58px; border-radius: 15px; font-size: 10px; }
+.mobile-nav-btn.active { background: linear-gradient(135deg,#2a70de,#1e58bd); }
+.mobile-nav-btn span:first-child { font-size: 20px; }
+
+@media (min-width: 851px) {
+  .mobile-menu-btn, .mobile-header-actions { display: none; }
+  .desktop-nav { display: flex; }
+  .header-inner { min-height: 82px; }
+  .page-section { padding: 42px 0 90px; }
+  .hero { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(300px,.75fr); min-height: 420px; }
+  .hero-content { padding: 58px 55px; }
+  .hero-actions { display: flex; grid-template-columns: none; }
+  .events-grid { grid-template-columns: repeat(3,1fr); }
+  .donor-results { grid-template-columns: repeat(3,1fr); }
+  .form-grid { grid-template-columns: repeat(2,1fr); }
+  .form-group.full, .form-actions, .form-message { grid-column: 1 / -1; }
+  .search-toolbar { grid-template-columns: 1fr 1fr 1fr auto; }
+  .search-toolbar .btn { grid-column: auto; }
+  .blood-grid { grid-template-columns: repeat(8,1fr); }
+  .admin-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .admin-wide { grid-column: 1 / -1; }
+  footer { padding-bottom: 32px; }
+  .footer-inner { flex-direction: row; align-items: center; }
+  .footer-contact-buttons { grid-template-columns: repeat(2, minmax(190px,1fr)); }
+}
