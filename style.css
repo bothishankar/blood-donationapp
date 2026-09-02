@@ -3453,3 +3453,20 @@ footer {
   .footer-inner { flex-direction: row; align-items: center; }
   .footer-contact-buttons { grid-template-columns: repeat(2, minmax(190px,1fr)); }
 }
+
+
+/* Premium V3 admin/editor/share additions */
+.admin-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.admin-settings-grid label{display:flex;flex-direction:column;gap:7px;font-weight:700;color:#123b82}
+.admin-settings-full{grid-column:1/-1}
+.footer-social-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.footer-social-links a{font-weight:700;text-decoration:none}
+.donor-details-modal{max-width:720px}
+.admin-donor-details-card{background:#fff;border:1px solid #dce6f4;border-radius:20px;padding:20px}
+.admin-donor-detail-head{display:flex;align-items:center;gap:14px;padding-bottom:16px;border-bottom:1px solid #e7edf6}
+.admin-donor-detail-head h3{margin:0;font-size:24px;color:#123b82}.admin-donor-detail-head span{font-weight:800;color:#1557c0}
+.admin-donor-detail-list{display:grid;grid-template-columns:1fr 1fr;gap:0 20px;margin-top:12px}
+.admin-donor-detail-list>div{display:grid;grid-template-columns:145px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid #edf1f7;font-size:14px}
+.admin-donor-detail-list strong{color:#123b82}.admin-donor-detail-list span{overflow-wrap:anywhere}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}.donor-share-actions{padding-top:8px}
+@media(max-width:700px){.admin-settings-grid{grid-template-columns:1fr}.admin-settings-full{grid-column:auto}.admin-donor-detail-list{grid-template-columns:1fr}.admin-donor-detail-list>div{grid-template-columns:125px 1fr}.donor-details-modal{width:min(94vw,720px)}}
