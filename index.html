@@ -1492,9 +1492,17 @@
 
       </div>
 
-      <div class="footer-copy">
-        © <span id="currentYear"></span>
-        Poongurichi Nanbargal. All rights reserved.
+      <div class="footer-contact-block">
+        <div class="footer-contact-title">For Blood Need Contact</div>
+        <div class="footer-contact-buttons">
+          <a class="footer-call-btn" href="tel:7402591722">☎ Ragubathi <span>7402591722</span></a>
+          <a class="footer-call-btn" href="tel:9585555993">☎ Dhanavenkadesh <span>9585555993</span></a>
+        </div>
+      </div>
+
+      <div class="footer-copy footer-developer">
+        © <span id="currentYear"></span> Poongurichi Nanbargal Donor's Club. All rights reserved.<br>
+        Developed By: <strong>Bothishankar.Natarajan</strong> &nbsp;|&nbsp; ☎ <a href="tel:9677824319">9677824319</a>
       </div>
 
     </div>
@@ -1890,10 +1898,16 @@
           value(stats, "totalDonors", "registeredDonors", "donors", "Registered_Donors")
         ) || donors.length;
 
-        const requestCount = Number(
+        let requestCount = Number(
           value(stats, "openRequests", "totalRequests", "activeRequests", "bloodRequests",
             "requests", "Open_Requests", "Total_Requests", "Active_Requests")
-        ) || requests.length;
+        );
+
+        /* If the stats endpoint is from an older deployment or returns
+           zero without the request table, verify the request count once. */
+        if (!Number.isFinite(requestCount) || requestCount < 0) {
+          requestCount = requests.length;
+        }
 
         const groupCount = Number(
           value(stats, "bloodGroups", "groups", "Blood_Groups")
@@ -2159,7 +2173,7 @@
 
               return ta - tb;
             })
-            .slice(0, 3);
+            .slice(0, 1);
 
 
         if (!events.length) {
