@@ -17,6 +17,9 @@
 
   <title>Poongurichi Nanbargal | Blood Donors Club</title>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 
 </head>
@@ -57,7 +60,7 @@
 
           <div class="brand-name" id="headerClubName">Poongurichi Nanbargal</div>
 
-          <div class="brand-meta" id="headerSubtitle">Donor's Club &nbsp;•&nbsp; Community Blood Network</div>
+          <div class="brand-meta" id="headerSubtitle">Poongurichi Nanbargal Blood Donor's Club</div>
 
         </div>
 
@@ -1320,6 +1323,15 @@
 
         <div id="adminGuardMessage" class="admin-guard-message"></div>
 
+        <div class="admin-action-grid" aria-label="Admin sections">
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminDonorCard')"><span>👥</span><strong>Manage Donors</strong><small>Edit all donor details</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminRequestCard')"><span>🩸</span><strong>Blood Requests</strong><small>View active requests</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminEventCard')"><span>📅</span><strong>Events</strong><small>Add & upload photos</small></button>
+          <button type="button" class="admin-action-btn" onclick="openNotifications()"><span>🔔</span><strong>Notifications</strong><small>Clear one or all</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminSettingsCard')"><span>🔗</span><strong>Social Links</strong><small>Website settings</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminSettingsCard')"><span>⚙️</span><strong>App Settings</strong><small>Brand & footer</small></button>
+        </div>
+
         <div class="admin-stat-grid">
           <div class="admin-stat-card">
             <span>👥</span>
@@ -1345,11 +1357,11 @@
 
         <div class="admin-grid">
 
-          <div class="admin-card admin-wide">
+          <div id="adminDonorCard" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
                 <h2>👥 Registered Donors</h2>
-                <p>View donor details and manage registrations.</p>
+                <p>View, edit and manage every registered donor record.</p>
               </div>
               <button type="button" class="admin-small-btn" onclick="loadAdminDonors()">↻ Refresh</button>
             </div>
@@ -1358,7 +1370,7 @@
             </div>
           </div>
 
-          <div class="admin-card admin-wide">
+          <div id="adminRequestCard" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
                 <h2>🚨 Blood Requests</h2>
@@ -1371,7 +1383,7 @@
             </div>
           </div>
 
-          <div class="admin-card">
+          <div id="adminEventCard" class="admin-card">
             <div class="admin-card-head">
               <div>
                 <h2>📅 Add Event</h2>
@@ -1455,7 +1467,7 @@
             </form>
           </div>
 
-          <div class="admin-card admin-wide">
+          <div id="adminSettingsCard" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
                 <h2>⚙️ Header & Footer Settings</h2>
@@ -1501,32 +1513,41 @@
       </div>
     </section>
 
-  <footer>
-
-    <div class="container footer-inner">
-
-      <div>
-
-        <div class="footer-brand" id="footerClubName">Poongurichi Nanbargal</div>
-        <div class="footer-copy" id="footerDescription">Blood Donors Club</div>
-
+  <footer class="site-footer">
+    <div class="container footer-inner-premium">
+      <div class="footer-brand-panel">
+        <div class="footer-brand" id="footerClubName">Poongurichi Nanbargal Donor's Club</div>
+        <div class="footer-copy" id="footerDescription">One donation. Many lives.</div>
       </div>
 
       <div class="footer-contact-block">
         <div class="footer-contact-title">For Blood Need Contact</div>
         <div class="footer-contact-buttons" id="footerBloodContacts">
-          <a class="footer-call-btn" href="tel:7402591722">☎ Ragubathi <span>7402591722</span></a>
-          <a class="footer-call-btn" href="tel:9585555993">☎ Dhanavenkadesh <span>9585555993</span></a>
+          <a class="footer-call-btn" href="tel:7402591722"><span>☎ Ragubathi</span><strong>7402591722</strong></a>
+          <a class="footer-call-btn" href="tel:9585555993"><span>☎ Dhanavenkadesh</span><strong>9585555993</strong></a>
         </div>
       </div>
 
-      <div class="footer-copy footer-developer">
-        © <span id="currentYear"></span> <span id="footerCopyright">Poongurichi Nanbargal Donor's Club. All rights reserved.</span><br>
-        Developed By: <strong id="footerDeveloperName">Bothishankar.Natarajan</strong> &nbsp;|&nbsp; ☎ <a id="footerDeveloperPhone" href="tel:9677824319">9677824319</a>
+      <div class="footer-follow">
+        <div class="footer-contact-title">Follow Us</div>
+        <div class="footer-social-links" id="footerSocialLinks">
+          <a href="#" aria-label="Instagram">Instagram</a>
+          <a href="#" aria-label="Facebook">Facebook</a>
+          <a href="#" aria-label="YouTube">YouTube</a>
+          <a href="#" aria-label="Gmail">Gmail</a>
+        </div>
       </div>
 
-    </div>
+      <div class="footer-developer-card">
+        <div class="footer-contact-title">Developed By</div>
+        <strong id="footerDeveloperName">Bothishankar.Natarajan</strong>
+        <a id="footerDeveloperPhone" href="tel:9677824319">☎ 9677824319</a>
+      </div>
 
+      <div class="footer-copyright-block">
+        <div>© <span id="currentYear"></span> <span id="footerCopyright">Poongurichi Nanbargal Donor's Club. All rights reserved.</span></div>
+      </div>
+    </div>
   </footer>
 
 
@@ -1625,8 +1646,42 @@
       <div id="adminDonorDetailsCard" class="admin-donor-details-card"></div>
       <div class="modal-actions donor-share-actions">
         <button type="button" class="btn btn-primary" onclick="shareAdminDonorDetails()">📤 Share Details</button>
+        <button type="button" class="btn btn-light" onclick="openAdminDonorEditFromDetails()">✏️ Edit Donor</button>
         <button type="button" class="btn btn-light" onclick="closeAdminDonorDetails()">Close</button>
       </div>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       ADMIN DONOR EDIT MODAL
+       ======================================================= -->
+  <div id="adminDonorEditModal" class="modal-backdrop" onclick="closeAdminDonorEditOutside(event)">
+    <div class="modal donor-edit-modal">
+      <div class="modal-head">
+        <h2>✏️ Edit Donor</h2>
+        <button class="modal-close" type="button" onclick="closeAdminDonorEdit()">×</button>
+      </div>
+      <form id="adminDonorEditForm" class="admin-form donor-edit-form">
+        <input type="hidden" name="Donor_ID">
+        <div class="edit-grid">
+          <label>Full Name <span class="required-mark">* Mandatory</span><input class="form-control" name="Name" required></label>
+          <label>Mobile Number <span class="required-mark">* Mandatory</span><input class="form-control" name="Mobile" required inputmode="tel"></label>
+          <label>Email<input class="form-control" name="Email" type="email"></label>
+          <label>Blood Group <span class="required-mark">* Mandatory</span><select class="form-control" name="Blood_Group" required><option value="">Select Blood Group</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
+          <label>Gender <span class="required-mark">* Mandatory</span><select class="form-control" name="Gender" required><option value="">Select Gender</option><option>Male</option><option>Female</option><option>Other</option></select></label>
+          <label>Date of Birth <span class="required-mark">* Mandatory</span><input class="form-control" name="DOB" type="date" required></label>
+          <label>District <span class="required-mark">* Mandatory</span><input class="form-control" name="District" required></label>
+          <label>City <span class="required-mark">* Mandatory</span><input class="form-control" name="City" required></label>
+          <label class="edit-full">Address <span class="required-mark">* Mandatory</span><textarea class="form-control" name="Address" required></textarea></label>
+          <label>Last Donation Date <span class="required-mark">* Mandatory</span><input class="form-control" name="Last_Donation_Date" type="date" required></label>
+          <label>Aadhaar Number <span class="optional-mark">Optional</span><input class="form-control" name="Aadhaar_Number" inputmode="numeric"></label>
+          <label>Referred By <span class="optional-mark">Optional</span><input class="form-control" name="Referred_By"></label>
+          <label>Status<select class="form-control" name="Status"><option>Active</option><option>Inactive</option></select></label>
+          <label>Available<select class="form-control" name="Available"><option>Yes</option><option>No</option></select></label>
+        </div>
+        <div id="adminDonorEditMessage" class="form-message"></div>
+        <div class="modal-actions"><button type="submit" class="btn btn-primary">💾 Update Donor</button><button type="button" class="btn btn-light" onclick="closeAdminDonorEdit()">Cancel</button></div>
+      </form>
     </div>
   </div>
 
@@ -3347,7 +3402,7 @@
       APP_SETTINGS = settings || {};
       const get = (key, fallback = "") => String(APP_SETTINGS[key] ?? fallback).trim();
       const club = get("Organization Name", "Poongurichi Nanbargal");
-      const subtitle = get("Header Subtitle", "Donor's Club • Community Blood Network");
+      const subtitle = get("Header Subtitle", "Poongurichi Nanbargal Blood Donor's Club");
       const logoUrl = get("Logo URL", "");
       const developer = get("Developer Name", "Bothishankar.Natarajan");
       const developerPhone = get("Developer Contact", "9677824319");
@@ -3356,12 +3411,12 @@
       const c2n = get("Blood Need Contact 2 Name", "Dhanavenkadesh");
       const c2p = get("Blood Need Contact 2 Phone", "9585555993");
       const setText = (id, text) => { const el=document.getElementById(id); if(el) el.textContent=text; };
-      setText("headerClubName", club);
-      setText("headerSubtitle", subtitle);
+      setText("headerClubName", "Poongurichi Nanbargal");
+      setText("headerSubtitle", "Poongurichi Nanbargal Blood Donor's Club");
       const logo = document.querySelector(".brand-logo");
       if (logoUrl && logo) { logo.src = logoUrl; }
-      setText("footerClubName", club);
-      setText("footerDescription", get("Footer Description", "Blood Donors Club"));
+      setText("footerClubName", "Poongurichi Nanbargal Donor's Club");
+      setText("footerDescription", get("Footer Description", "One donation. Many lives."));
       setText("footerDeveloperName", developer);
       const phone = document.getElementById("footerDeveloperPhone");
       if (phone) { phone.textContent = developerPhone; phone.href = "tel:" + developerPhone.replace(/\D/g, ""); }
@@ -3454,6 +3509,7 @@
         ["Registered On", value(donor,"Registration_Date","registrationDate")]
       ];
       card.innerHTML = `<div class="admin-donor-detail-head"><div class="donor-avatar">${escapeHtml(String(value(donor,"Name","name")||"D").split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase())}</div><div><h3>${escapeHtml(value(donor,"Name","name")||"Donor")}</h3><span>${escapeHtml(value(donor,"Blood_Group","bloodGroup")||"—")}</span></div></div><div class="admin-donor-detail-list">${rows.map(r=>`<div><strong>${escapeHtml(r[0])}</strong><span>${escapeHtml(r[1]||"—")}</span></div>`).join("")}</div>`;
+      card.insertAdjacentHTML("beforeend", `<div class="admin-detail-note">🔒 All donor details are visible only to Admin.</div>`);
       document.getElementById("adminDonorDetailsModal").classList.add("show");
     }
 
@@ -3477,6 +3533,57 @@
         }
         const url = URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
       } catch (error) { if(error?.name !== "AbortError") toast(error?.message || "Unable to share donor details."); }
+    }
+
+    function openAdminDonorEditFromDetails() {
+      if (!currentAdminDonor) return;
+      closeAdminDonorDetails();
+      openAdminDonorEdit(value(currentAdminDonor,"Donor_ID","donorId","DonorID","ID","id"));
+    }
+
+    function openAdminDonorEdit(donorId) {
+      if (!ensureAdminAccess()) return;
+      const donor = (window.__ADMIN_DONORS || []).find(d => String(value(d,"Donor_ID","donorId","DonorID","ID","id")) === String(donorId));
+      if (!donor) return toast("Donor details not found.");
+      const form = document.getElementById("adminDonorEditForm");
+      const fields = {
+        Donor_ID:["Donor_ID","donorId"], Name:["Name","name"], Mobile:["Mobile","mobile","Phone"], Email:["Email","email"],
+        Blood_Group:["Blood_Group","bloodGroup","BloodGroup"], Gender:["Gender","gender"], DOB:["DOB","dob"], District:["District","district"],
+        City:["City","city"], Address:["Address","address"], Last_Donation_Date:["Last_Donation_Date","lastDonationDate"],
+        Aadhaar_Number:["Aadhaar_Number","aadhaarNumber"], Referred_By:["Referred_By","referredBy"], Status:["Status","status"], Available:["Available","available"]
+      };
+      Object.entries(fields).forEach(([name, keys]) => { const el=form.elements.namedItem(name); if(el) el.value=String(value(donor,...keys) || ""); });
+      document.getElementById("adminDonorEditMessage").textContent="";
+      document.getElementById("adminDonorEditModal").classList.add("show");
+    }
+
+    function closeAdminDonorEdit(){ document.getElementById("adminDonorEditModal")?.classList.remove("show"); }
+    function closeAdminDonorEditOutside(event){ if(event.target.id === "adminDonorEditModal") closeAdminDonorEdit(); }
+
+    document.getElementById("adminDonorEditForm")?.addEventListener("submit", async function(event){
+      event.preventDefault(); if(!ensureAdminAccess()) return;
+      const msg=document.getElementById("adminDonorEditMessage"), submit=this.querySelector("button[type=submit]");
+      const required=["Name","Mobile","Blood_Group","Gender","DOB","District","City","Address","Last_Donation_Date"];
+      const missing=required.find(n=>!String(this.elements.namedItem(n)?.value||"").trim());
+      if(missing){msg.className="form-message error";msg.textContent=missing.replace(/_/g," ")+" is required.";this.elements.namedItem(missing)?.focus();return;}
+      try{
+        submit.disabled=true; msg.className="form-message success"; msg.textContent="Updating donor…";
+        const result=await BloodDonationAPI.updateDonor({
+          donorId:this.elements.namedItem("Donor_ID").value, name:this.elements.namedItem("Name").value.trim(), mobile:this.elements.namedItem("Mobile").value.trim(),
+          email:this.elements.namedItem("Email").value.trim(), bloodGroup:this.elements.namedItem("Blood_Group").value, gender:this.elements.namedItem("Gender").value,
+          dob:this.elements.namedItem("DOB").value, district:this.elements.namedItem("District").value.trim(), city:this.elements.namedItem("City").value.trim(),
+          address:this.elements.namedItem("Address").value.trim(), lastDonationDate:this.elements.namedItem("Last_Donation_Date").value,
+          aadhaarNumber:this.elements.namedItem("Aadhaar_Number").value.trim(), referredBy:this.elements.namedItem("Referred_By").value.trim(),
+          status:this.elements.namedItem("Status").value, available:this.elements.namedItem("Available").value
+        }, getAdminUserId());
+        if(result?.success===false) throw new Error(result.error||"Unable to update donor.");
+        closeAdminDonorEdit(); toast("Donor updated successfully."); await loadAdminDashboard();
+      }catch(error){msg.className="form-message error";msg.textContent=error?.message||"Unable to update donor.";}finally{submit.disabled=false;}
+    });
+
+    function adminJumpTo(id) {
+      const el=document.getElementById(id);
+      if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
     }
 
     /* =========================================================
@@ -3594,6 +3701,7 @@
                     <td><span class="admin-status-pill">${escapeHtml(eligibility)}</span></td>
                     <td>
                       <button type="button" class="admin-small-btn" onclick="openAdminDonorDetails('${escapeAttribute(id)}')">View Details</button>
+                      <button type="button" class="admin-small-btn admin-edit-btn" onclick="openAdminDonorEdit('${escapeAttribute(id)}')">Edit</button>
                       <button type="button" class="admin-danger-btn" onclick="adminDeleteDonor('${escapeAttribute(id)}')">Delete</button>
                     </td>
                   </tr>`;
@@ -3924,21 +4032,39 @@
       }
     }
 
+    function normalizeImageUrl(url) {
+      const raw = String(url || "").trim();
+      if (!raw) return "";
+      const match = raw.match(/(?:drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?[^#]*id=|thumbnail\?id=))([a-zA-Z0-9_-]+)/);
+      if (match) return `https://drive.google.com/thumbnail?id=${encodeURIComponent(match[1])}&sz=w1400`;
+      return raw;
+    }
+
     function renderDonorPhotoGallery() {
       const gallery = document.getElementById("donorPhotoGallery");
       if (!gallery) return;
-      if (!donorPhotos.length) { gallery.innerHTML = ""; return; }
+      if (!donorPhotos.length) { gallery.innerHTML = `<div class="donor-photo-empty"><div>💙</div><strong>Our Donor Community</strong><span>Donor photos will appear here after Admin uploads them.</span></div>`; return; }
       const photo = donorPhotos[donorPhotoIndex];
       const title = escapeHtml(photo.title || "Poongurichi Donor");
-      const imageUrl = escapeAttribute(photo.imageUrl || "");
+      const imageUrl = escapeAttribute(normalizeImageUrl(photo.imageUrl || ""));
       gallery.innerHTML = `
         <div class="donor-photo-card" ontouchstart="donorPhotoTouchStart(event)" ontouchend="donorPhotoTouchEnd(event)">
-          <img src="${imageUrl}" alt="${title}" loading="lazy" decoding="async" onerror="this.closest('.donor-photo-card').classList.add('image-error')">
+          <img src="${imageUrl}" alt="${title}" loading="lazy" decoding="async" onerror="handleDonorPhotoImageError(this)">
           <button class="donor-photo-nav prev" type="button" onclick="showDonorPhoto(${donorPhotoIndex - 1})" aria-label="Previous donor photo">‹</button>
           <button class="donor-photo-nav next" type="button" onclick="showDonorPhoto(${donorPhotoIndex + 1})" aria-label="Next donor photo">›</button>
           <div class="donor-photo-caption">${title}</div>
           <div class="donor-photo-dots">${donorPhotos.map((_, i) => `<button type="button" class="donor-photo-dot ${i === donorPhotoIndex ? 'active' : ''}" onclick="showDonorPhoto(${i})" aria-label="Photo ${i + 1}"></button>`).join("")}</div>
         </div>`;
+    }
+
+    function handleDonorPhotoImageError(img) {
+      const card = img.closest(".donor-photo-card");
+      if (img.dataset.fallback !== "1") {
+        const raw = img.getAttribute("src") || "";
+        const m = raw.match(/[?&]id=([^&]+)/);
+        if (m) { img.dataset.fallback="1"; img.src=`https://drive.google.com/uc?export=view&id=${encodeURIComponent(m[1])}`; return; }
+      }
+      if(card) card.classList.add("image-error");
     }
 
     function showDonorPhoto(index) {
