@@ -55,15 +55,9 @@
 
         <div class="brand-copy">
 
-          <div class="brand-name">
-            Poongurichi Nanbargal
-          </div>
+          <div class="brand-name" id="headerClubName">Poongurichi Nanbargal</div>
 
-          <div class="brand-meta">
-            Donor's Club
-            &nbsp;•&nbsp;
-            Community Blood Network
-          </div>
+          <div class="brand-meta" id="headerSubtitle">Donor's Club &nbsp;•&nbsp; Community Blood Network</div>
 
         </div>
 
@@ -1395,8 +1389,10 @@
               <label>Location <span class="required-mark">* Mandatory</span></label>
               <input class="form-control" name="Location" required placeholder="Poongurichi">
 
-              <label>Image URL</label>
-              <input class="form-control" name="Image_URL" type="text" placeholder="https://... or image reference">
+              <label>Event Image</label>
+              <input class="form-control" id="adminEventImageFile" name="Event_Image_File" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+              <small class="field-help">JPG, PNG, WEBP or GIF. Maximum 5 MB.</small>
+              <input type="hidden" name="Image_URL" value="">
 
               <label>Description</label>
               <textarea class="form-control" name="Description" placeholder="Event details..."></textarea>
@@ -1462,8 +1458,37 @@
           <div class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
+                <h2>⚙️ Header & Footer Settings</h2>
+                <p>Admin-only controls for website header, footer, developer and contact details.</p>
+              </div>
+            </div>
+            <form id="adminSettingsForm" class="admin-form admin-settings-grid">
+              <label>Club Name<input class="form-control" name="Organization Name" data-setting="Organization Name"></label>
+              <label>Logo URL<input class="form-control" name="Logo URL" data-setting="Logo URL" type="url" placeholder="https://..."></label>
+              <label>Copyright Text<input class="form-control" name="Copyright Name" data-setting="Copyright Name"></label>
+              <label>Header Subtitle<input class="form-control" name="Header Subtitle" data-setting="Header Subtitle"></label>
+              <label>Developer Name<input class="form-control" name="Developer Name" data-setting="Developer Name"></label>
+              <label>Developer Contact<input class="form-control" name="Developer Contact" data-setting="Developer Contact" inputmode="tel"></label>
+              <label>Blood Need Contact 1 Name<input class="form-control" name="Blood Need Contact 1 Name" data-setting="Blood Need Contact 1 Name"></label>
+              <label>Blood Need Contact 1 Phone<input class="form-control" name="Blood Need Contact 1 Phone" data-setting="Blood Need Contact 1 Phone" inputmode="tel"></label>
+              <label>Blood Need Contact 2 Name<input class="form-control" name="Blood Need Contact 2 Name" data-setting="Blood Need Contact 2 Name"></label>
+              <label>Blood Need Contact 2 Phone<input class="form-control" name="Blood Need Contact 2 Phone" data-setting="Blood Need Contact 2 Phone" inputmode="tel"></label>
+              <label>Instagram URL<input class="form-control" name="Instagram URL" data-setting="Instagram URL" type="url"></label>
+              <label>Facebook URL<input class="form-control" name="Facebook URL" data-setting="Facebook URL" type="url"></label>
+              <label>YouTube URL<input class="form-control" name="YouTube URL" data-setting="YouTube URL" type="url"></label>
+              <label>Gmail URL<input class="form-control" name="Gmail URL" data-setting="Gmail URL" type="url"></label>
+              <label class="admin-settings-full">Footer Text<textarea class="form-control" name="Footer Text" data-setting="Footer Text"></textarea></label>
+              <label class="admin-settings-full">Footer Description<textarea class="form-control" name="Footer Description" data-setting="Footer Description"></textarea></label>
+              <div id="adminSettingsMessage" class="form-message admin-settings-full"></div>
+              <button class="btn btn-primary admin-settings-full" type="submit">💾 Save Header & Footer</button>
+            </form>
+          </div>
+
+          <div class="admin-card admin-wide">
+            <div class="admin-card-head">
+              <div>
                 <h2>📅 Existing Events</h2>
-                <p>Remove events that are no longer needed.</p>
+                <p>Edit or remove events. Event images are uploaded securely by Admin.</p>
               </div>
               <button type="button" class="admin-small-btn" onclick="loadAdminEvents()">↻ Refresh</button>
             </div>
@@ -1482,27 +1507,22 @@
 
       <div>
 
-        <div class="footer-brand">
-          Poongurichi Nanbargal
-        </div>
-
-        <div class="footer-copy">
-          Blood Donors Club
-        </div>
+        <div class="footer-brand" id="footerClubName">Poongurichi Nanbargal</div>
+        <div class="footer-copy" id="footerDescription">Blood Donors Club</div>
 
       </div>
 
       <div class="footer-contact-block">
         <div class="footer-contact-title">For Blood Need Contact</div>
-        <div class="footer-contact-buttons">
+        <div class="footer-contact-buttons" id="footerBloodContacts">
           <a class="footer-call-btn" href="tel:7402591722">☎ Ragubathi <span>7402591722</span></a>
           <a class="footer-call-btn" href="tel:9585555993">☎ Dhanavenkadesh <span>9585555993</span></a>
         </div>
       </div>
 
       <div class="footer-copy footer-developer">
-        © <span id="currentYear"></span> Poongurichi Nanbargal Donor's Club. All rights reserved.<br>
-        Developed By: <strong>Bothishankar.Natarajan</strong> &nbsp;|&nbsp; ☎ <a href="tel:9677824319">9677824319</a>
+        © <span id="currentYear"></span> <span id="footerCopyright">Poongurichi Nanbargal Donor's Club. All rights reserved.</span><br>
+        Developed By: <strong id="footerDeveloperName">Bothishankar.Natarajan</strong> &nbsp;|&nbsp; ☎ <a id="footerDeveloperPhone" href="tel:9677824319">9677824319</a>
       </div>
 
     </div>
@@ -1571,6 +1591,44 @@
 
   </div>
 
+
+  <!-- =======================================================
+       ADMIN EVENT EDIT MODAL
+       ======================================================= -->
+  <div id="adminEventEditModal" class="modal-backdrop" onclick="closeAdminEventEditorOutside(event)">
+    <div class="modal">
+      <div class="modal-head"><h2>📅 Edit Event</h2><button class="modal-close" type="button" onclick="closeAdminEventEditor()">×</button></div>
+      <form id="adminEventEditForm" class="admin-form">
+        <input type="hidden" name="Event_ID">
+        <label>Event Title <span class="required-mark">* Mandatory</span></label><input class="form-control" name="Title" required>
+        <label>Event Date <span class="required-mark">* Mandatory</span></label><input class="form-control" name="Event_Date" type="date" required>
+        <label>Location <span class="required-mark">* Mandatory</span></label><input class="form-control" name="Location" required>
+        <label>Replace Event Image</label><input class="form-control" id="adminEventEditImageFile" name="Event_Image_File" type="file" accept="image/jpeg,image/png,image/webp,image/gif"><small class="field-help">Leave empty to keep the current image. Maximum 5 MB.</small>
+        <input type="hidden" name="Image_URL">
+        <label>Description</label><textarea class="form-control" name="Description"></textarea>
+        <label>Status</label><select class="form-control" name="Status"><option value="Published">Published</option><option value="Draft">Draft</option><option value="Archived">Archived</option></select>
+        <div id="adminEventEditMessage" class="form-message"></div>
+        <div class="modal-actions"><button type="submit" class="btn btn-primary">💾 Save Event</button><button type="button" class="btn btn-light" onclick="closeAdminEventEditor()">Cancel</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =======================================================
+       ADMIN DONOR DETAILS / SHARE MODAL
+       ======================================================= -->
+  <div id="adminDonorDetailsModal" class="modal-backdrop" onclick="closeAdminDonorDetailsOutside(event)">
+    <div class="modal donor-details-modal">
+      <div class="modal-head">
+        <h2>👤 Donor Full Details</h2>
+        <button class="modal-close" type="button" onclick="closeAdminDonorDetails()">×</button>
+      </div>
+      <div id="adminDonorDetailsCard" class="admin-donor-details-card"></div>
+      <div class="modal-actions donor-share-actions">
+        <button type="button" class="btn btn-primary" onclick="shareAdminDonorDetails()">📤 Share Details</button>
+        <button type="button" class="btn btn-light" onclick="closeAdminDonorDetails()">Close</button>
+      </div>
+    </div>
+  </div>
 
   <!-- =======================================================
        ADMIN MODAL
@@ -1692,6 +1750,7 @@
        IMPORTANT: app.js must remain in your repository
        ======================================================= -->
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
   <script src="app.js"></script>
 
 
@@ -3279,6 +3338,148 @@
 
 
     /* =========================================================
+       ADMIN SETTINGS / BRANDING
+       ========================================================= */
+
+    let APP_SETTINGS = {};
+
+    function applySiteSettings(settings) {
+      APP_SETTINGS = settings || {};
+      const get = (key, fallback = "") => String(APP_SETTINGS[key] ?? fallback).trim();
+      const club = get("Organization Name", "Poongurichi Nanbargal");
+      const subtitle = get("Header Subtitle", "Donor's Club • Community Blood Network");
+      const logoUrl = get("Logo URL", "");
+      const developer = get("Developer Name", "Bothishankar.Natarajan");
+      const developerPhone = get("Developer Contact", "9677824319");
+      const c1n = get("Blood Need Contact 1 Name", "Ragubathi");
+      const c1p = get("Blood Need Contact 1 Phone", "7402591722");
+      const c2n = get("Blood Need Contact 2 Name", "Dhanavenkadesh");
+      const c2p = get("Blood Need Contact 2 Phone", "9585555993");
+      const setText = (id, text) => { const el=document.getElementById(id); if(el) el.textContent=text; };
+      setText("headerClubName", club);
+      setText("headerSubtitle", subtitle);
+      const logo = document.querySelector(".brand-logo");
+      if (logoUrl && logo) { logo.src = logoUrl; }
+      setText("footerClubName", club);
+      setText("footerDescription", get("Footer Description", "Blood Donors Club"));
+      setText("footerDeveloperName", developer);
+      const phone = document.getElementById("footerDeveloperPhone");
+      if (phone) { phone.textContent = developerPhone; phone.href = "tel:" + developerPhone.replace(/\D/g, ""); }
+      const copyright = document.getElementById("footerCopyright");
+      if (copyright) copyright.textContent = get("Footer Text", club + " Donor's Club. All rights reserved.");
+      const contacts = document.getElementById("footerBloodContacts");
+      if (contacts) {
+        contacts.innerHTML = `
+          <a class="footer-call-btn" href="tel:${escapeAttribute(c1p.replace(/\D/g,''))}">☎ ${escapeHtml(c1n)} <span>${escapeHtml(c1p)}</span></a>
+          <a class="footer-call-btn" href="tel:${escapeAttribute(c2p.replace(/\D/g,''))}">☎ ${escapeHtml(c2n)} <span>${escapeHtml(c2p)}</span></a>`;
+      }
+      const social = document.getElementById("footerSocialLinks");
+      if (social) {
+        const links = [["Instagram URL","Instagram"],["Facebook URL","Facebook"],["YouTube URL","YouTube"],["Gmail URL","Gmail"]]
+          .map(([k,label]) => ({label,url:get(k)})).filter(x=>x.url);
+        social.innerHTML = links.map(x=>`<a href="${escapeAttribute(x.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(x.label)}</a>`).join("");
+      }
+    }
+
+    async function loadSiteSettings() {
+      try {
+        const result = await BloodDonationAPI.getSettings();
+        const settings = result?.settings || result?.data || result || {};
+        applySiteSettings(settings);
+      } catch (error) {
+        console.warn("Settings:", error);
+      }
+    }
+
+    async function loadAdminSettings() {
+      if (!ensureAdminAccess()) return;
+      const form = document.getElementById("adminSettingsForm");
+      if (!form) return;
+      try {
+        const result = await BloodDonationAPI.getSettings();
+        const settings = result?.settings || result?.data || result || {};
+        form.querySelectorAll("[data-setting]").forEach(input => {
+          input.value = String(settings[input.dataset.setting] ?? "");
+        });
+      } catch (error) { console.error("Admin settings load:", error); }
+    }
+
+    document.getElementById("adminSettingsForm")?.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      if (!ensureAdminAccess()) return;
+      const message = document.getElementById("adminSettingsMessage");
+      const submit = this.querySelector("button[type=submit]");
+      try {
+        submit.disabled = true;
+        const fields = [...this.querySelectorAll("[data-setting]")];
+        for (const input of fields) {
+          const key = input.dataset.setting;
+          await BloodDonationAPI.saveSetting(key, input.value.trim(), getAdminUserId());
+        }
+        await loadSiteSettings();
+        message.className = "form-message success";
+        message.textContent = "Header and footer settings saved.";
+        toast("Header & footer updated.");
+      } catch (error) {
+        message.className = "form-message error";
+        message.textContent = error?.message || "Unable to save settings.";
+      } finally { submit.disabled = false; }
+    });
+
+    /* =========================================================
+       ADMIN DONOR DETAILS + IMAGE SHARE
+       ========================================================= */
+    let currentAdminDonor = null;
+
+    function openAdminDonorDetails(donorId) {
+      if (!ensureAdminAccess()) return;
+      const donors = window.__ADMIN_DONORS || [];
+      const donor = donors.find(d => String(value(d,"Donor_ID","donorId","DonorID","ID","id")) === String(donorId));
+      if (!donor) return toast("Donor details not found.");
+      currentAdminDonor = donor;
+      const card = document.getElementById("adminDonorDetailsCard");
+      const rows = [
+        ["Full Name", value(donor,"Name","name")],
+        ["Blood Group", value(donor,"Blood_Group","bloodGroup","BloodGroup")],
+        ["Date of Birth", value(donor,"DOB","dob")],
+        ["Gender", value(donor,"Gender","gender")],
+        ["Mobile Number", value(donor,"Mobile","mobile","Phone")],
+        ["Email", value(donor,"Email","email")],
+        ["District", value(donor,"District","district")],
+        ["City", value(donor,"City","city")],
+        ["Address", value(donor,"Address","address")],
+        ["Last Donation Date", value(donor,"Last_Donation_Date","lastDonationDate")],
+        ["Aadhaar Number", value(donor,"Aadhaar_Number","aadhaarNumber")],
+        ["Referred By", value(donor,"Referred_By","referredBy")],
+        ["Registered On", value(donor,"Registration_Date","registrationDate")]
+      ];
+      card.innerHTML = `<div class="admin-donor-detail-head"><div class="donor-avatar">${escapeHtml(String(value(donor,"Name","name")||"D").split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase())}</div><div><h3>${escapeHtml(value(donor,"Name","name")||"Donor")}</h3><span>${escapeHtml(value(donor,"Blood_Group","bloodGroup")||"—")}</span></div></div><div class="admin-donor-detail-list">${rows.map(r=>`<div><strong>${escapeHtml(r[0])}</strong><span>${escapeHtml(r[1]||"—")}</span></div>`).join("")}</div>`;
+      document.getElementById("adminDonorDetailsModal").classList.add("show");
+    }
+
+    function closeAdminDonorDetails() { document.getElementById("adminDonorDetailsModal")?.classList.remove("show"); }
+    function closeAdminDonorDetailsOutside(event) { if(event.target.id === "adminDonorDetailsModal") closeAdminDonorDetails(); }
+
+    async function shareAdminDonorDetails() {
+      if (!currentAdminDonor) return;
+      const card = document.getElementById("adminDonorDetailsCard");
+      if (!card) return;
+      if (typeof html2canvas === "undefined") { toast("Share image library is not loaded. Refresh the page."); return; }
+      try {
+        const canvas = await html2canvas(card, {backgroundColor:"#ffffff", scale:2, useCORS:true, logging:false});
+        const blob = await new Promise(resolve => canvas.toBlob(resolve,"image/png",1));
+        if (!blob) throw new Error("Unable to create image.");
+        const name = String(value(currentAdminDonor,"Name","name")||"Donor").replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"");
+        const file = new File([blob], `${name || "Donor"}_Details.png`, {type:"image/png"});
+        if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+          await navigator.share({title:"Blood Donor Details", text:"Blood donor details", files:[file]});
+          return;
+        }
+        const url = URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+      } catch (error) { if(error?.name !== "AbortError") toast(error?.message || "Unable to share donor details."); }
+    }
+
+    /* =========================================================
        ADMIN DASHBOARD
        ========================================================= */
 
@@ -3342,7 +3543,8 @@
         loadAdminDonors(),
         loadAdminRequests(),
         loadAdminEvents(),
-        loadAdminAbout()
+        loadAdminAbout(),
+        loadAdminSettings()
       ]);
     }
 
@@ -3354,6 +3556,7 @@
 
       try {
         const donors = await BloodDonationAPI.getDonors();
+        window.__ADMIN_DONORS = donors;
 
         if (!donors.length) {
           box.innerHTML = '<div class="admin-empty">No registered donors found.</div>';
@@ -3390,8 +3593,8 @@
                     <td>${escapeHtml(location)}</td>
                     <td><span class="admin-status-pill">${escapeHtml(eligibility)}</span></td>
                     <td>
-                      <button type="button" class="admin-danger-btn"
-                        onclick="adminDeleteDonor('${escapeAttribute(id)}')">Delete</button>
+                      <button type="button" class="admin-small-btn" onclick="openAdminDonorDetails('${escapeAttribute(id)}')">View Details</button>
+                      <button type="button" class="admin-danger-btn" onclick="adminDeleteDonor('${escapeAttribute(id)}')">Delete</button>
                     </td>
                   </tr>`;
               }).join("")}
@@ -3491,6 +3694,34 @@
       }
     }
 
+    function openAdminEventEditor(eventId) {
+      if(!ensureAdminAccess()) return;
+      const events=window.__ADMIN_EVENTS||[];
+      const event=events.find(e=>String(value(e,"Event_ID","eventId","EventID","ID","id"))===String(eventId));
+      if(!event) return toast("Event not found.");
+      const form=document.getElementById("adminEventEditForm");
+      form.elements.namedItem("Event_ID").value=value(event,"Event_ID","eventId","EventID","ID","id")||"";
+      form.elements.namedItem("Title").value=value(event,"Title","title","Event_Title")||"";
+      form.elements.namedItem("Event_Date").value=value(event,"Event_Date","eventDate","EventDate")||"";
+      form.elements.namedItem("Location").value=value(event,"Location","location")||"";
+      form.elements.namedItem("Image_URL").value=value(event,"Image_URL","imageUrl","ImageURL")||"";
+      form.elements.namedItem("Description").value=value(event,"Description","description")||"";
+      form.elements.namedItem("Status").value=value(event,"Status","status")||"Published";
+      document.getElementById("adminEventEditImageFile").value="";
+      document.getElementById("adminEventEditMessage").textContent="";
+      document.getElementById("adminEventEditModal").classList.add("show");
+    }
+    function closeAdminEventEditor(){document.getElementById("adminEventEditModal")?.classList.remove("show");}
+    function closeAdminEventEditorOutside(event){if(event.target.id==="adminEventEditModal")closeAdminEventEditor();}
+
+    document.getElementById("adminEventEditForm")?.addEventListener("submit",async function(event){
+      event.preventDefault(); if(!ensureAdminAccess()) return;
+      const msg=document.getElementById("adminEventEditMessage"), submit=this.querySelector("button[type=submit]");
+      const title=String(this.elements.namedItem("Title").value||"").trim(), date=String(this.elements.namedItem("Event_Date").value||"").trim(), location=String(this.elements.namedItem("Location").value||"").trim();
+      if(!title||!date||!location){msg.className="form-message error";msg.textContent="Event title, date and location are mandatory.";return;}
+      try{submit.disabled=true;msg.className="form-message success";msg.textContent="Saving event…";let imageUrl=this.elements.namedItem("Image_URL").value||"";const file=document.getElementById("adminEventEditImageFile")?.files?.[0];if(file)imageUrl=await uploadAdminImage(file,"event");const result=await BloodDonationAPI.updateEvent({eventId:this.elements.namedItem("Event_ID").value,title,eventDate:date,location,imageUrl,description:this.elements.namedItem("Description").value||"",status:this.elements.namedItem("Status").value||"Published"},getAdminUserId());if(result?.success===false)throw new Error(result.error||"Unable to update event.");closeAdminEventEditor();toast("Event updated.");await Promise.allSettled([loadAdminDashboard(),loadEvents()]);}catch(error){msg.className="form-message error";msg.textContent=error?.message||"Unable to update event.";}finally{submit.disabled=false;}
+    });
+
     async function loadAdminEvents() {
       const box = document.getElementById("adminEventTable");
       if (!box || !ensureAdminAccess()) return;
@@ -3502,6 +3733,7 @@
         const events = Array.isArray(result)
           ? result
           : (result?.events || result?.data || []);
+        window.__ADMIN_EVENTS = events;
 
         if (!events.length) {
           box.innerHTML = '<div class="admin-empty">No events found.</div>';
@@ -3534,8 +3766,8 @@
                     <td>${escapeHtml(location)}</td>
                     <td><span class="admin-status-pill">${escapeHtml(status)}</span></td>
                     <td>
-                      <button type="button" class="admin-danger-btn"
-                        onclick="adminDeleteEvent('${escapeAttribute(id)}')">Delete</button>
+                      <button type="button" class="admin-small-btn" onclick="openAdminEventEditor('${escapeAttribute(id)}')">Edit</button>
+                      <button type="button" class="admin-danger-btn" onclick="adminDeleteEvent('${escapeAttribute(id)}')">Delete</button>
                     </td>
                   </tr>`;
               }).join("")}
@@ -3582,123 +3814,50 @@
        CREATE EVENT
        Explicit validation + normalized API payload.
        ========================================================= */
+    async function readImageAsBase64(file) {
+      return await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || "").split(",")[1] || "");
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function uploadAdminImage(file, kind) {
+      if (!file) return "";
+      if (file.size > 5 * 1024 * 1024) throw new Error("Image is too large. Maximum 5 MB.");
+      const allowed = ["image/jpeg","image/png","image/webp","image/gif"];
+      if (!allowed.includes(file.type)) throw new Error("Only JPG, PNG, WEBP and GIF images are allowed.");
+      const base64 = await readImageAsBase64(file);
+      const fn = kind === "event" ? BloodDonationAPI.uploadEventImage : BloodDonationAPI.uploadDonorPhoto;
+      const result = await fn({base64, mimeType:file.type, fileName:file.name, userId:getAdminUserId()});
+      if (result?.success === false) throw new Error(result.error || "Image upload failed.");
+      return result.imageUrl || "";
+    }
+
     document.getElementById("adminEventForm")?.addEventListener("submit", async function(event) {
       event.preventDefault();
-
       if (!ensureAdminAccess()) return;
-
       const message = document.getElementById("adminEventMessage");
       const submit = this.querySelector("button[type=submit]");
-
-      const titleEl = this.elements.namedItem("Title");
-      const dateEl = this.elements.namedItem("Event_Date");
-      const locationEl = this.elements.namedItem("Location");
-      const imageEl = this.elements.namedItem("Image_URL");
-      const descriptionEl = this.elements.namedItem("Description");
-
-      const title = String(titleEl?.value || "").trim();
-      const eventDate = String(dateEl?.value || "").trim();
-      const location = String(locationEl?.value || "").trim();
-      const imageUrl = String(imageEl?.value || "").trim();
-      const description = String(descriptionEl?.value || "").trim();
-
-      /* Validate the three mandatory event fields directly.
-         This avoids the old checkValidity() path and gives a clear
-         message for the exact field that is missing. */
-      if (!title) {
-        message.className = "form-message error";
-        message.textContent = "Event title is required.";
-        titleEl?.focus();
-        return;
-      }
-
-      if (!eventDate) {
-        message.className = "form-message error";
-        message.textContent = "Event date is required.";
-        dateEl?.focus();
-        return;
-      }
-
-      if (!location) {
-        message.className = "form-message error";
-        message.textContent = "Event location is required.";
-        locationEl?.focus();
-        return;
-      }
-
-      const userId = getAdminUserId();
-
-      /* Apps Script versions can use different property names.
-         Sending the aliases together prevents the backend from
-         receiving an empty title/date/location. */
-      const data = {
-        Title: title,
-        Event_Title: title,
-        event_title: title,
-        title: title,
-        eventTitle: title,
-
-        Event_Date: eventDate,
-        EventDate: eventDate,
-        event_date: eventDate,
-        eventDate: eventDate,
-
-        Location: location,
-        Event_Location: location,
-        location: location,
-
-        Image_URL: imageUrl,
-        ImageUrl: imageUrl,
-        imageURL: imageUrl,
-        imageUrl: imageUrl,
-
-        Description: description,
-        description: description,
-
-        userId: userId,
-        User_ID: userId
-      };
-
+      const titleEl=this.elements.namedItem("Title"), dateEl=this.elements.namedItem("Event_Date"), locEl=this.elements.namedItem("Location"), fileEl=document.getElementById("adminEventImageFile"), descEl=this.elements.namedItem("Description");
+      const title=String(titleEl?.value||"").trim(), eventDate=String(dateEl?.value||"").trim(), location=String(locEl?.value||"").trim(), description=String(descEl?.value||"").trim();
+      if(!title){message.className="form-message error";message.textContent="Event title is required.";titleEl?.focus();return;}
+      if(!eventDate){message.className="form-message error";message.textContent="Event date is required.";dateEl?.focus();return;}
+      if(!location){message.className="form-message error";message.textContent="Event location is required.";locEl?.focus();return;}
       try {
-        submit.disabled = true;
-        message.className = "form-message success";
-        message.textContent = "Creating event…";
-
-        if (!window.BloodDonationAPI || typeof BloodDonationAPI.api !== "function") {
-          throw new Error("Event service is not available. Please check app.js.");
-        }
-
-        let result;
-
-        if (typeof BloodDonationAPI.createEvent === "function") {
-          result = await BloodDonationAPI.createEvent(data, userId);
-        } else if (typeof BloodDonationAPI.api === "function") {
-          result = await BloodDonationAPI.api("createEvent", data);
-        } else {
-          throw new Error("Event service is not available. Please check app.js.");
-        }
-
-        if (result?.success === false) {
-          throw new Error(result.error || "Unable to create event.");
-        }
-
-        this.reset();
-        message.className = "form-message success";
-        message.textContent = "Event created successfully.";
-        toast("Event created.");
-
-        await Promise.allSettled([
-          loadAdminDashboard(),
-          loadEvents()
-        ]);
-      } catch (error) {
-        console.error("Create event error:", error);
-        message.className = "form-message error";
-        message.textContent = error?.message || "Unable to create event.";
-      } finally {
-        submit.disabled = false;
-      }
+        submit.disabled=true; message.className="form-message success"; message.textContent="Uploading image and creating event…";
+        let imageUrl=String(this.elements.namedItem("Image_URL")?.value||"").trim();
+        if(fileEl?.files?.[0]) imageUrl=await uploadAdminImage(fileEl.files[0],"event");
+        const result=await BloodDonationAPI.createEvent({title,eventDate,location,imageUrl,description,status:"Published"},getAdminUserId());
+        if(result?.success===false) throw new Error(result.error||"Unable to create event.");
+        this.reset(); message.className="form-message success"; message.textContent="Event created successfully."; toast("Event created.");
+        BloodDonationAPI.api && BloodDonationAPI.api && (typeof BloodDonationAPI.api === "function") && (window.__dummy=0);
+        await Promise.allSettled([loadAdminDashboard(),loadEvents()]);
+      } catch(error){console.error("Create event error:",error);message.className="form-message error";message.textContent=error?.message||"Unable to create event.";}
+      finally{submit.disabled=false;}
     });
+
 
 
     document.getElementById("adminAboutForm")?.addEventListener("submit", async function(event) {
@@ -3908,6 +4067,8 @@
       */
 
       await Promise.allSettled([
+
+        loadSiteSettings(),
 
         loadDashboard(),
 
