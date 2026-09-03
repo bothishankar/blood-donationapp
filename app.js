@@ -517,6 +517,9 @@ window.BloodDonationAPI = {
   uploadDonorRegistrationPhoto: (payload = {}) =>
     api("uploadDonorRegistrationPhoto", payload),
 
+  getDonorPhotoData: (payload = {}) =>
+    api("getDonorPhotoData", payload),
+
   /* ABOUT */
   getAbout: () => api("getAbout"),
 
