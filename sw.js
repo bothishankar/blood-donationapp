@@ -1,4 +1,4 @@
-const CACHE_NAME = 'poongurichi-premium-v3-static-3';
+const CACHE_NAME = 'poongurichi-premium-v5-id-card-1';
 const STATIC_ASSETS = [
   './',
   './index.html',
