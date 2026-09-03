@@ -27,13 +27,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-    .donor-photo-preview{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid #dbe5f0;border-radius:14px;background:#f7fbff;color:#123b82;font-weight:700}
-    .donor-photo-preview img{width:64px;height:76px;object-fit:cover;border-radius:10px;border:2px solid #d7e2ef}
-    .donor-photo-preview.error{border-color:#e14b5a;color:#b4232f;background:#fff4f5}
-    .admin-donor-detail-photo{width:76px;height:76px;object-fit:cover;border-radius:18px;border:3px solid #dbe6f2;box-shadow:0 4px 14px rgba(18,59,130,.12)}
-    .donor-share-actions{display:flex;flex-wrap:wrap;gap:10px}
-  </style>
 
 </head>
 
@@ -855,32 +848,6 @@
             <div class="form-group">
 
               <label class="form-label">
-                Donor Photo <span class="optional-mark">Optional</span>
-              </label>
-
-              <input
-                class="form-control"
-                id="donorPhotoFile"
-                name="Donor_Photo_File"
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-              >
-
-              <small class="field-help">
-                Upload a clear passport-size photo. Maximum 5 MB. This photo will appear on the donor ID card.
-              </small>
-
-              <div id="donorPhotoPreview" class="donor-photo-preview" hidden>
-                <img id="donorPhotoPreviewImage" src="" alt="Donor photo preview">
-                <span>Photo ready for ID card</span>
-              </div>
-
-            </div>
-
-
-            <div class="form-group">
-
-              <label class="form-label">
                 Aadhaar Number <span class="optional-mark">Optional</span>
               </label>
 
@@ -1693,7 +1660,6 @@
       <div id="adminDonorDetailsCard" class="admin-donor-details-card"></div>
       <div class="modal-actions donor-share-actions">
         <button type="button" class="btn btn-primary" onclick="shareAdminDonorDetails()">📤 Share Details</button>
-        <button type="button" class="btn btn-primary" onclick="generateAdminDonorIdCard()">🪪 Generate ID Card</button>
         <button type="button" class="btn btn-light" onclick="openAdminDonorEditFromDetails()">✏️ Edit Donor</button>
         <button type="button" class="btn btn-light" onclick="closeAdminDonorDetails()">Close</button>
       </div>
@@ -2691,34 +2657,6 @@
 
 
     /* =========================================================
-       DONOR PHOTO PREVIEW
-       ========================================================= */
-
-    document.getElementById("donorPhotoFile")?.addEventListener("change", function() {
-      const preview = document.getElementById("donorPhotoPreview");
-      const img = document.getElementById("donorPhotoPreviewImage");
-      const file = this.files?.[0];
-      if (!preview || !img) return;
-      if (!file) {
-        preview.hidden = true;
-        img.removeAttribute("src");
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        preview.hidden = false;
-        preview.classList.add("error");
-        img.removeAttribute("src");
-        preview.querySelector("span").textContent = "Photo is larger than 5 MB.";
-        return;
-      }
-      preview.classList.remove("error");
-      img.src = URL.createObjectURL(file);
-      preview.querySelector("span").textContent = "Photo ready for ID card";
-      preview.hidden = false;
-    });
-
-
-    /* =========================================================
        DONOR REGISTRATION
        ========================================================= */
 
@@ -2751,9 +2689,6 @@
             Object.fromEntries(
               new FormData(form)
             );
-
-          // The photo file is uploaded separately; the resulting URL is stored with the donor record.
-          delete data.Donor_Photo_File;
 
           const lastDateEl = document.getElementById("donorLastDonationDate");
           const newDonorNA = document.getElementById("newDonorNA");
@@ -2798,27 +2733,6 @@
             message.textContent =
               "Submitting your registration...";
 
-            const photoFile = document.getElementById("donorPhotoFile")?.files?.[0];
-            if (photoFile) {
-              if (photoFile.size > 5 * 1024 * 1024) {
-                throw new Error("Donor photo is too large. Maximum size is 5 MB.");
-              }
-              if (!["image/jpeg","image/png","image/webp"].includes(photoFile.type)) {
-                throw new Error("Please upload a JPG, PNG or WEBP donor photo.");
-              }
-              message.textContent = "Uploading donor photo...";
-              const base64 = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
-                reader.onerror = reject;
-                reader.readAsDataURL(photoFile);
-              });
-              const upload = await BloodDonationAPI.uploadDonorRegistrationPhoto({
-                base64, mimeType: photoFile.type, fileName: photoFile.name
-              });
-              data.photoUrl = upload.imageUrl || "";
-              data.Photo_URL = data.photoUrl;
-            }
 
             await BloodDonationAPI.registerDonor(
               data
@@ -3659,9 +3573,7 @@
         ["Referred By", value(donor,"Referred_By","referredBy")],
         ["Registered On", value(donor,"Registration_Date","registrationDate")]
       ];
-      const donorPhotoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL") || "").trim();
-      const photoHtml = donorPhotoUrl ? `<img class="admin-donor-detail-photo" src="${escapeAttribute(donorPhotoUrl)}" alt="${escapeAttribute(value(donor,"Name","name") || "Donor photo")}">` : `<div class="donor-avatar">${escapeHtml(String(value(donor,"Name","name")||"D").split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase())}</div>`;
-      card.innerHTML = `<div class="admin-donor-detail-head">${photoHtml}<div><h3>${escapeHtml(value(donor,"Name","name")||"Donor")}</h3><span>${escapeHtml(value(donor,"Blood_Group","bloodGroup")||"—")}</span></div></div><div class="admin-donor-detail-list">${rows.map(r=>`<div><strong>${escapeHtml(r[0])}</strong><span>${escapeHtml(r[1]||"—")}</span></div>`).join("")}</div>`;
+      card.innerHTML = `<div class="admin-donor-detail-head"><div class="donor-avatar">${escapeHtml(String(value(donor,"Name","name")||"D").split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase())}</div><div><h3>${escapeHtml(value(donor,"Name","name")||"Donor")}</h3><span>${escapeHtml(value(donor,"Blood_Group","bloodGroup")||"—")}</span></div></div><div class="admin-donor-detail-list">${rows.map(r=>`<div><strong>${escapeHtml(r[0])}</strong><span>${escapeHtml(r[1]||"—")}</span></div>`).join("")}</div>`;
       card.insertAdjacentHTML("beforeend", `<div class="admin-detail-note">🔒 All donor details are visible only to Admin.</div>`);
       document.getElementById("adminDonorDetailsModal").classList.add("show");
     }
@@ -3753,80 +3665,6 @@
       ctx.fillText("Poongurichi Nanbargal Blood Donors Club",540,1260);
 
       return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create PNG image.")),"image/png",1));
-    }
-
-    async function createProfessionalDonorIdCard(donor) {
-      const name = String(value(donor,"Name","name") || "Donor").trim();
-      const donorId = String(value(donor,"Donor_ID","donorId","DonorID","ID","id") || "—").trim();
-      const blood = String(value(donor,"Blood_Group","bloodGroup","BloodGroup") || "—").trim();
-      const mobile = String(value(donor,"Mobile","mobile","Phone") || "—").trim();
-      const city = String(value(donor,"City","city") || "—").trim();
-      const district = String(value(donor,"District","district") || "—").trim();
-      const dob = String(value(donor,"DOB","dob") || "—").trim();
-      const photoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL") || "").trim();
-      const canvas = document.createElement("canvas");
-      canvas.width = 1200; canvas.height = 760;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("Your browser cannot generate the ID card.");
-
-      const rr = (x,y,w,h,r,fill,stroke,sw=1) => { ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.lineWidth=sw;ctx.strokeStyle=stroke;ctx.stroke();} };
-      const logo = await loadImageSafe("icons/poongurichi-logo.jpeg");
-      const photo = photoUrl ? await loadImageSafe(photoUrl) : null;
-
-      ctx.fillStyle="#edf3fa"; ctx.fillRect(0,0,1200,760);
-      rr(30,30,1140,700,34,"#ffffff","#cbd8e8",4);
-      rr(30,30,1140,155,34,"#123b82",null);
-      if (logo) { ctx.save(); ctx.beginPath(); ctx.arc(120,108,62,0,Math.PI*2); ctx.clip(); ctx.drawImage(logo,58,46,124,124); ctx.restore(); }
-      ctx.fillStyle="#ffffff"; ctx.font="800 42px Arial"; ctx.fillText("POONGURICHI NANBARGAL",215,92);
-      ctx.font="500 24px Arial"; ctx.fillText("BLOOD DONORS CLUB",215,132);
-      ctx.font="700 20px Arial"; ctx.fillText("OFFICIAL DONOR ID CARD",890,110);
-
-      rr(72,220,250,330,24,"#f3f7fc","#d7e2ef",2);
-      if (photo) {
-        ctx.save(); ctx.beginPath(); ctx.roundRect(92,240,210,250,18); ctx.clip();
-        const scale=Math.max(210/photo.width,250/photo.height); const w=photo.width*scale,h=photo.height*scale;
-        ctx.drawImage(photo,197-w/2,365-h/2,w,h); ctx.restore();
-      } else {
-        ctx.fillStyle="#dce9f7"; ctx.fillRect(92,240,210,250);
-        ctx.fillStyle="#123b82"; ctx.font="700 70px Arial"; ctx.textAlign="center"; ctx.fillText(name.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase(),197,390); ctx.textAlign="left";
-      }
-      ctx.fillStyle="#5d6f84"; ctx.font="600 18px Arial"; ctx.textAlign="center"; ctx.fillText("DONOR PHOTO",197,525); ctx.textAlign="left";
-
-      ctx.fillStyle="#123b82"; ctx.font="800 38px Arial"; ctx.fillText(name,365,260);
-      rr(365,285,165,62,30,"#d9273f",null); ctx.fillStyle="#ffffff"; ctx.font="800 32px Arial"; ctx.textAlign="center"; ctx.fillText(blood,447,327); ctx.textAlign="left";
-      ctx.fillStyle="#64748b"; ctx.font="600 18px Arial"; ctx.fillText("BLOOD GROUP",550,325);
-
-      const fields=[["DONOR ID",donorId],["MOBILE",mobile],["DATE OF BIRTH",dob],["LOCATION",[city,district].filter(Boolean).join(", ") || "—"]];
-      let fy=400;
-      fields.forEach(([label,val])=>{ ctx.fillStyle="#123b82"; ctx.font="700 18px Arial"; ctx.fillText(label,365,fy); ctx.fillStyle="#172033"; ctx.font="600 25px Arial"; ctx.fillText(String(val||"—"),565,fy); ctx.strokeStyle="#e1e8f0"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(365,fy+18); ctx.lineTo(1090,fy+18); ctx.stroke(); fy+=62; });
-
-      rr(365,665,725,40,18,"#eef6ff",null); ctx.fillStyle="#123b82"; ctx.font="700 18px Arial"; ctx.textAlign="center"; ctx.fillText("DONATE BLOOD • SAVE LIFE • BE A HERO",727,691); ctx.textAlign="left";
-      return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create ID card PNG.")),"image/png",1));
-    }
-
-    async function loadImageSafe(src) {
-      return await new Promise((resolve)=>{
-        const img=new Image();
-        img.crossOrigin="anonymous";
-        img.onload=()=>resolve(img);
-        img.onerror=()=>resolve(null);
-        img.src=src;
-      });
-    }
-
-    async function generateAdminDonorIdCard() {
-      if (!currentAdminDonor) return;
-      try {
-        const blob = await createProfessionalDonorIdCard(currentAdminDonor);
-        const name = String(value(currentAdminDonor,"Name","name") || "Donor").replace(/[^a-z0-9]+/gi,"_");
-        const file = new File([blob], `${name || "Donor"}_ID_Card.png`, { type:"image/png" });
-        if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
-          await navigator.share({ title:"Poongurichi Nanbargal Donor ID Card", text:"Official Blood Donor ID Card", files:[file] });
-          return;
-        }
-        const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
-        toast("Professional donor ID card generated.");
-      } catch(error) { console.error(error); toast(error?.message || "Unable to generate donor ID card."); }
     }
 
     async function shareAdminDonorDetails() {
