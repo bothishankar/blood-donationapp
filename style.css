@@ -3563,3 +3563,18 @@ h1,h2,h3,h4,.brand-name,.nav-link,.btn,.admin-card-head h2,.section-title{font-f
 .admin-action-btn strong{font-family:var(--font-display);font-size:13px;color:#123b82;}
 .admin-action-btn small{font-size:10px;color:#71839b;}
 @media(max-width:700px){.admin-action-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.admin-action-btn{padding:12px}.admin-action-btn strong{font-size:12px}}
+
+
+/* Premium V3 - PWA install UI */
+.install-app-top-btn{border:1px solid #c9d9ef;background:#fff;color:#123b82;border-radius:12px;padding:10px 13px;font-family:var(--font-display);font-weight:800;cursor:pointer;box-shadow:0 8px 20px rgba(18,59,130,.08);}
+.install-app-top-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px rgba(18,59,130,.12);}
+.install-platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;}
+.install-platform-card{border:1px solid #d9e5f5;border-radius:18px;padding:18px;background:linear-gradient(145deg,#f8fbff,#fff);display:flex;flex-direction:column;gap:9px;}
+.install-platform-card h3{margin:0;color:#123b82;font-family:var(--font-display);font-size:18px;}
+.install-platform-card p{margin:0;color:#64748b;font-size:13px;line-height:1.55;}
+.install-platform-card small{color:#71839b;line-height:1.5;}
+.install-platform-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#edf5ff;font-size:24px;}
+.install-steps{margin-top:14px;padding:13px 15px;border-radius:13px;background:#eef6ff;color:#123b82;font-size:13px;line-height:1.55;}
+.install-note{margin-top:14px;padding:12px 14px;border-radius:13px;background:#f7f9fc;color:#66768c;font-size:12px;line-height:1.55;}
+.install-app-modal{width:min(720px,calc(100vw - 28px));max-height:min(86vh,760px);overflow:auto;}
+@media(max-width:700px){.install-app-top-btn{display:none}.install-platform-grid{grid-template-columns:1fr}.install-app-modal{padding:18px}.install-platform-card{padding:15px}.install-platform-card .btn{width:100%}}
