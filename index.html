@@ -14,6 +14,11 @@
   >
 
   <meta name="theme-color" content="#123b82">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Poongurichi Nanbargal">
+  <link rel="manifest" href="manifest.json">
 
   <title>Poongurichi Nanbargal | Blood Donors Club</title>
 
@@ -141,6 +146,10 @@
           🔐 Admin
         </button>
 
+        <button type="button" class="install-app-top-btn" onclick="openInstallApp()" aria-label="Install app">
+          📲 Install App
+        </button>
+
       </nav>
 
     </div>
@@ -156,6 +165,10 @@
     >
       <span class="mobile-menu-admin-icon">🔐</span>
       <span>Admin Login</span>
+    </button>
+    <button type="button" class="mobile-menu-admin install-menu-btn" onclick="openInstallApp(); closeMobileMenu();">
+      <span class="mobile-menu-admin-icon">📲</span>
+      <span>Install App</span>
     </button>
   </div>
 
@@ -1329,7 +1342,7 @@
           <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminEventCard')"><span>📅</span><strong>Events</strong><small>Add & upload photos</small></button>
           <button type="button" class="admin-action-btn" onclick="openNotifications()"><span>🔔</span><strong>Notifications</strong><small>Clear one or all</small></button>
           <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminSettingsCard')"><span>🔗</span><strong>Social Links</strong><small>Website settings</small></button>
-          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminSettingsCard')"><span>⚙️</span><strong>App Settings</strong><small>Brand & footer</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminSettingsCard')"><span>⚙️</span><strong>Fields</strong><small>Edit all website fields</small></button>
         </div>
 
         <div class="admin-stat-grid">
@@ -1470,8 +1483,8 @@
           <div id="adminSettingsCard" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
-                <h2>⚙️ Header & Footer Settings</h2>
-                <p>Admin-only controls for website header, footer, developer and contact details.</p>
+                <h2>⚙️ Fields</h2>
+                <p>All editable website fields are grouped here for Admin. Changes do not alter donor/request/event database logic.</p>
               </div>
             </div>
             <form id="adminSettingsForm" class="admin-form admin-settings-grid">
@@ -1754,6 +1767,34 @@
   </div>
 
 
+
+  <!-- =======================================================
+       INSTALL APP MODAL
+       ======================================================= -->
+  <div id="installAppModal" class="modal-backdrop" onclick="closeInstallAppOutside(event)" aria-hidden="true">
+    <div class="modal install-app-modal" role="dialog" aria-modal="true" aria-labelledby="installAppTitle">
+      <div class="modal-head">
+        <div><h2 id="installAppTitle">📲 Install Poongurichi App</h2><p>Use the website like a normal mobile application.</p></div>
+        <button class="modal-close" type="button" onclick="closeInstallApp()" aria-label="Close">×</button>
+      </div>
+      <div class="install-platform-grid">
+        <div class="install-platform-card">
+          <div class="install-platform-icon">🤖</div><h3>Android</h3>
+          <p>Install directly when the browser supports the PWA install prompt.</p>
+          <button type="button" class="btn btn-primary" id="androidInstallButton" onclick="installAndroidApp()">⬇️ Install for Android</button>
+          <small>If no prompt appears: Chrome ⋮ → <b>Install app</b> or <b>Add to Home screen</b>.</small>
+        </div>
+        <div class="install-platform-card">
+          <div class="install-platform-icon">🍎</div><h3>iPhone / iPad</h3>
+          <p>Apple installs web apps from Safari using Add to Home Screen.</p>
+          <button type="button" class="btn btn-primary" onclick="showIOSInstallSteps()">🍎 Show iPhone Steps</button>
+          <small>Safari → Share ⬆️ → <b>Add to Home Screen</b> → Add.</small>
+        </div>
+      </div>
+      <div id="iosInstallSteps" class="install-steps" hidden><strong>iPhone installation:</strong> Open this site in <b>Safari</b> → tap <b>Share ⬆️</b> → <b>Add to Home Screen</b> → <b>Add</b>.</div>
+      <div class="install-note">💡 A website cannot reliably force every phone to open normal links specifically in Google Chrome. The phone's default browser controls normal web links. Once installed as a PWA, the app opens in its app-style window.</div>
+    </div>
+  </div>
 
   <!-- =======================================================
        NOTIFICATIONS
@@ -4079,6 +4120,87 @@
       const diff = endX - donorPhotoTouchStartX;
       if (Math.abs(diff) > 45) showDonorPhoto(donorPhotoIndex + (diff < 0 ? 1 : -1));
     }
+
+    /* =========================================================
+       PWA INSTALL / MOBILE APP
+       ========================================================= */
+    let deferredInstallPrompt = null;
+
+    window.addEventListener("beforeinstallprompt", (event) => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      document.documentElement.classList.add("pwa-install-ready");
+      updateInstallButtonState();
+    });
+
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      document.documentElement.classList.remove("pwa-install-ready");
+      updateInstallButtonState();
+      toast("Poongurichi App installed successfully.");
+    });
+
+    function isIOSDevice() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    }
+
+    function isStandalonePWA() {
+      return window.matchMedia && window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+    }
+
+    function updateInstallButtonState() {
+      document.querySelectorAll(".install-app-top-btn, .install-menu-btn").forEach(btn => {
+        btn.style.display = isStandalonePWA() ? "none" : "";
+      });
+      const androidBtn = document.getElementById("androidInstallButton");
+      if (androidBtn) androidBtn.textContent = deferredInstallPrompt ? "⬇️ Install for Android" : "📱 Install / Add to Home Screen";
+    }
+
+    function openInstallApp() {
+      const modal = document.getElementById("installAppModal");
+      if (!modal) return;
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      updateInstallButtonState();
+      if (isIOSDevice()) showIOSInstallSteps();
+    }
+
+    function closeInstallApp() {
+      const modal = document.getElementById("installAppModal");
+      if (!modal) return;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    function closeInstallAppOutside(event) {
+      if (event.target && event.target.id === "installAppModal") closeInstallApp();
+    }
+
+    function showIOSInstallSteps() {
+      const steps = document.getElementById("iosInstallSteps");
+      if (steps) steps.hidden = false;
+    }
+
+    async function installAndroidApp() {
+      if (deferredInstallPrompt) {
+        try {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+        } catch (error) {
+          console.warn("Install prompt:", error);
+        }
+        deferredInstallPrompt = null;
+        updateInstallButtonState();
+        return;
+      }
+      if (isIOSDevice()) {
+        showIOSInstallSteps();
+        return;
+      }
+      toast("Open your browser menu and choose Install app or Add to Home screen.");
+    }
+
+    updateInstallButtonState();
 
     /* =========================================================
        BACKGROUND BROWSER NOTIFICATIONS (FREE)
