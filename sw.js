@@ -1,4 +1,4 @@
-const CACHE_NAME = 'poongurichi-premium-v3-static-2';
+const CACHE_NAME = 'poongurichi-premium-v3-static-3';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,9 @@ const STATIC_ASSETS = [
   './app.js',
   './manifest.json',
   './icons/poongurichi-logo.jpeg',
-  './icons/icon-192.png'
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', event => {
