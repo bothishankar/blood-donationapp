@@ -19,6 +19,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Poongurichi Nanbargal">
   <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 
   <title>Poongurichi Nanbargal | Blood Donors Club</title>
 
@@ -146,7 +147,7 @@
           🔐 Admin
         </button>
 
-        <button type="button" class="install-app-top-btn" onclick="openInstallApp()" aria-label="Install app">
+        <button type="button" class="install-app-top-btn" onclick="installAppNow()" aria-label="Install app">
           📲 Install App
         </button>
 
@@ -166,7 +167,7 @@
       <span class="mobile-menu-admin-icon">🔐</span>
       <span>Admin Login</span>
     </button>
-    <button type="button" class="mobile-menu-admin install-menu-btn" onclick="openInstallApp(); closeMobileMenu();">
+    <button type="button" class="mobile-menu-admin install-menu-btn" onclick="installAppNow(); closeMobileMenu();">
       <span class="mobile-menu-admin-icon">📲</span>
       <span>Install App</span>
     </button>
@@ -1337,12 +1338,12 @@
         <div id="adminGuardMessage" class="admin-guard-message"></div>
 
         <div class="admin-action-grid" aria-label="Admin sections">
-          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminDonorCard')"><span>👥</span><strong>Manage Donors</strong><small>Edit all donor details</small></button>
-          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminRequestCard')"><span>🩸</span><strong>Blood Requests</strong><small>View active requests</small></button>
-          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminEventCard')"><span>📅</span><strong>Events</strong><small>Add & upload photos</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('donors')"><span>👥</span><strong>Manage Donors</strong><small>Edit all donor details</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('requests')"><span>🩸</span><strong>Blood Requests</strong><small>View active requests</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('events')"><span>📅</span><strong>Events</strong><small>Add & upload photos</small></button>
           <button type="button" class="admin-action-btn" onclick="openNotifications()"><span>🔔</span><strong>Notifications</strong><small>Clear one or all</small></button>
-          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminSettingsCard')"><span>🔗</span><strong>Social Links</strong><small>Website settings</small></button>
-          <button type="button" class="admin-action-btn" onclick="adminJumpTo('adminSettingsCard')"><span>⚙️</span><strong>Fields</strong><small>Edit all website fields</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('social')"><span>🔗</span><strong>Social Links</strong><small>Edit social links</small></button>
+          <button type="button" class="admin-action-btn" onclick="adminJumpTo('fields')"><span>⚙️</span><strong>Fields</strong><small>Edit all website fields</small></button>
         </div>
 
         <div class="admin-stat-grid">
@@ -1370,7 +1371,7 @@
 
         <div class="admin-grid">
 
-          <div id="adminDonorCard" class="admin-card admin-wide">
+          <div id="adminDonorCard" data-admin-tab="donors" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
                 <h2>👥 Registered Donors</h2>
@@ -1383,7 +1384,7 @@
             </div>
           </div>
 
-          <div id="adminRequestCard" class="admin-card admin-wide">
+          <div id="adminRequestCard" data-admin-tab="requests" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
                 <h2>🚨 Blood Requests</h2>
@@ -1396,7 +1397,7 @@
             </div>
           </div>
 
-          <div id="adminEventCard" class="admin-card">
+          <div id="adminEventCard" data-admin-tab="events" class="admin-card">
             <div class="admin-card-head">
               <div>
                 <h2>📅 Add Event</h2>
@@ -1428,7 +1429,7 @@
             </form>
           </div>
 
-          <div class="admin-card admin-wide">
+          <div data-admin-tab="events" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
                 <h2>💙 Donor Photos</h2>
@@ -1458,7 +1459,7 @@
           </div>
 
 
-          <div class="admin-card">
+          <div data-admin-tab="fields" class="admin-card">
             <div class="admin-card-head">
               <div>
                 <h2>ℹ️ About Content</h2>
@@ -1480,7 +1481,7 @@
             </form>
           </div>
 
-          <div id="adminSettingsCard" class="admin-card admin-wide">
+          <div id="adminSettingsCard" data-admin-tab="settings" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
                 <h2>⚙️ Fields</h2>
@@ -1488,28 +1489,28 @@
               </div>
             </div>
             <form id="adminSettingsForm" class="admin-form admin-settings-grid">
-              <label>Club Name<input class="form-control" name="Organization Name" data-setting="Organization Name"></label>
+              <label data-settings-group="fields">Club Name<input class="form-control" name="Organization Name" data-setting="Organization Name"></label>
               <label>Logo URL<input class="form-control" name="Logo URL" data-setting="Logo URL" type="url" placeholder="https://..."></label>
-              <label>Copyright Text<input class="form-control" name="Copyright Name" data-setting="Copyright Name"></label>
-              <label>Header Subtitle<input class="form-control" name="Header Subtitle" data-setting="Header Subtitle"></label>
-              <label>Developer Name<input class="form-control" name="Developer Name" data-setting="Developer Name"></label>
-              <label>Developer Contact<input class="form-control" name="Developer Contact" data-setting="Developer Contact" inputmode="tel"></label>
-              <label>Blood Need Contact 1 Name<input class="form-control" name="Blood Need Contact 1 Name" data-setting="Blood Need Contact 1 Name"></label>
-              <label>Blood Need Contact 1 Phone<input class="form-control" name="Blood Need Contact 1 Phone" data-setting="Blood Need Contact 1 Phone" inputmode="tel"></label>
-              <label>Blood Need Contact 2 Name<input class="form-control" name="Blood Need Contact 2 Name" data-setting="Blood Need Contact 2 Name"></label>
-              <label>Blood Need Contact 2 Phone<input class="form-control" name="Blood Need Contact 2 Phone" data-setting="Blood Need Contact 2 Phone" inputmode="tel"></label>
-              <label>Instagram URL<input class="form-control" name="Instagram URL" data-setting="Instagram URL" type="url"></label>
-              <label>Facebook URL<input class="form-control" name="Facebook URL" data-setting="Facebook URL" type="url"></label>
-              <label>YouTube URL<input class="form-control" name="YouTube URL" data-setting="YouTube URL" type="url"></label>
-              <label>Gmail URL<input class="form-control" name="Gmail URL" data-setting="Gmail URL" type="url"></label>
-              <label class="admin-settings-full">Footer Text<textarea class="form-control" name="Footer Text" data-setting="Footer Text"></textarea></label>
-              <label class="admin-settings-full">Footer Description<textarea class="form-control" name="Footer Description" data-setting="Footer Description"></textarea></label>
+              <label data-settings-group="fields">Copyright Text<input class="form-control" name="Copyright Name" data-setting="Copyright Name"></label>
+              <label data-settings-group="fields">Header Subtitle<input class="form-control" name="Header Subtitle" data-setting="Header Subtitle"></label>
+              <label data-settings-group="fields">Developer Name<input class="form-control" name="Developer Name" data-setting="Developer Name"></label>
+              <label data-settings-group="fields">Developer Contact<input class="form-control" name="Developer Contact" data-setting="Developer Contact" inputmode="tel"></label>
+              <label data-settings-group="fields">Blood Need Contact 1 Name<input class="form-control" name="Blood Need Contact 1 Name" data-setting="Blood Need Contact 1 Name"></label>
+              <label data-settings-group="fields">Blood Need Contact 1 Phone<input class="form-control" name="Blood Need Contact 1 Phone" data-setting="Blood Need Contact 1 Phone" inputmode="tel"></label>
+              <label data-settings-group="fields">Blood Need Contact 2 Name<input class="form-control" name="Blood Need Contact 2 Name" data-setting="Blood Need Contact 2 Name"></label>
+              <label data-settings-group="fields">Blood Need Contact 2 Phone<input class="form-control" name="Blood Need Contact 2 Phone" data-setting="Blood Need Contact 2 Phone" inputmode="tel"></label>
+              <label data-settings-group="social">Instagram URL<input class="form-control" name="Instagram URL" data-setting="Instagram URL" type="url"></label>
+              <label data-settings-group="social">Facebook URL<input class="form-control" name="Facebook URL" data-setting="Facebook URL" type="url"></label>
+              <label data-settings-group="social">YouTube URL<input class="form-control" name="YouTube URL" data-setting="YouTube URL" type="url"></label>
+              <label data-settings-group="social">Gmail URL<input class="form-control" name="Gmail URL" data-setting="Gmail URL" type="url"></label>
+              <label data-settings-group="fields" class="admin-settings-full">Footer Text<textarea class="form-control" name="Footer Text" data-setting="Footer Text"></textarea></label>
+              <label data-settings-group="fields" class="admin-settings-full">Footer Description<textarea class="form-control" name="Footer Description" data-setting="Footer Description"></textarea></label>
               <div id="adminSettingsMessage" class="form-message admin-settings-full"></div>
               <button class="btn btn-primary admin-settings-full" type="submit">💾 Save Header & Footer</button>
             </form>
           </div>
 
-          <div class="admin-card admin-wide">
+          <div data-admin-tab="events" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
                 <h2>📅 Existing Events</h2>
@@ -1901,6 +1902,10 @@
         target.classList.add("active");
       }
 
+      if (page === "admin" && adminIsLoggedIn()) {
+        // Admin opens on the Donors tab; individual buttons switch tabs without exposing other panels.
+        setTimeout(() => adminJumpTo("donors"), 0);
+      }
 
       document
         .querySelectorAll(".nav-link")
@@ -3399,6 +3404,7 @@
           submit.textContent = "🔐 Login as Admin";
           goTo("admin");
           await loadAdminDashboard();
+          adminJumpTo("donors");
         }, 450);
 
       } catch (error) {
@@ -3500,6 +3506,22 @@
       } catch (error) { console.error("Admin settings load:", error); }
     }
 
+    let adminSettingsMode = "fields";
+
+    function setAdminSettingsMode(mode = "fields") {
+      adminSettingsMode = mode === "social" ? "social" : "fields";
+      const form = document.getElementById("adminSettingsForm");
+      if (!form) return;
+      form.querySelectorAll("[data-settings-group]").forEach(label => {
+        // Fields tab shows every editable website field. Social Links tab shows only social URLs.
+        label.hidden = adminSettingsMode === "social" && label.dataset.settingsGroup !== "social";
+      });
+      const submit = form.querySelector("button[type=submit]");
+      if (submit) submit.textContent = adminSettingsMode === "social" ? "💾 Save Social Links" : "💾 Save Website Fields";
+      const message = document.getElementById("adminSettingsMessage");
+      if (message) message.textContent = "";
+    }
+
     document.getElementById("adminSettingsForm")?.addEventListener("submit", async function(event) {
       event.preventDefault();
       if (!ensureAdminAccess()) return;
@@ -3507,20 +3529,23 @@
       const submit = this.querySelector("button[type=submit]");
       try {
         submit.disabled = true;
-        const fields = [...this.querySelectorAll("[data-setting]")];
-        for (const input of fields) {
-          const key = input.dataset.setting;
-          await BloodDonationAPI.saveSetting(key, input.value.trim(), getAdminUserId());
+        const inputs = adminSettingsMode === "social"
+          ? [...this.querySelectorAll('[data-settings-group="social"] [data-setting]')]
+          : [...this.querySelectorAll("[data-setting]")];
+        for (const input of inputs) {
+          await BloodDonationAPI.saveSetting(input.dataset.setting, input.value.trim(), getAdminUserId());
         }
         await loadSiteSettings();
         message.className = "form-message success";
-        message.textContent = "Header and footer settings saved.";
-        toast("Header & footer updated.");
+        message.textContent = adminSettingsMode === "social" ? "Social links saved successfully." : "Website fields saved successfully.";
+        toast(adminSettingsMode === "social" ? "Social links updated." : "Website fields updated.");
       } catch (error) {
         message.className = "form-message error";
         message.textContent = error?.message || "Unable to save settings.";
       } finally { submit.disabled = false; }
     });
+
+    setAdminSettingsMode("fields");
 
     /* =========================================================
        ADMIN DONOR DETAILS + IMAGE SHARE
@@ -3559,21 +3584,64 @@
 
     async function shareAdminDonorDetails() {
       if (!currentAdminDonor) return;
-      const card = document.getElementById("adminDonorDetailsCard");
-      if (!card) return;
-      if (typeof html2canvas === "undefined") { toast("Share image library is not loaded. Refresh the page."); return; }
+      const donor = currentAdminDonor;
+      const donorName = String(value(donor,"Name","name") || "Donor").trim();
+      const detailsText = [
+        "Blood Donor Details",
+        `Name: ${donorName}`,
+        `Blood Group: ${value(donor,"Blood_Group","bloodGroup","BloodGroup") || "—"}`,
+        `Mobile: ${value(donor,"Mobile","mobile","Phone") || "—"}`,
+        `Email: ${value(donor,"Email","email") || "—"}`,
+        `District: ${value(donor,"District","district") || "—"}`,
+        `City: ${value(donor,"City","city") || "—"}`,
+        `Address: ${value(donor,"Address","address") || "—"}`
+      ].join("\n");
+
       try {
-        const canvas = await html2canvas(card, {backgroundColor:"#ffffff", scale:2, useCORS:true, logging:false});
-        const blob = await new Promise(resolve => canvas.toBlob(resolve,"image/png",1));
-        if (!blob) throw new Error("Unable to create image.");
-        const name = String(value(currentAdminDonor,"Name","name")||"Donor").replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"");
-        const file = new File([blob], `${name || "Donor"}_Details.png`, {type:"image/png"});
-        if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
-          await navigator.share({title:"Blood Donor Details", text:"Blood donor details", files:[file]});
+        // Prefer the native mobile share sheet. Text sharing works even when file sharing is unsupported.
+        if (navigator.share) {
+          const card = document.getElementById("adminDonorDetailsCard");
+          if (card && typeof html2canvas !== "undefined") {
+            try {
+              const canvas = await html2canvas(card, {backgroundColor:"#ffffff", scale:2, useCORS:true, logging:false});
+              const blob = await new Promise(resolve => canvas.toBlob(resolve,"image/png",1));
+              if (blob) {
+                const safeName = donorName.replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"") || "Donor";
+                const file = new File([blob], `${safeName}_Details.png`, {type:"image/png"});
+                if (!navigator.canShare || navigator.canShare({files:[file]})) {
+                  await navigator.share({title:"Blood Donor Details", text:detailsText, files:[file]});
+                  return;
+                }
+              }
+            } catch (imageError) {
+              console.warn("Donor share image:", imageError);
+            }
+          }
+          await navigator.share({title:"Blood Donor Details", text:detailsText});
           return;
         }
-        const url = URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
-      } catch (error) { if(error?.name !== "AbortError") toast(error?.message || "Unable to share donor details."); }
+
+        // Desktop fallback: copy the donor details so the Share button still performs a useful action.
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(detailsText);
+          toast("Donor details copied. You can paste them into WhatsApp, Email or another app.");
+          return;
+        }
+
+        // Final fallback: download the details as a text file.
+        const blob = new Blob([detailsText], {type:"text/plain;charset=utf-8"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${donorName.replace(/[^a-z0-9]+/gi,"_") || "Donor"}_Details.txt`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        toast("Donor details file created.");
+      } catch (error) {
+        if (error?.name !== "AbortError") toast(error?.message || "Unable to share donor details.");
+      }
     }
 
     function openAdminDonorEditFromDetails() {
@@ -3622,9 +3690,33 @@
       }catch(error){msg.className="form-message error";msg.textContent=error?.message||"Unable to update donor.";}finally{submit.disabled=false;}
     });
 
-    function adminJumpTo(id) {
-      const el=document.getElementById(id);
-      if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+    function adminJumpTo(tab) {
+      if (!ensureAdminAccess()) return;
+      const cards = [...document.querySelectorAll("[data-admin-tab]")];
+      if (!cards.length) return;
+
+      cards.forEach(card => {
+        card.classList.toggle("admin-tab-active", card.dataset.adminTab === tab);
+      });
+
+      document.querySelectorAll(".admin-action-btn").forEach(btn => {
+        btn.classList.toggle("active",
+          (tab === "donors" && btn.textContent.includes("Manage Donors")) ||
+          (tab === "requests" && btn.textContent.includes("Blood Requests")) ||
+          (tab === "events" && btn.textContent.includes("Events")) ||
+          (tab === "social" && btn.textContent.includes("Social Links")) ||
+          (tab === "fields" && btn.textContent.includes("Fields"))
+        );
+      });
+
+      const settingsCard = document.getElementById("adminSettingsCard");
+      if (settingsCard) {
+        settingsCard.classList.toggle("admin-tab-active", tab === "fields" || tab === "social");
+        setAdminSettingsMode(tab === "social" ? "social" : "fields");
+      }
+
+      const first = cards.find(card => card.dataset.adminTab === tab) || (tab === "social" ? settingsCard : null);
+      if (first) first.scrollIntoView({behavior:"smooth", block:"start"});
     }
 
     /* =========================================================
@@ -4154,6 +4246,21 @@
       });
       const androidBtn = document.getElementById("androidInstallButton");
       if (androidBtn) androidBtn.textContent = deferredInstallPrompt ? "⬇️ Install for Android" : "📱 Install / Add to Home Screen";
+    }
+
+    async function installAppNow() {
+      if (deferredInstallPrompt) {
+        try {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice;
+        } catch (error) {
+          console.warn("Install prompt:", error);
+        }
+        deferredInstallPrompt = null;
+        updateInstallButtonState();
+        return;
+      }
+      openInstallApp();
     }
 
     function openInstallApp() {
