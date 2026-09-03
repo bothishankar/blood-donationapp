@@ -268,7 +268,7 @@ function normalizeDonor(donor = {}) {
   const gender = clean(first(donor, "gender", "Gender"));
   const dob = clean(first(donor, "dob", "DOB", "Date_of_Birth"));
   const district = clean(first(donor, "district", "District"));
-  const city = clean(first(donor, "city", "City"));
+  const city = clean(first(donor, "city", "City", "Town/Village", "Town", "Village"));
   const address = clean(first(donor, "address", "Address"));
   const lastDonationDate = clean(
     first(donor, "lastDonationDate", "Last_Donation_Date", "LastDonationDate")
@@ -276,6 +276,7 @@ function normalizeDonor(donor = {}) {
   const available = clean(first(donor, "available", "Available")) || "Yes";
   const aadhaarNumber = clean(first(donor, "aadhaarNumber", "Aadhaar_Number", "Aadhaar", "aadhaar"));
   const referredBy = clean(first(donor, "referredBy", "Referred_By", "ReferredBy"));
+  const photoUrl = clean(first(donor, "photoUrl", "Photo_URL", "photoURL", "Photo_Url"));
 
   return {
     name,
@@ -305,6 +306,9 @@ function normalizeDonor(donor = {}) {
     Aadhaar_Number: aadhaarNumber,
     referredBy,
     Referred_By: referredBy,
+    photoUrl,
+    Photo_URL: photoUrl,
+    photoURL: photoUrl,
     available,
     Available: available
   };
