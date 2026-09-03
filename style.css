@@ -3578,3 +3578,11 @@ h1,h2,h3,h4,.brand-name,.nav-link,.btn,.admin-card-head h2,.section-title{font-f
 .install-note{margin-top:14px;padding:12px 14px;border-radius:13px;background:#f7f9fc;color:#66768c;font-size:12px;line-height:1.55;}
 .install-app-modal{width:min(720px,calc(100vw - 28px));max-height:min(86vh,760px);overflow:auto;}
 @media(max-width:700px){.install-app-top-btn{display:none}.install-platform-grid{grid-template-columns:1fr}.install-app-modal{padding:18px}.install-platform-card{padding:15px}.install-platform-card .btn{width:100%}}
+
+
+/* Admin dashboard tabs - show only the section selected by the Admin. */
+.admin-card[data-admin-tab]{display:none;}
+.admin-card[data-admin-tab].admin-tab-active{display:block;}
+.admin-action-btn.active{border-color:#123b82;background:linear-gradient(145deg,#eef6ff,#ffffff);box-shadow:0 12px 30px rgba(18,59,130,.14);}
+.admin-settings-grid label[hidden]{display:none !important;}
+@media(max-width:700px){.admin-action-btn.active{transform:none;}}
