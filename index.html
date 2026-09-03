@@ -3763,7 +3763,7 @@
       const city = String(value(donor,"City","city") || "—").trim();
       const district = String(value(donor,"District","district") || "—").trim();
       const dob = String(value(donor,"DOB","dob") || "—").trim();
-      const photoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL") || "").trim();
+      const photoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url") || "").trim();
       const canvas = document.createElement("canvas");
       canvas.width = 1200; canvas.height = 760;
       const ctx = canvas.getContext("2d");
@@ -3771,7 +3771,7 @@
 
       const rr = (x,y,w,h,r,fill,stroke,sw=1) => { ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.lineWidth=sw;ctx.strokeStyle=stroke;ctx.stroke();} };
       const logo = await loadImageSafe("icons/poongurichi-logo.jpeg");
-      const photo = photoUrl ? await loadImageSafe(photoUrl) : null;
+      const photo = photoUrl ? await loadImageForCard(photoUrl) : null;
 
       ctx.fillStyle="#edf3fa"; ctx.fillRect(0,0,1200,760);
       rr(30,30,1140,700,34,"#ffffff","#cbd8e8",4);
@@ -3812,6 +3812,30 @@
         img.onerror=()=>resolve(null);
         img.src=src;
       });
+    }
+
+    async function loadImageForCard(src) {
+      if (!src) return null;
+      // Google Drive thumbnail images may not provide CORS headers.
+      // Try the original first, then a CORS-enabled image proxy so the
+      // photo can actually be drawn into the downloadable ID-card PNG.
+      let img = await loadImageSafe(src);
+      if (img) return img;
+
+      try {
+        const proxy = "https://images.weserv.nl/?url=" + encodeURIComponent(src);
+        img = await loadImageSafe(proxy);
+        if (img) return img;
+      } catch (e) {}
+
+      // If the stored URL is a Google Drive thumbnail, try a direct
+      // lh3-style URL derived from the file id as a final fallback.
+      const match = String(src).match(/[?&]id=([^&]+)/i);
+      if (match && match[1]) {
+        img = await loadImageSafe("https://drive.google.com/thumbnail?id=" + encodeURIComponent(match[1]) + "&sz=w1000");
+        if (img) return img;
+      }
+      return null;
     }
 
     async function generateAdminDonorIdCard() {
