@@ -3826,7 +3826,18 @@
       const donorIdForPhoto = String(value(donor,"Donor_ID","donorId","DonorID","ID","id") || "").trim();
       const storedPhotoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url") || "").trim();
       const cachedPhoto = getCachedDonorPhoto(donorIdForPhoto);
-      const photoUrl = cachedPhoto || storedPhotoUrl;
+      let photoUrl = cachedPhoto || storedPhotoUrl;
+      // If Google Drive blocks the browser canvas because of CORS, ask Apps Script
+      // to read the Drive file server-side and return a data URL.
+      if (!cachedPhoto && storedPhotoUrl) {
+        try {
+          const serverPhoto = await BloodDonationAPI.getDonorPhotoData({ photoUrl: storedPhotoUrl });
+          if (serverPhoto && serverPhoto.success && serverPhoto.dataUrl) {
+            photoUrl = serverPhoto.dataUrl;
+            if (donorIdForPhoto) saveCachedDonorPhoto(donorIdForPhoto, photoUrl);
+          }
+        } catch (_) {}
+      }
       const canvas = document.createElement("canvas");
       canvas.width = 1200; canvas.height = 760;
       const ctx = canvas.getContext("2d");
