@@ -33,6 +33,9 @@
     .donor-photo-preview.error{border-color:#e14b5a;color:#b4232f;background:#fff4f5}
     .admin-donor-detail-photo{width:76px;height:76px;object-fit:cover;border-radius:18px;border:3px solid #dbe6f2;box-shadow:0 4px 14px rgba(18,59,130,.12)}
     .donor-share-actions{display:flex;flex-wrap:wrap;gap:10px}
+    .admin-donor-tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;align-items:center}
+    .admin-donor-tools .admin-small-btn{white-space:nowrap}
+    .admin-import-progress{margin:8px 0 14px}
   </style>
 
 </head>
@@ -793,13 +796,13 @@
             <div class="form-group">
 
               <label class="form-label">
-                City <span class="required-mark">* Mandatory</span>
+                Town/Village <span class="required-mark">* Mandatory</span>
               </label>
 
               <input
                 class="form-control"
                 name="City"
-                placeholder="City"
+                placeholder="Town / Village"
                 required
               >
 
@@ -1410,8 +1413,15 @@
                 <h2>👥 Registered Donors</h2>
                 <p>View, edit and manage every registered donor record.</p>
               </div>
-              <button type="button" class="admin-small-btn" onclick="loadAdminDonors()">↻ Refresh</button>
+              <div class="admin-donor-tools">
+                <input id="adminDonorImportFile" type="file" accept=".xlsx,.xls,.csv" hidden onchange="importDonorsFromExcel(event)">
+                <button type="button" class="admin-small-btn" onclick="document.getElementById('adminDonorImportFile')?.click()">📥 Import Excel</button>
+                <button type="button" class="admin-small-btn" onclick="downloadDonorExcelTemplate()">📄 Excel Template</button>
+                <button type="button" class="admin-small-btn" onclick="exportDonorsToExcel()">📤 Export Excel</button>
+                <button type="button" class="admin-small-btn" onclick="loadAdminDonors()">↻ Refresh</button>
+              </div>
             </div>
+            <div id="adminDonorImportMessage" class="form-message admin-settings-full"></div>
             <div id="adminDonorTable" class="admin-table-wrap">
               <div class="admin-loading">Loading donors…</div>
             </div>
@@ -1719,7 +1729,7 @@
           <label>Gender <span class="required-mark">* Mandatory</span><select class="form-control" name="Gender" required><option value="">Select Gender</option><option>Male</option><option>Female</option><option>Other</option></select></label>
           <label>Date of Birth <span class="required-mark">* Mandatory</span><input class="form-control" name="DOB" type="date" required></label>
           <label>District <span class="required-mark">* Mandatory</span><input class="form-control" name="District" required></label>
-          <label>City <span class="required-mark">* Mandatory</span><input class="form-control" name="City" required></label>
+          <label>Town/Village <span class="required-mark">* Mandatory</span><input class="form-control" name="City" placeholder="Town / Village" required></label>
           <label class="edit-full">Address <span class="required-mark">* Mandatory</span><textarea class="form-control" name="Address" required></textarea></label>
           <label>Last Donation Date <span class="required-mark">* Mandatory</span><input class="form-control" name="Last_Donation_Date" type="date" required></label>
           <label>Aadhaar Number <span class="optional-mark">Optional</span><input class="form-control" name="Aadhaar_Number" inputmode="numeric"></label>
@@ -1881,6 +1891,8 @@
        IMPORTANT: app.js must remain in your repository
        ======================================================= -->
 
+  <!-- SheetJS: Excel import/export for Admin donor management -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
   <script src="app.js"></script>
 
 
@@ -2691,6 +2703,31 @@
 
 
     /* =========================================================
+       DONOR PHOTO LOCAL CACHE
+       ========================================================= */
+    let __pendingDonorPhotoDataUrl = "";
+    function donorPhotoCacheKey(donorId) { return "poongurichi_donor_photo_" + String(donorId || "").trim(); }
+    async function makeDonorPhotoDataUrl(file) {
+      return await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const maxW=600, maxH=750, scale=Math.min(1,maxW/img.width,maxH/img.height);
+            const c=document.createElement("canvas"); c.width=Math.max(1,Math.round(img.width*scale)); c.height=Math.max(1,Math.round(img.height*scale));
+            const cx=c.getContext("2d"); if(!cx) return reject(new Error("Unable to prepare donor photo."));
+            cx.drawImage(img,0,0,c.width,c.height); resolve(c.toDataURL("image/jpeg",0.82));
+          };
+          img.onerror=()=>reject(new Error("Unable to read donor photo."));
+          img.src=String(reader.result||"");
+        };
+        reader.onerror=reject; reader.readAsDataURL(file);
+      });
+    }
+    function getCachedDonorPhoto(donorId) { try { return donorId ? (localStorage.getItem(donorPhotoCacheKey(donorId)) || "") : ""; } catch (_) { return ""; } }
+    function saveCachedDonorPhoto(donorId,dataUrl) { if(!donorId||!dataUrl)return; try{localStorage.setItem(donorPhotoCacheKey(donorId),dataUrl);}catch(_){}}
+
+    /* =========================================================
        DONOR PHOTO PREVIEW
        ========================================================= */
 
@@ -2807,22 +2844,22 @@
                 throw new Error("Please upload a JPG, PNG or WEBP donor photo.");
               }
               message.textContent = "Uploading donor photo...";
-              const base64 = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(String(reader.result).split(",")[1] || "");
-                reader.onerror = reject;
-                reader.readAsDataURL(photoFile);
-              });
+              const localPhotoDataUrl = await makeDonorPhotoDataUrl(photoFile);
+              __pendingDonorPhotoDataUrl = localPhotoDataUrl;
+              const base64 = localPhotoDataUrl.split(",")[1] || "";
               const upload = await BloodDonationAPI.uploadDonorRegistrationPhoto({
-                base64, mimeType: photoFile.type, fileName: photoFile.name
+                base64, mimeType: "image/jpeg", fileName: photoFile.name.replace(/\.[^.]+$/, "") + ".jpg"
               });
+              if (!upload || upload.success === false) throw new Error(upload?.error || "Donor photo upload failed.");
               data.photoUrl = upload.imageUrl || "";
               data.Photo_URL = data.photoUrl;
             }
 
-            await BloodDonationAPI.registerDonor(
-              data
-            );
+            const registrationResult = await BloodDonationAPI.registerDonor(data);
+            if (registrationResult && registrationResult.success === false) throw new Error(registrationResult.error || "Registration failed.");
+            const registeredDonorId = registrationResult?.donorId || registrationResult?.Donor_ID || "";
+            if (registeredDonorId && __pendingDonorPhotoDataUrl) saveCachedDonorPhoto(registeredDonorId, __pendingDonorPhotoDataUrl);
+            __pendingDonorPhotoDataUrl = "";
 
 
             message.className =
@@ -3623,7 +3660,13 @@
         await loadSiteSettings();
         message.className = "form-message success";
         message.textContent = adminSettingsMode === "social" ? "Social links saved successfully." : "Website fields saved successfully.";
+        submit.textContent = "✓ Saved Successfully";
         toast(adminSettingsMode === "social" ? "Social links updated." : "Website fields updated.");
+        setTimeout(() => {
+          if (submit && !submit.disabled) {
+            submit.textContent = adminSettingsMode === "social" ? "💾 Save Social Links" : "💾 Save Website Fields";
+          }
+        }, 2500);
       } catch (error) {
         message.className = "form-message error";
         message.textContent = error?.message || "Unable to save settings.";
@@ -3635,6 +3678,20 @@
     /* =========================================================
        ADMIN DONOR DETAILS + IMAGE SHARE
        ========================================================= */
+    function dateOnly(valueToFormat) {
+      const raw = String(valueToFormat ?? "").trim();
+      if (!raw) return "—";
+      if (/^\d{4}-\d{2}-\d{2}/.test(raw)) return raw.slice(0, 10);
+      const d = new Date(raw);
+      if (!Number.isNaN(d.getTime())) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
+      }
+      return raw.split(" ")[0] || "—";
+    }
+
     let currentAdminDonor = null;
 
     function openAdminDonorDetails(donorId) {
@@ -3647,20 +3704,23 @@
       const rows = [
         ["Full Name", value(donor,"Name","name")],
         ["Blood Group", value(donor,"Blood_Group","bloodGroup","BloodGroup")],
-        ["Date of Birth", value(donor,"DOB","dob")],
+        ["Date of Birth", dateOnly(value(donor,"DOB","dob"))],
         ["Gender", value(donor,"Gender","gender")],
         ["Mobile Number", value(donor,"Mobile","mobile","Phone")],
         ["Email", value(donor,"Email","email")],
         ["District", value(donor,"District","district")],
-        ["City", value(donor,"City","city")],
+        ["Town/Village", value(donor,"City","city")],
         ["Address", value(donor,"Address","address")],
         ["Last Donation Date", value(donor,"Last_Donation_Date","lastDonationDate")],
         ["Aadhaar Number", value(donor,"Aadhaar_Number","aadhaarNumber")],
         ["Referred By", value(donor,"Referred_By","referredBy")],
         ["Registered On", value(donor,"Registration_Date","registrationDate")]
       ];
-      const donorPhotoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL") || "").trim();
-      const photoHtml = donorPhotoUrl ? `<img class="admin-donor-detail-photo" src="${escapeAttribute(donorPhotoUrl)}" alt="${escapeAttribute(value(donor,"Name","name") || "Donor photo")}">` : `<div class="donor-avatar">${escapeHtml(String(value(donor,"Name","name")||"D").split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase())}</div>`;
+      const donorIdForPhoto = String(value(donor,"Donor_ID","donorId","DonorID","ID","id") || "").trim();
+      const donorPhotoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url") || "").trim();
+      const cachedPhoto = getCachedDonorPhoto(donorIdForPhoto);
+      const detailPhotoSrc = cachedPhoto || donorPhotoUrl;
+      const photoHtml = detailPhotoSrc ? `<img class="admin-donor-detail-photo" src="${escapeAttribute(detailPhotoSrc)}" alt="${escapeAttribute(value(donor,"Name","name") || "Donor photo")}">` : `<div class="donor-avatar">${escapeHtml(String(value(donor,"Name","name")||"D").split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase())}</div>`;
       card.innerHTML = `<div class="admin-donor-detail-head">${photoHtml}<div><h3>${escapeHtml(value(donor,"Name","name")||"Donor")}</h3><span>${escapeHtml(value(donor,"Blood_Group","bloodGroup")||"—")}</span></div></div><div class="admin-donor-detail-list">${rows.map(r=>`<div><strong>${escapeHtml(r[0])}</strong><span>${escapeHtml(r[1]||"—")}</span></div>`).join("")}</div>`;
       card.insertAdjacentHTML("beforeend", `<div class="admin-detail-note">🔒 All donor details are visible only to Admin.</div>`);
       document.getElementById("adminDonorDetailsModal").classList.add("show");
@@ -3762,8 +3822,11 @@
       const mobile = String(value(donor,"Mobile","mobile","Phone") || "—").trim();
       const city = String(value(donor,"City","city") || "—").trim();
       const district = String(value(donor,"District","district") || "—").trim();
-      const dob = String(value(donor,"DOB","dob") || "—").trim();
-      const photoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url") || "").trim();
+      const dob = dateOnly(value(donor,"DOB","dob"));
+      const donorIdForPhoto = String(value(donor,"Donor_ID","donorId","DonorID","ID","id") || "").trim();
+      const storedPhotoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url") || "").trim();
+      const cachedPhoto = getCachedDonorPhoto(donorIdForPhoto);
+      const photoUrl = cachedPhoto || storedPhotoUrl;
       const canvas = document.createElement("canvas");
       canvas.width = 1200; canvas.height = 760;
       const ctx = canvas.getContext("2d");
@@ -3816,23 +3879,32 @@
 
     async function loadImageForCard(src) {
       if (!src) return null;
-      // Google Drive thumbnail images may not provide CORS headers.
-      // Try the original first, then a CORS-enabled image proxy so the
-      // photo can actually be drawn into the downloadable ID-card PNG.
-      let img = await loadImageSafe(src);
+      const raw = String(src).trim();
+      if (!raw) return null;
+
+      // Local/cached data URLs are the most reliable source for canvas.
+      if (raw.startsWith("data:image/")) return await loadImageSafe(raw);
+
+      // Try the stored URL first.
+      let img = await loadImageSafe(raw);
       if (img) return img;
 
-      try {
-        const proxy = "https://images.weserv.nl/?url=" + encodeURIComponent(src);
-        img = await loadImageSafe(proxy);
-        if (img) return img;
-      } catch (e) {}
+      // Google Drive direct image variants.
+      const driveId = raw.match(/[?&]id=([^&]+)/)?.[1] || raw.match(/\/d\/([^/]+)/)?.[1] || raw.match(/id=([^&]+)/)?.[1];
+      const candidates = [];
+      if (driveId) {
+        candidates.push(
+          `https://drive.google.com/thumbnail?id=${encodeURIComponent(driveId)}&sz=w1000`,
+          `https://drive.google.com/uc?export=view&id=${encodeURIComponent(driveId)}`
+        );
+      }
+      candidates.push(
+        "https://images.weserv.nl/?url=" + encodeURIComponent(raw),
+        "https://wsrv.nl/?url=" + encodeURIComponent(raw)
+      );
 
-      // If the stored URL is a Google Drive thumbnail, try a direct
-      // lh3-style URL derived from the file id as a final fallback.
-      const match = String(src).match(/[?&]id=([^&]+)/i);
-      if (match && match[1]) {
-        img = await loadImageSafe("https://drive.google.com/thumbnail?id=" + encodeURIComponent(match[1]) + "&sz=w1000");
+      for (const candidate of candidates) {
+        img = await loadImageSafe(candidate);
         if (img) return img;
       }
       return null;
@@ -3935,7 +4007,7 @@
       const msg=document.getElementById("adminDonorEditMessage"), submit=this.querySelector("button[type=submit]");
       const required=["Name","Mobile","Blood_Group","Gender","DOB","District","City","Address","Last_Donation_Date"];
       const missing=required.find(n=>!String(this.elements.namedItem(n)?.value||"").trim());
-      if(missing){msg.className="form-message error";msg.textContent=missing.replace(/_/g," ")+" is required.";this.elements.namedItem(missing)?.focus();return;}
+      if(missing){msg.className="form-message error";msg.textContent=missing === "City" ? "Town/Village is required." : missing.replace(/_/g," ")+" is required.";this.elements.namedItem(missing)?.focus();return;}
       try{
         submit.disabled=true; msg.className="form-message success"; msg.textContent="Updating donor…";
         const result=await BloodDonationAPI.updateDonor({
@@ -3985,6 +4057,276 @@
       const target = cards.find(card => card.dataset.adminTab === tab) ||
         (settingsCard && ["fields","social"].includes(tab) ? settingsCard : null);
       if (target) target.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+
+    /* =========================================================
+       ADMIN DONOR EXCEL IMPORT / EXPORT
+       ========================================================= */
+
+    const DONOR_EXCEL_HEADERS = [
+      "Donor ID",
+      "Name",
+      "Mobile",
+      "Email",
+      "Blood Group",
+      "Gender",
+      "DOB",
+      "District",
+      "Town/Village",
+      "Address",
+      "Last Donation Date",
+      "Aadhaar Number",
+      "Referred By",
+      "Available",
+      "Status",
+      "Registration Date",
+      "Photo URL"
+    ];
+
+    const DONOR_IMPORT_ALIASES = {
+      name: ["Name", "Donor Name", "Donor_Name", "DonorName"],
+      mobile: ["Mobile", "Mobile Number", "Phone", "Phone Number"],
+      email: ["Email", "Email Address"],
+      bloodGroup: ["Blood Group", "Blood_Group", "BloodGroup"],
+      gender: ["Gender", "Sex"],
+      dob: ["DOB", "Date of Birth", "Date_of_Birth"],
+      district: ["District"],
+      townVillage: ["Town/Village", "Town / Village", "Town", "Village", "City"],
+      address: ["Address"],
+      lastDonationDate: ["Last Donation Date", "Last_Donation_Date", "LastDonationDate"],
+      aadhaarNumber: ["Aadhaar Number", "Aadhaar_Number", "Aadhaar"],
+      referredBy: ["Referred By", "Referred_By", "ReferredBy"],
+      available: ["Available"],
+      status: ["Status"],
+      photoUrl: ["Photo URL", "Photo_URL", "PhotoURL", "Photo Url"]
+    };
+
+    function excelCell(row, aliases) {
+      for (const key of aliases) {
+        if (Object.prototype.hasOwnProperty.call(row, key) && row[key] !== undefined && row[key] !== null && String(row[key]).trim() !== "") {
+          return row[key];
+        }
+      }
+      const normalized = {};
+      Object.keys(row || {}).forEach(k => {
+        normalized[String(k).trim().toLowerCase().replace(/[^a-z0-9]/g, "")] = row[k];
+      });
+      for (const key of aliases) {
+        const nk = String(key).trim().toLowerCase().replace(/[^a-z0-9]/g, "");
+        if (normalized[nk] !== undefined && normalized[nk] !== null && String(normalized[nk]).trim() !== "") return normalized[nk];
+      }
+      return "";
+    }
+
+    function excelDateToISO(valueToFormat) {
+      if (valueToFormat instanceof Date && !Number.isNaN(valueToFormat.getTime())) {
+        return `${valueToFormat.getFullYear()}-${String(valueToFormat.getMonth()+1).padStart(2,"0")}-${String(valueToFormat.getDate()).padStart(2,"0")}`;
+      }
+      const raw = String(valueToFormat ?? "").trim();
+      if (!raw) return "";
+      if (/^\\d{4}-\\d{2}-\\d{2}/.test(raw)) return raw.slice(0,10);
+      const m = raw.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{4})$/);
+      if (m) {
+        // Treat DD/MM/YYYY as the normal Indian Excel entry format.
+        return `${m[3]}-${String(m[2]).padStart(2,"0")}-${String(m[1]).padStart(2,"0")}`;
+      }
+      if (/^\\d+(\\.\\d+)?$/.test(raw) && window.XLSX?.SSF?.parse_date_code) {
+        const d = XLSX.SSF.parse_date_code(Number(raw));
+        if (d?.y) return `${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`;
+      }
+      const parsed = new Date(raw);
+      if (!Number.isNaN(parsed.getTime())) {
+        return `${parsed.getFullYear()}-${String(parsed.getMonth()+1).padStart(2,"0")}-${String(parsed.getDate()).padStart(2,"0")}`;
+      }
+      return raw.split(" ")[0];
+    }
+
+    function donorImportRowToPayload(row) {
+      const name = String(excelCell(row, DONOR_IMPORT_ALIASES.name) || "").trim();
+      const mobile = String(excelCell(row, DONOR_IMPORT_ALIASES.mobile) || "").replace(/\D/g, "").trim();
+      const email = String(excelCell(row, DONOR_IMPORT_ALIASES.email) || "").trim();
+      const bloodGroup = String(excelCell(row, DONOR_IMPORT_ALIASES.bloodGroup) || "").trim().toUpperCase();
+      const gender = String(excelCell(row, DONOR_IMPORT_ALIASES.gender) || "").trim();
+      const dob = excelDateToISO(excelCell(row, DONOR_IMPORT_ALIASES.dob));
+      const district = String(excelCell(row, DONOR_IMPORT_ALIASES.district) || "").trim();
+      const townVillage = String(excelCell(row, DONOR_IMPORT_ALIASES.townVillage) || "").trim();
+      const address = String(excelCell(row, DONOR_IMPORT_ALIASES.address) || "").trim();
+      const lastDonationDate = excelDateToISO(excelCell(row, DONOR_IMPORT_ALIASES.lastDonationDate)) || "NA";
+      const aadhaarNumber = String(excelCell(row, DONOR_IMPORT_ALIASES.aadhaarNumber) || "").replace(/\D/g, "").trim();
+      const referredBy = String(excelCell(row, DONOR_IMPORT_ALIASES.referredBy) || "").trim();
+      const available = String(excelCell(row, DONOR_IMPORT_ALIASES.available) || "Yes").trim() || "Yes";
+      const status = String(excelCell(row, DONOR_IMPORT_ALIASES.status) || "Active").trim() || "Active";
+      const photoUrl = String(excelCell(row, DONOR_IMPORT_ALIASES.photoUrl) || "").trim();
+
+      return {
+        name, mobile, email, bloodGroup, gender, dob, district,
+        city: townVillage,
+        address, lastDonationDate, aadhaarNumber, referredBy,
+        available, status, photoUrl, Photo_URL: photoUrl
+      };
+    }
+
+    function downloadDonorExcelTemplate() {
+      if (!ensureAdminAccess()) return;
+      if (!window.XLSX) return toast("Excel module is still loading. Please try again.");
+      const headers = DONOR_EXCEL_HEADERS.filter(h => !["Donor ID", "Registration Date"].includes(h)); // system fields are generated automatically
+      const sample = [[
+        "Sample Donor",
+        "9876543210",
+        "example@email.com",
+        "O+",
+        "Male",
+        "1990-01-15",
+        "Erode",
+        "Modakkurichi",
+        "Sample Address",
+        "NA",
+        "",
+        "",
+        "Yes",
+        "Active",
+        "https://drive.google.com/..."
+      ]];
+
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...sample]);
+      ws["!cols"] = headers.map(h => ({ wch: Math.max(15, Math.min(32, h.length + 4)) }));
+      XLSX.utils.book_append_sheet(wb, ws, "Donor Import");
+
+      const guide = [
+        ["Poongurichi Nanbargal - Mass Donor Import"],
+        ["Use this Excel file to add many donors at once from Admin → Manage Donors → Import Excel."],
+        ["Required fields", "Name, Mobile, Blood Group, Gender, DOB, District, Town/Village, Address"],
+        ["Last Donation Date", "Enter YYYY-MM-DD or DD/MM/YYYY. Enter NA for a first-time/new donor."],
+        ["Photo URL", "Optional. If supplied, use a publicly accessible image URL."],
+        ["Donor ID / Registration Date", "Do not enter these for import; the system generates them automatically."],
+        ["Duplicates", "Review your file before importing. Each row is registered as a new donor."],
+        ["Google Sheets", "Upload this .xlsx file to Google Sheets; the same columns can be used there."]
+      ];
+      const gi = XLSX.utils.aoa_to_sheet(guide);
+      gi["!cols"] = [{ wch: 28 }, { wch: 90 }];
+      XLSX.utils.book_append_sheet(wb, gi, "Instructions");
+      XLSX.writeFile(wb, "Poongurichi_Nanbargal_Donor_Import_Template.xlsx");
+    }
+
+    function donorExportRows(donors) {
+      return (donors || []).map(donor => ({
+        "Donor ID": value(donor,"Donor_ID","donorId","DonorID","ID","id"),
+        "Name": value(donor,"Name","name"),
+        "Mobile": value(donor,"Mobile","mobile","Phone"),
+        "Email": value(donor,"Email","email"),
+        "Blood Group": value(donor,"Blood_Group","bloodGroup","BloodGroup"),
+        "Gender": value(donor,"Gender","gender"),
+        "DOB": dateOnly(value(donor,"DOB","dob")),
+        "District": value(donor,"District","district"),
+        "Town/Village": value(donor,"City","city"),
+        "Address": value(donor,"Address","address"),
+        "Last Donation Date": dateOnly(value(donor,"Last_Donation_Date","lastDonationDate")),
+        "Aadhaar Number": value(donor,"Aadhaar_Number","aadhaarNumber"),
+        "Referred By": value(donor,"Referred_By","referredBy"),
+        "Available": value(donor,"Available","available"),
+        "Status": value(donor,"Status","status"),
+        "Registration Date": dateOnly(value(donor,"Registration_Date","registrationDate")),
+        "Photo URL": value(donor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url")
+      }));
+    }
+
+    async function exportDonorsToExcel() {
+      if (!ensureAdminAccess()) return;
+      if (!window.XLSX) return toast("Excel module is still loading. Please try again.");
+      const message = document.getElementById("adminDonorImportMessage");
+      try {
+        if (message) { message.className = "form-message success"; message.textContent = "Preparing donor Excel file…"; }
+        const donors = await BloodDonationAPI.getDonors();
+        if (!donors.length) {
+          if (message) { message.className = "form-message error"; message.textContent = "No donor records available to export."; }
+          return;
+        }
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(donorExportRows(donors), { header: DONOR_EXCEL_HEADERS });
+        ws["!cols"] = DONOR_EXCEL_HEADERS.map(h => ({ wch: Math.max(14, Math.min(34, h.length + 4)) }));
+        XLSX.utils.book_append_sheet(wb, ws, "Donors");
+        XLSX.writeFile(wb, `Poongurichi_Nanbargal_Donors_${new Date().toISOString().slice(0,10)}.xlsx`);
+        if (message) { message.className = "form-message success"; message.textContent = `✓ ${donors.length} donor record(s) exported successfully.`; }
+      } catch (error) {
+        console.error(error);
+        if (message) { message.className = "form-message error"; message.textContent = error?.message || "Unable to export donors."; }
+      }
+    }
+
+    async function importDonorsFromExcel(event) {
+      if (!ensureAdminAccess()) return;
+      const input = event.target;
+      const file = input?.files?.[0];
+      if (!file) return;
+      const message = document.getElementById("adminDonorImportMessage");
+      if (!window.XLSX) {
+        if (message) { message.className = "form-message error"; message.textContent = "Excel module is not available. Please refresh the page."; }
+        input.value = "";
+        return;
+      }
+
+      try {
+        if (message) { message.className = "form-message success"; message.textContent = "Reading Excel file…"; }
+        const buffer = await file.arrayBuffer();
+        const wb = XLSX.read(buffer, { type: "array", cellDates: true });
+        const firstSheet = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(firstSheet, { defval: "", raw: true });
+        if (!rows.length) throw new Error("The Excel sheet contains no donor rows.");
+
+        const donors = rows.map(donorImportRowToPayload);
+        const required = [
+          ["Name","name"], ["Mobile","mobile"], ["Blood Group","bloodGroup"],
+          ["Gender","gender"], ["DOB","dob"], ["District","district"],
+          ["Town/Village","city"], ["Address","address"]
+        ];
+        const errors = [];
+        donors.forEach((d, i) => {
+          required.forEach(([label,key]) => {
+            if (!String(d[key] || "").trim()) errors.push(`Row ${i+2}: ${label} is required.`);
+          });
+          if (d.mobile && !/^[6-9]\d{9}$/.test(d.mobile)) errors.push(`Row ${i+2}: Mobile must be a valid 10-digit Indian number.`);
+          if (d.bloodGroup && !["A+","A-","B+","B-","AB+","AB-","O+","O-"].includes(d.bloodGroup)) errors.push(`Row ${i+2}: Invalid blood group ${d.bloodGroup}.`);
+        });
+        if (errors.length) {
+          if (message) {
+            message.className = "form-message error";
+            message.textContent = errors.slice(0, 8).join(" ") + (errors.length > 8 ? ` (+${errors.length-8} more errors)` : "");
+          }
+          return;
+        }
+
+        if (!confirm(`Import ${donors.length} donor record(s) now? This will create new donor IDs for every row.`)) return;
+
+        let success = 0, failed = 0;
+        const failures = [];
+        for (let i = 0; i < donors.length; i++) {
+          if (message) {
+            message.className = "form-message success admin-import-progress";
+            message.textContent = `Importing ${i+1} of ${donors.length}…`;
+          }
+          try {
+            const result = await BloodDonationAPI.registerDonor(donors[i]);
+            if (result?.success === false) throw new Error(result.error || "Registration failed.");
+            success++;
+          } catch (error) {
+            failed++;
+            failures.push(`Row ${i+2}: ${error?.message || "Import failed."}`);
+          }
+        }
+
+        await loadAdminDashboard();
+        if (message) {
+          message.className = failed ? "form-message error" : "form-message success";
+          message.textContent = `Import completed: ${success} successful, ${failed} failed.` + (failures.length ? " " + failures.slice(0,5).join(" ") : "");
+        }
+      } catch (error) {
+        console.error(error);
+        if (message) { message.className = "form-message error"; message.textContent = error?.message || "Unable to import Excel file."; }
+      } finally {
+        input.value = "";
+      }
     }
 
     /* =========================================================
