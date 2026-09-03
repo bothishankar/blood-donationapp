@@ -943,6 +943,18 @@
 
             </div>
 
+            <div id="newDonorIdCardAction" class="full" style="display:none;margin-top:4px;text-align:center;">
+              <div id="newDonorIdCardStatus" class="form-message success" style="margin-bottom:10px;">✓ Registration saved. Your ID card is ready.</div>
+              <button
+                id="newDonorIdCardDownloadBtn"
+                type="button"
+                class="btn btn-primary"
+                onclick="downloadNewDonorIdCard()"
+              >
+                ⬇️ Download Donor ID Card
+              </button>
+            </div>
+
           </form>
 
         </div>
@@ -1413,7 +1425,18 @@
                 <h2>👥 Registered Donors</h2>
                 <p>View, edit and manage every registered donor record.</p>
               </div>
-              <div class="admin-donor-tools">
+              <div class="admin-donor-tools" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <input id="adminDonorSearch" class="form-control" type="search" placeholder="Search Name / Blood Group / Contact / Referred By" oninput="renderAdminDonorTable()" style="min-width:300px;max-width:420px;">
+                <button type="button" class="admin-small-btn" onclick="clearAdminDonorSearch()">✕ Clear</button>
+                <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;">
+                  Entries
+                  <select id="adminDonorEntryCount" class="form-control" onchange="renderAdminDonorTable()" style="width:auto;min-width:85px;padding:8px 10px;">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="all">All</option>
+                  </select>
+                </label>
                 <input id="adminDonorImportFile" type="file" accept=".xlsx,.xls,.csv" hidden onchange="importDonorsFromExcel(event)">
                 <button type="button" class="admin-small-btn" onclick="document.getElementById('adminDonorImportFile')?.click()">📥 Import Excel</button>
                 <button type="button" class="admin-small-btn" onclick="downloadDonorExcelTemplate()">📄 Excel Template</button>
@@ -1688,30 +1711,6 @@
         <div id="adminEventEditMessage" class="form-message"></div>
         <div class="modal-actions"><button type="submit" class="btn btn-primary">💾 Save Event</button><button type="button" class="btn btn-light" onclick="closeAdminEventEditor()">Cancel</button></div>
       </form>
-    </div>
-  </div>
-
-
-  <!-- =======================================================
-       NEW DONOR REGISTRATION -> ID CARD POPUP
-       ======================================================= -->
-  <div id="registrationIdCardModal" class="modal-backdrop" onclick="closeRegistrationIdCardOutside(event)">
-    <div class="modal registration-id-card-modal" style="max-width:900px;">
-      <div class="modal-head">
-        <h2>🎉 Registration Successful</h2>
-        <button class="modal-close" type="button" onclick="closeRegistrationIdCardPopup()">×</button>
-      </div>
-      <div id="registrationIdCardStatus" class="form-message success" style="margin:10px 0;text-align:center;">
-        Preparing your donor ID card…
-      </div>
-      <div style="background:#f4f8fc;border-radius:16px;padding:12px;overflow:auto;text-align:center;">
-        <img id="registrationIdCardImage" alt="Donor ID Card" style="display:none;max-width:100%;height:auto;border-radius:14px;box-shadow:0 8px 28px rgba(18,59,130,.15);">
-      </div>
-      <div class="modal-actions" style="justify-content:center;flex-wrap:wrap;">
-        <button id="registrationIdCardShareBtn" type="button" class="btn btn-primary" onclick="shareRegistrationIdCard()" disabled>📤 Share ID Card</button>
-        <button id="registrationIdCardDownloadBtn" type="button" class="btn btn-primary" onclick="downloadRegistrationIdCard()" disabled>⬇️ Download ID Card</button>
-        <button type="button" class="btn btn-light" onclick="closeRegistrationIdCardPopup()">Close</button>
-      </div>
     </div>
   </div>
 
@@ -2780,6 +2779,10 @@
     });
 
 
+    window.__NEW_DONOR_ID_CARD_BLOB = null;
+    window.__NEW_DONOR_ID_CARD_FILE = null;
+    window.__ADMIN_DONOR_PAGE = 1;
+
     /* =========================================================
        DONOR REGISTRATION
        ========================================================= */
@@ -2887,9 +2890,6 @@
             if (registeredDonorId && __pendingDonorPhotoDataUrl) saveCachedDonorPhoto(registeredDonorId, __pendingDonorPhotoDataUrl);
             __pendingDonorPhotoDataUrl = "";
 
-            // Generate the new donor's ID card immediately after a successful
-            // registration. The cached local photo is used first, so the card
-            // does not have to wait for Google Drive when a photo was uploaded.
             const newlyRegisteredDonor = {
               ...data,
               Donor_ID: registeredDonorId,
@@ -2897,15 +2897,40 @@
               Photo_URL: data.Photo_URL || data.photoUrl || "",
               photoUrl: data.photoUrl || data.Photo_URL || ""
             };
+
+            // Prepare the ID card immediately after the donor is saved.
+            // No popup is used; a download button appears below the Save button.
+            const idAction = document.getElementById("newDonorIdCardAction");
+            const idStatus = document.getElementById("newDonorIdCardStatus");
+            if (idAction) idAction.style.display = "block";
+            if (idStatus) {
+              idStatus.className = "form-message success";
+              idStatus.textContent = "⏳ Preparing your donor ID card…";
+            }
+            window.__NEW_DONOR_ID_CARD_BLOB = null;
+            window.__NEW_DONOR_ID_CARD_FILE = null;
+
+            try {
+              const idBlob = await createProfessionalDonorIdCard(newlyRegisteredDonor);
+              const safeName = String(newlyRegisteredDonor.Name || "Donor")
+                .replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "") || "Donor";
+              window.__NEW_DONOR_ID_CARD_BLOB = idBlob;
+              window.__NEW_DONOR_ID_CARD_FILE = new File([idBlob], `${safeName}_Donor_ID_Card.png`, { type: "image/png" });
+              if (idStatus) {
+                idStatus.className = "form-message success";
+                idStatus.textContent = "✓ Registration saved. ID Card is ready to download.";
+              }
+            } catch (cardError) {
+              console.error("New donor ID card error:", cardError);
+              if (idStatus) {
+                idStatus.className = "form-message error";
+                idStatus.textContent = "✓ Registration saved, but ID Card could not be prepared. Please try again.";
+              }
+            }
+
             form.reset();
             document.getElementById("donorPhotoPreview")?.setAttribute("hidden", "hidden");
-
-            await Promise.all([
-              loadDashboard(),
-              loadBloodGroups()
-            ]);
-
-            await openRegistrationIdCardPopup(newlyRegisteredDonor);
+            await Promise.all([loadDashboard(), loadBloodGroups()]);
             return;
 
 
@@ -2935,6 +2960,24 @@
         }
       );
 
+
+    async function downloadNewDonorIdCard() {
+      const blob = window.__NEW_DONOR_ID_CARD_BLOB;
+      const file = window.__NEW_DONOR_ID_CARD_FILE;
+      if (!blob || !file) {
+        toast("ID Card is still preparing. Please wait a moment and try again.");
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+      toast("Donor ID Card downloaded successfully.");
+    }
 
     /* =========================================================
        SEARCH DONORS
@@ -4485,6 +4528,99 @@
       ]);
     }
 
+    function clearAdminDonorSearch() {
+      const input = document.getElementById("adminDonorSearch");
+      if (input) input.value = "";
+      window.__ADMIN_DONOR_PAGE = 1;
+      renderAdminDonorTable();
+    }
+
+    function changeAdminDonorPage(delta) {
+      window.__ADMIN_DONOR_PAGE = Math.max(1, (Number(window.__ADMIN_DONOR_PAGE) || 1) + delta);
+      renderAdminDonorTable();
+    }
+
+    function renderAdminDonorTable() {
+      const box = document.getElementById("adminDonorTable");
+      if (!box) return;
+
+      const donors = Array.isArray(window.__ADMIN_DONORS) ? window.__ADMIN_DONORS : [];
+      const query = String(document.getElementById("adminDonorSearch")?.value || "").trim().toLowerCase();
+      const entryValue = String(document.getElementById("adminDonorEntryCount")?.value || "10");
+
+      const filtered = donors.filter(donor => {
+        if (!query) return true;
+        const name = String(value(donor, "Name", "name") || "").toLowerCase();
+        const group = String(value(donor, "Blood_Group", "bloodGroup", "BloodGroup") || "").toLowerCase();
+        const mobile = String(value(donor, "Mobile", "mobile", "Phone") || "").toLowerCase();
+        const referred = String(value(donor, "Referred_By", "referredBy", "ReferredBy") || "").toLowerCase();
+        return name.includes(query) || group.includes(query) || mobile.includes(query) || referred.includes(query);
+      });
+
+      const pageSize = entryValue === "all" ? filtered.length : Math.max(1, Number(entryValue) || 10);
+      const totalPages = pageSize ? Math.max(1, Math.ceil(filtered.length / pageSize)) : 1;
+      const page = Math.min(Math.max(1, Number(window.__ADMIN_DONOR_PAGE) || 1), totalPages);
+      window.__ADMIN_DONOR_PAGE = page;
+      const visible = entryValue === "all"
+        ? filtered
+        : filtered.slice((page - 1) * pageSize, page * pageSize);
+
+      if (!filtered.length) {
+        box.innerHTML = '<div class="admin-empty">No donors match your search.</div>';
+        return;
+      }
+
+      box.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;">
+          <div style="font-size:14px;color:#5d6f84;font-weight:600;">Showing ${entryValue === "all" ? 1 : ((page-1)*pageSize+1)}–${entryValue === "all" ? filtered.length : Math.min(page*pageSize, filtered.length)} of ${filtered.length} matching donor(s)</div>
+          ${entryValue !== "all" && totalPages > 1 ? `
+            <div style="display:flex;align-items:center;gap:6px;">
+              <button type="button" class="admin-small-btn" onclick="changeAdminDonorPage(-1)" ${page<=1?"disabled":""}>← Previous</button>
+              <span style="font-size:13px;font-weight:700;">Page ${page} / ${totalPages}</span>
+              <button type="button" class="admin-small-btn" onclick="changeAdminDonorPage(1)" ${page>=totalPages?"disabled":""}>Next →</button>
+            </div>` : ""}
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Blood</th>
+              <th>Mobile</th>
+              <th>Referred By</th>
+              <th>Location</th>
+              <th>90-Day Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${visible.map(donor => {
+              const id = value(donor, "Donor_ID", "donorId", "DonorID", "ID", "id");
+              const name = value(donor, "Name", "name") || "—";
+              const group = value(donor, "Blood_Group", "bloodGroup", "BloodGroup") || "—";
+              const mobile = value(donor, "Mobile", "mobile", "Phone") || "—";
+              const referred = value(donor, "Referred_By", "referredBy", "ReferredBy") || "—";
+              const location = [value(donor, "City", "city"), value(donor, "District", "district")]
+                .filter(Boolean).join(", ") || "—";
+              const eligibility = donor.eligibility?.status || "Unknown";
+              return `
+                <tr>
+                  <td><strong>${escapeHtml(name)}</strong></td>
+                  <td>${escapeHtml(group)}</td>
+                  <td>${escapeHtml(mobile)}</td>
+                  <td>${escapeHtml(referred)}</td>
+                  <td>${escapeHtml(location)}</td>
+                  <td><span class="admin-status-pill">${escapeHtml(eligibility)}</span></td>
+                  <td style="white-space:nowrap;">
+                    <button type="button" class="admin-small-btn" onclick="openAdminDonorDetails('${escapeAttribute(id)}')">View Details</button>
+                    <button type="button" class="admin-small-btn admin-edit-btn" onclick="openAdminDonorEdit('${escapeAttribute(id)}')">Edit</button>
+                    <button type="button" class="admin-danger-btn" onclick="adminDeleteDonor('${escapeAttribute(id)}')">Delete</button>
+                  </td>
+                </tr>`;
+            }).join("")}
+          </tbody>
+        </table>`;
+    }
+
     async function loadAdminDonors() {
       const box = document.getElementById("adminDonorTable");
       if (!box || !ensureAdminAccess()) return;
@@ -4493,51 +4629,9 @@
 
       try {
         const donors = await BloodDonationAPI.getDonors();
-        window.__ADMIN_DONORS = donors;
-
-        if (!donors.length) {
-          box.innerHTML = '<div class="admin-empty">No registered donors found.</div>';
-          return;
-        }
-
-        box.innerHTML = `
-          <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Blood</th>
-                <th>Mobile</th>
-                <th>Location</th>
-                <th>90-Day Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${donors.map(donor => {
-                const id = value(donor, "Donor_ID", "donorId", "DonorID", "ID", "id");
-                const name = value(donor, "Name", "name") || "—";
-                const group = value(donor, "Blood_Group", "bloodGroup", "BloodGroup") || "—";
-                const mobile = value(donor, "Mobile", "mobile", "Phone") || "—";
-                const location = [value(donor, "City", "city"), value(donor, "District", "district")]
-                  .filter(Boolean).join(", ") || "—";
-                const eligibility = donor.eligibility?.status || "Unknown";
-
-                return `
-                  <tr>
-                    <td><strong>${escapeHtml(name)}</strong></td>
-                    <td>${escapeHtml(group)}</td>
-                    <td>${escapeHtml(mobile)}</td>
-                    <td>${escapeHtml(location)}</td>
-                    <td><span class="admin-status-pill">${escapeHtml(eligibility)}</span></td>
-                    <td>
-                      <button type="button" class="admin-small-btn" onclick="openAdminDonorDetails('${escapeAttribute(id)}')">View Details</button>
-                      <button type="button" class="admin-small-btn admin-edit-btn" onclick="openAdminDonorEdit('${escapeAttribute(id)}')">Edit</button>
-                      <button type="button" class="admin-danger-btn" onclick="adminDeleteDonor('${escapeAttribute(id)}')">Delete</button>
-                    </td>
-                  </tr>`;
-              }).join("")}
-            </tbody>
-          </table>`;
+        window.__ADMIN_DONORS = Array.isArray(donors) ? donors : [];
+        window.__ADMIN_DONOR_PAGE = 1;
+        renderAdminDonorTable();
       } catch (error) {
         console.error(error);
         box.innerHTML = '<div class="admin-empty error-text">Unable to load donors.</div>';
