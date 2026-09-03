@@ -1701,6 +1701,7 @@
         <button class="modal-close" type="button" onclick="closeAdminDonorDetails()">×</button>
       </div>
       <div id="adminDonorDetailsCard" class="admin-donor-details-card"></div>
+      <div id="idCardStatus" class="form-message" style="margin:10px 0;text-align:center;display:none;"></div>
       <div class="modal-actions donor-share-actions">
         <button type="button" class="btn btn-primary" onclick="shareAdminDonorDetails()">📤 Share Details</button>
         <button type="button" class="btn btn-primary" onclick="generateAdminDonorIdCard()">🪪 Generate ID Card</button>
@@ -3831,7 +3832,10 @@
       // to read the Drive file server-side and return a data URL.
       if (!cachedPhoto && storedPhotoUrl) {
         try {
-          const serverPhoto = await BloodDonationAPI.getDonorPhotoData({ photoUrl: storedPhotoUrl });
+          const serverPhoto = await Promise.race([
+            BloodDonationAPI.getDonorPhotoData({ photoUrl: storedPhotoUrl }),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("PHOTO_FETCH_TIMEOUT")), 25000))
+          ]);
           if (serverPhoto && serverPhoto.success && serverPhoto.dataUrl) {
             photoUrl = serverPhoto.dataUrl;
             if (donorIdForPhoto) saveCachedDonorPhoto(donorIdForPhoto, photoUrl);
@@ -3923,17 +3927,54 @@
 
     async function generateAdminDonorIdCard() {
       if (!currentAdminDonor) return;
+      const status = document.getElementById("idCardStatus");
+      const setStatus = (text, type="success") => {
+        if (!status) return;
+        status.style.display = "block";
+        status.className = "form-message " + type;
+        status.textContent = text;
+      };
       try {
-        const blob = await createProfessionalDonorIdCard(currentAdminDonor);
+        const donorIdForPhoto = String(value(currentAdminDonor,"Donor_ID","donorId","DonorID","ID","id") || "").trim();
+        const storedPhotoUrl = String(value(currentAdminDonor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url") || "").trim();
+        const cachedPhoto = getCachedDonorPhoto(donorIdForPhoto);
+
+        if (cachedPhoto || storedPhotoUrl) {
+          setStatus("⏳ Loading donor photo… Please wait until the photo is ready.", "success");
+        } else {
+          setStatus("ℹ️ No donor photo uploaded. ID card will use initials.", "success");
+        }
+
+        // Give the server/browser enough time to fetch a Google Drive photo.
+        // The photo fetch itself has a 25-second maximum; the ID card then continues.
+        const blob = await Promise.race([
+          createProfessionalDonorIdCard(currentAdminDonor),
+          new Promise((_, reject) => setTimeout(() => reject(new Error("PHOTO_TIMEOUT")), 30000))
+        ]).catch(async (error) => {
+          if (error?.message !== "PHOTO_TIMEOUT") throw error;
+          setStatus("⚠️ Photo took too long to load. Using initials. Preparing ID card…", "success");
+          // Generate once more without blocking indefinitely; createProfessionalDonorIdCard
+          // will still use a cached/local photo if available.
+          return await createProfessionalDonorIdCard({ ...currentAdminDonor, Photo_URL: "" });
+        });
+
         const name = String(value(currentAdminDonor,"Name","name") || "Donor").replace(/[^a-z0-9]+/gi,"_");
         const file = new File([blob], `${name || "Donor"}_ID_Card.png`, { type:"image/png" });
+
+        setStatus("✓ Photo loaded. ID card is ready to download/share.", "success");
+        await new Promise(resolve => setTimeout(resolve, 500));
+
         if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
           await navigator.share({ title:"Poongurichi Nanbargal Donor ID Card", text:"Official Blood Donor ID Card", files:[file] });
           return;
         }
         const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download=file.name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
         toast("Professional donor ID card generated.");
-      } catch(error) { console.error(error); toast(error?.message || "Unable to generate donor ID card."); }
+      } catch(error) {
+        console.error(error);
+        setStatus("Unable to generate the ID card. Please try again.", "error");
+        toast(error?.message || "Unable to generate donor ID card.");
+      }
     }
 
     async function shareAdminDonorDetails() {
