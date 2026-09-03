@@ -1,20 +1,15 @@
 {
-  "name": "Blood Donation App",
-  "short_name": "Blood Donate",
+  "name": "Poongurichi Nanbargal Blood Donor's Club",
+  "short_name": "Poongurichi Nanbargal",
+  "description": "Community blood donor network for Poongurichi Nanbargal Blood Donor's Club.",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f6f7fb",
-  "theme_color": "#b91c1c",
+  "orientation": "portrait-primary",
+  "theme_color": "#123b82",
+  "background_color": "#f4f7fb",
   "icons": [
-    {
-      "src": "icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }
