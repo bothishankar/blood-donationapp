@@ -1847,7 +1847,6 @@
        IMPORTANT: app.js must remain in your repository
        ======================================================= -->
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
   <script src="app.js"></script>
 
 
@@ -3582,65 +3581,141 @@
     function closeAdminDonorDetails() { document.getElementById("adminDonorDetailsModal")?.classList.remove("show"); }
     function closeAdminDonorDetailsOutside(event) { if(event.target.id === "adminDonorDetailsModal") closeAdminDonorDetails(); }
 
+    async function createDonorShareImage(donor) {
+      const donorName = String(value(donor,"Name","name") || "Donor").trim();
+      const bloodGroup = String(value(donor,"Blood_Group","bloodGroup","BloodGroup") || "—").trim();
+      const mobile = String(value(donor,"Mobile","mobile","Phone") || "—").trim();
+      const district = String(value(donor,"District","district") || "—").trim();
+      const city = String(value(donor,"City","city") || "—").trim();
+      const address = String(value(donor,"Address","address") || "—").trim();
+      const lastDonation = String(value(donor,"Last_Donation_Date","lastDonationDate") || "—").trim();
+
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1350;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Your browser cannot create the donor image.");
+
+      const roundRect = (x,y,w,h,r,fill,stroke,sw=1) => {
+        ctx.beginPath();
+        ctx.roundRect(x,y,w,h,r);
+        if (fill) { ctx.fillStyle=fill; ctx.fill(); }
+        if (stroke) { ctx.lineWidth=sw; ctx.strokeStyle=stroke; ctx.stroke(); }
+      };
+      const wrap = (text, maxWidth, font) => {
+        ctx.font = font;
+        const words = String(text || "—").split(/\s+/);
+        const lines=[]; let line="";
+        for (const word of words) {
+          const test=line ? line+" "+word : word;
+          if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line=word; }
+          else line=test;
+        }
+        if(line) lines.push(line);
+        return lines.slice(0,4);
+      };
+
+      ctx.fillStyle="#f4f7fb"; ctx.fillRect(0,0,1080,1350);
+      roundRect(35,35,1010,1280,42,"#ffffff","#d7e2ef",4);
+      roundRect(35,35,1010,235,42,"#eef6ff",null);
+
+      // Load the supplied Poongurichi Nanbargal logo directly onto the canvas.
+      try {
+        const logo = new Image();
+        logo.src = new URL("icons/poongurichi-logo.jpeg", document.baseURI).href;
+        await new Promise((resolve,reject)=>{ logo.onload=resolve; logo.onerror=reject; });
+        ctx.save();
+        ctx.beginPath(); ctx.arc(165,160,95,0,Math.PI*2); ctx.clip();
+        ctx.drawImage(logo,70,65,190,190);
+        ctx.restore();
+      } catch (_) {
+        ctx.fillStyle="#123b82"; ctx.beginPath(); ctx.arc(165,160,90,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle="#fff"; ctx.font="700 32px Arial"; ctx.textAlign="center"; ctx.fillText("PN",165,172);
+      }
+
+      ctx.textAlign="left";
+      ctx.fillStyle="#123b82"; ctx.font="700 39px Arial"; ctx.fillText("Poongurichi Nanbargal",300,120);
+      ctx.fillStyle="#5f7087"; ctx.font="27px Arial"; ctx.fillText("Blood Donor's Club",300,168);
+      roundRect(300,195,255,55,27,"#d9273f",null);
+      ctx.fillStyle="#fff"; ctx.font="700 28px Arial"; ctx.textAlign="center"; ctx.fillText("BLOOD DONOR",427,232);
+
+      ctx.textAlign="left"; ctx.fillStyle="#123b82"; ctx.font="700 43px Arial"; ctx.fillText("Donor Details",110,350);
+      ctx.fillStyle="#172033"; ctx.font="700 38px Arial"; ctx.fillText(donorName,110,420);
+
+      const rows=[
+        ["BLOOD GROUP",bloodGroup], ["MOBILE NUMBER",mobile], ["CITY",city],
+        ["DISTRICT",district], ["LAST DONATION",lastDonation]
+      ];
+      let y=505;
+      for(const [label,val] of rows){
+        ctx.fillStyle="#123b82"; ctx.font="700 27px Arial"; ctx.fillText(label,110,y);
+        ctx.fillStyle="#172033"; ctx.font="29px Arial"; ctx.fillText(val,420,y);
+        ctx.strokeStyle="#dbe4f0"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(110,y+22); ctx.lineTo(970,y+22); ctx.stroke();
+        y+=82;
+      }
+      ctx.fillStyle="#123b82"; ctx.font="700 27px Arial"; ctx.fillText("ADDRESS",110,y+10);
+      const addressLines=wrap(address,520,"27px Arial");
+      ctx.fillStyle="#172033"; ctx.font="27px Arial";
+      addressLines.forEach((line,i)=>ctx.fillText(line,420,y+10+i*42));
+
+      roundRect(90,1200,900,75,25,"#eef6ff",null);
+      ctx.textAlign="center"; ctx.fillStyle="#123b82"; ctx.font="700 25px Arial";
+      ctx.fillText("Donate Blood • Save Life • Be a Hero",540,1232);
+      ctx.fillStyle="#5f7087"; ctx.font="21px Arial";
+      ctx.fillText("Poongurichi Nanbargal Blood Donors Club",540,1260);
+
+      return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create PNG image.")),"image/png",1));
+    }
+
     async function shareAdminDonorDetails() {
       if (!currentAdminDonor) return;
       const donor = currentAdminDonor;
       const donorName = String(value(donor,"Name","name") || "Donor").trim();
+      const safeName = donorName.replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"") || "Donor";
       const detailsText = [
-        "Blood Donor Details",
-        `Name: ${donorName}`,
+        "Poongurichi Nanbargal Blood Donor Details",
+        `Name: ${value(donor,"Name","name") || "—"}`,
         `Blood Group: ${value(donor,"Blood_Group","bloodGroup","BloodGroup") || "—"}`,
         `Mobile: ${value(donor,"Mobile","mobile","Phone") || "—"}`,
-        `Email: ${value(donor,"Email","email") || "—"}`,
         `District: ${value(donor,"District","district") || "—"}`,
         `City: ${value(donor,"City","city") || "—"}`,
         `Address: ${value(donor,"Address","address") || "—"}`
       ].join("\n");
 
       try {
-        // Prefer the native mobile share sheet. Text sharing works even when file sharing is unsupported.
-        if (navigator.share) {
-          const card = document.getElementById("adminDonorDetailsCard");
-          if (card && typeof html2canvas !== "undefined") {
-            try {
-              const canvas = await html2canvas(card, {backgroundColor:"#ffffff", scale:2, useCORS:true, logging:false});
-              const blob = await new Promise(resolve => canvas.toBlob(resolve,"image/png",1));
-              if (blob) {
-                const safeName = donorName.replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"") || "Donor";
-                const file = new File([blob], `${safeName}_Details.png`, {type:"image/png"});
-                if (!navigator.canShare || navigator.canShare({files:[file]})) {
-                  await navigator.share({title:"Blood Donor Details", text:detailsText, files:[file]});
-                  return;
-                }
-              }
-            } catch (imageError) {
-              console.warn("Donor share image:", imageError);
-            }
-          }
-          await navigator.share({title:"Blood Donor Details", text:detailsText});
+        toast("Creating donor PNG…");
+        const pngBlob = await createDonorShareImage(donor);
+        const file = new File([pngBlob], `${safeName}_Blood_Donor_Details.png`, {type:"image/png"});
+
+        // Preferred path: native Android/iOS share sheet with the actual PNG file.
+        if (navigator.share && navigator.canShare && navigator.canShare({files:[file]})) {
+          await navigator.share({
+            title:`Blood Donor Details - ${donorName}`,
+            text:"Poongurichi Nanbargal Blood Donor Details",
+            files:[file]
+          });
           return;
         }
 
-        // Desktop fallback: copy the donor details so the Share button still performs a useful action.
-        if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(detailsText);
-          toast("Donor details copied. You can paste them into WhatsApp, Email or another app.");
+        // Some in-app browsers (including WhatsApp's browser) don't expose file sharing.
+        // Open a simple share/download view instead of silently failing.
+        const url = URL.createObjectURL(pngBlob);
+        const win = window.open("", "_blank");
+        if (win) {
+          win.document.write(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Share Donor Details</title><style>body{margin:0;background:#eef3f8;font-family:Arial;text-align:center;padding:20px;color:#123b82}img{max-width:100%;height:auto;border-radius:16px;box-shadow:0 8px 30px #0002}a,button{display:inline-block;margin:14px 6px;padding:14px 20px;border:0;border-radius:12px;background:#1261d8;color:#fff;font-weight:700;font-size:16px;text-decoration:none}p{color:#5f7087}</style></head><body><h2>Donor Details PNG</h2><p>Image created successfully. Save it and share it on WhatsApp.</p><img src="${url}" alt="Donor details"><br><a href="${url}" download="${safeName}_Blood_Donor_Details.png">⬇️ Save PNG</a><p><b>iPhone:</b> long-press the image to save it, then share it from Photos.<br><b>Android:</b> tap Save PNG, then share it from Gallery.</p></body></html>`);
+          win.document.close();
+          setTimeout(()=>URL.revokeObjectURL(url),60000);
           return;
         }
 
-        // Final fallback: download the details as a text file.
-        const blob = new Blob([detailsText], {type:"text/plain;charset=utf-8"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `${donorName.replace(/[^a-z0-9]+/gi,"_") || "Donor"}_Details.txt`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-        toast("Donor details file created.");
-      } catch (error) {
-        if (error?.name !== "AbortError") toast(error?.message || "Unable to share donor details.");
+        // Last fallback: trigger a download from the current page.
+        const a=document.createElement("a"); a.href=url; a.download=`${safeName}_Blood_Donor_Details.png`;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),5000);
+        toast("PNG created. Save the image and share it from your gallery.");
+      } catch(error) {
+        console.error("Donor PNG share failed:",error);
+        toast(error?.message || "Unable to create donor PNG.");
       }
     }
 
@@ -3692,31 +3767,38 @@
 
     function adminJumpTo(tab) {
       if (!ensureAdminAccess()) return;
+      const validTabs = new Set(["donors","requests","events","fields","social"]);
+      if (!validTabs.has(tab)) return;
+
       const cards = [...document.querySelectorAll("[data-admin-tab]")];
-      if (!cards.length) return;
-
       cards.forEach(card => {
-        card.classList.toggle("admin-tab-active", card.dataset.adminTab === tab);
+        const active = card.dataset.adminTab === tab;
+        card.classList.toggle("admin-tab-active", active);
+        card.hidden = !active;
       });
 
-      document.querySelectorAll(".admin-action-btn").forEach(btn => {
-        btn.classList.toggle("active",
-          (tab === "donors" && btn.textContent.includes("Manage Donors")) ||
-          (tab === "requests" && btn.textContent.includes("Blood Requests")) ||
-          (tab === "events" && btn.textContent.includes("Events")) ||
-          (tab === "social" && btn.textContent.includes("Social Links")) ||
-          (tab === "fields" && btn.textContent.includes("Fields"))
-        );
-      });
-
+      // The Fields card contains both normal website fields and social fields.
       const settingsCard = document.getElementById("adminSettingsCard");
       if (settingsCard) {
-        settingsCard.classList.toggle("admin-tab-active", tab === "fields" || tab === "social");
+        settingsCard.hidden = !["fields","social"].includes(tab);
+        settingsCard.classList.toggle("admin-tab-active", ["fields","social"].includes(tab));
         setAdminSettingsMode(tab === "social" ? "social" : "fields");
       }
 
-      const first = cards.find(card => card.dataset.adminTab === tab) || (tab === "social" ? settingsCard : null);
-      if (first) first.scrollIntoView({behavior:"smooth", block:"start"});
+      document.querySelectorAll(".admin-action-btn").forEach(btn => {
+        const text=btn.textContent||"";
+        btn.classList.toggle("active",
+          (tab === "donors" && text.includes("Manage Donors")) ||
+          (tab === "requests" && text.includes("Blood Requests")) ||
+          (tab === "events" && text.includes("Events")) ||
+          (tab === "social" && text.includes("Social Links")) ||
+          (tab === "fields" && text.includes("Fields"))
+        );
+      });
+
+      const target = cards.find(card => card.dataset.adminTab === tab) ||
+        (settingsCard && ["fields","social"].includes(tab) ? settingsCard : null);
+      if (target) target.scrollIntoView({behavior:"smooth", block:"start"});
     }
 
     /* =========================================================
@@ -4240,71 +4322,72 @@
       return window.matchMedia && window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
     }
 
+    function isSafariBrowser() {
+      const ua = navigator.userAgent || "";
+      return /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|Chrome|Android/i.test(ua);
+    }
+
+
     function updateInstallButtonState() {
       document.querySelectorAll(".install-app-top-btn, .install-menu-btn").forEach(btn => {
         btn.style.display = isStandalonePWA() ? "none" : "";
       });
       const androidBtn = document.getElementById("androidInstallButton");
-      if (androidBtn) androidBtn.textContent = deferredInstallPrompt ? "⬇️ Install for Android" : "📱 Install / Add to Home Screen";
+      if (androidBtn) {
+        if (deferredInstallPrompt) androidBtn.textContent = "⬇️ Install for Android";
+        else if (isIOSDevice()) androidBtn.textContent = "🍎 Show iPhone Install Steps";
+        else androidBtn.textContent = "📱 Install / Add to Home Screen";
+      }
     }
 
     async function installAppNow() {
+      if (isStandalonePWA()) return;
       if (deferredInstallPrompt) {
         try {
           deferredInstallPrompt.prompt();
           await deferredInstallPrompt.userChoice;
-        } catch (error) {
-          console.warn("Install prompt:", error);
-        }
-        deferredInstallPrompt = null;
-        updateInstallButtonState();
-        return;
+        } catch (error) { console.warn("Install prompt:",error); }
+        deferredInstallPrompt=null; updateInstallButtonState(); return;
       }
       openInstallApp();
     }
 
     function openInstallApp() {
-      const modal = document.getElementById("installAppModal");
-      if (!modal) return;
-      modal.classList.add("open");
-      modal.setAttribute("aria-hidden", "false");
-      updateInstallButtonState();
-      if (isIOSDevice()) showIOSInstallSteps();
+      const modal=document.getElementById("installAppModal");
+      if(!modal) return;
+      modal.classList.add("open"); modal.setAttribute("aria-hidden","false"); updateInstallButtonState();
+      if(isIOSDevice()) showIOSInstallSteps();
+    }
+    function closeInstallApp(){ const modal=document.getElementById("installAppModal"); if(!modal)return; modal.classList.remove("open"); modal.setAttribute("aria-hidden","true"); }
+    function closeInstallAppOutside(event){ if(event.target?.id==="installAppModal") closeInstallApp(); }
+
+    function showIOSInstallSteps(){
+      const steps=document.getElementById("iosInstallSteps"); if(!steps)return;
+      steps.hidden=false;
+      steps.innerHTML=`<strong>iPhone / iPad:</strong> Open this page in <b>Safari</b> → tap <b>Share ⬆️</b> → <b>Add to Home Screen</b> → turn on <b>Open as Web App</b> → <b>Add</b>.<br><br><small>Apple installs this website as a web app; an unsigned .ipa file cannot be directly installed on a normal iPhone.</small>`;
     }
 
-    function closeInstallApp() {
-      const modal = document.getElementById("installAppModal");
-      if (!modal) return;
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
+    function openInChromeForInstall(){
+      const url=location.href;
+      if(/Android/i.test(navigator.userAgent)){
+        try { location.href=`intent://${url.replace(/^https?:\/\//,'')}#Intent;scheme=https;package=com.android.chrome;end`; return; } catch(_) {}
+      }
+      window.open(url,"_blank");
     }
 
-    function closeInstallAppOutside(event) {
-      if (event.target && event.target.id === "installAppModal") closeInstallApp();
-    }
-
-    function showIOSInstallSteps() {
-      const steps = document.getElementById("iosInstallSteps");
-      if (steps) steps.hidden = false;
-    }
-
-    async function installAndroidApp() {
-      if (deferredInstallPrompt) {
-        try {
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice;
-        } catch (error) {
-          console.warn("Install prompt:", error);
-        }
-        deferredInstallPrompt = null;
-        updateInstallButtonState();
+    async function installAndroidApp(){
+      if(isIOSDevice()){ showIOSInstallSteps(); return; }
+      if(deferredInstallPrompt){
+        try{ deferredInstallPrompt.prompt(); await deferredInstallPrompt.userChoice; }
+        catch(error){ console.warn("Install prompt:",error); }
+        deferredInstallPrompt=null; updateInstallButtonState(); return;
+      }
+      if(/Android/i.test(navigator.userAgent) && !/Chrome/i.test(navigator.userAgent)){
+        openInChromeForInstall();
         return;
       }
-      if (isIOSDevice()) {
-        showIOSInstallSteps();
-        return;
-      }
-      toast("Open your browser menu and choose Install app or Add to Home screen.");
+      openInstallApp();
+      toast("In Chrome, use ⋮ → Install app if the automatic prompt is not shown.");
     }
 
     updateInstallButtonState();
