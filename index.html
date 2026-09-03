@@ -1691,6 +1691,30 @@
     </div>
   </div>
 
+
+  <!-- =======================================================
+       NEW DONOR REGISTRATION -> ID CARD POPUP
+       ======================================================= -->
+  <div id="registrationIdCardModal" class="modal-backdrop" onclick="closeRegistrationIdCardOutside(event)">
+    <div class="modal registration-id-card-modal" style="max-width:900px;">
+      <div class="modal-head">
+        <h2>🎉 Registration Successful</h2>
+        <button class="modal-close" type="button" onclick="closeRegistrationIdCardPopup()">×</button>
+      </div>
+      <div id="registrationIdCardStatus" class="form-message success" style="margin:10px 0;text-align:center;">
+        Preparing your donor ID card…
+      </div>
+      <div style="background:#f4f8fc;border-radius:16px;padding:12px;overflow:auto;text-align:center;">
+        <img id="registrationIdCardImage" alt="Donor ID Card" style="display:none;max-width:100%;height:auto;border-radius:14px;box-shadow:0 8px 28px rgba(18,59,130,.15);">
+      </div>
+      <div class="modal-actions" style="justify-content:center;flex-wrap:wrap;">
+        <button id="registrationIdCardShareBtn" type="button" class="btn btn-primary" onclick="shareRegistrationIdCard()" disabled>📤 Share ID Card</button>
+        <button id="registrationIdCardDownloadBtn" type="button" class="btn btn-primary" onclick="downloadRegistrationIdCard()" disabled>⬇️ Download ID Card</button>
+        <button type="button" class="btn btn-light" onclick="closeRegistrationIdCardPopup()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- =======================================================
        ADMIN DONOR DETAILS / SHARE MODAL
        ======================================================= -->
@@ -2854,6 +2878,7 @@
               if (!upload || upload.success === false) throw new Error(upload?.error || "Donor photo upload failed.");
               data.photoUrl = upload.imageUrl || "";
               data.Photo_URL = data.photoUrl;
+              data.photoFileId = upload.fileId || upload.fileID || "";
             }
 
             const registrationResult = await BloodDonationAPI.registerDonor(data);
@@ -2861,6 +2886,27 @@
             const registeredDonorId = registrationResult?.donorId || registrationResult?.Donor_ID || "";
             if (registeredDonorId && __pendingDonorPhotoDataUrl) saveCachedDonorPhoto(registeredDonorId, __pendingDonorPhotoDataUrl);
             __pendingDonorPhotoDataUrl = "";
+
+            // Generate the new donor's ID card immediately after a successful
+            // registration. The cached local photo is used first, so the card
+            // does not have to wait for Google Drive when a photo was uploaded.
+            const newlyRegisteredDonor = {
+              ...data,
+              Donor_ID: registeredDonorId,
+              donorId: registeredDonorId,
+              Photo_URL: data.Photo_URL || data.photoUrl || "",
+              photoUrl: data.photoUrl || data.Photo_URL || ""
+            };
+            form.reset();
+            document.getElementById("donorPhotoPreview")?.setAttribute("hidden", "hidden");
+
+            await Promise.all([
+              loadDashboard(),
+              loadBloodGroups()
+            ]);
+
+            await openRegistrationIdCardPopup(newlyRegisteredDonor);
+            return;
 
 
             message.className =
@@ -2870,18 +2916,7 @@
               "Registration successful. Thank you for becoming a donor!";
 
 
-            form.reset();
-
-
-            await Promise.all([
-              loadDashboard(),
-              loadBloodGroups()
-            ]);
-
-
-            toast(
-              "Donor registration successful ❤️"
-            );
+            toast("Donor registration successful ❤️");
 
           } catch (error) {
 
