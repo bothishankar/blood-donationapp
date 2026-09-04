@@ -42,18 +42,6 @@
   }
   </script>
 
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Poongurichi Nanbargal Blood Donors Club",
-    "alternateName": "Poongurichi Nanbargal",
-    "url": "https://bothishankar.github.io/blood-donationapp/",
-    "description": "Poongurichi Nanbargal Blood Donors Club helps connect voluntary blood donors with people who need blood."
-  }
-  </script>
-
   <meta name="theme-color" content="#123b82">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -69,13 +57,6 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .seo-community-intro{margin:30px 0 10px;padding:0}
-    .seo-community-inner{padding:26px 28px;border:1px solid #dbe5f0;border-radius:22px;background:#f8fbff}
-    .seo-community-inner h2{margin:6px 0 10px;font-size:clamp(24px,3vw,34px);line-height:1.15}
-    .seo-community-inner p{max-width:900px;margin:0;color:#536273;line-height:1.7}
-    .seo-community-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
-    .seo-community-links button{border:1px solid #cbd8e6;background:#fff;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;color:#123b82;cursor:pointer}
-    .seo-community-links button:hover{transform:translateY(-1px)}
     .donor-photo-preview{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid #dbe5f0;border-radius:14px;background:#f7fbff;color:#123b82;font-weight:700}
     .donor-photo-preview img{width:64px;height:76px;object-fit:cover;border-radius:10px;border:2px solid #d7e2ef}
     .donor-photo-preview.error{border-color:#e14b5a;color:#b4232f;background:#fff4f5}
@@ -354,27 +335,6 @@
           </div>
 
         </div>
-
-
-        <!-- SEO / COMMUNITY INTRO -->
-
-        <section class="seo-community-intro" aria-labelledby="club-seo-title">
-          <div class="seo-community-inner">
-            <div class="section-kicker">🩸 Poongurichi Blood Donation</div>
-            <h2 id="club-seo-title">Poongurichi Nanbargal Blood Donors Club</h2>
-            <p>
-              <strong>Poongurichi Nanbargal Blood Donors Club</strong> is a community blood donor network
-              that connects voluntary blood donors with people who need blood. You can
-              <strong>register as a blood donor</strong>, <strong>find blood donors</strong> by blood group
-              and location, or <strong>raise a blood request</strong> when blood is needed.
-            </p>
-            <div class="seo-community-links" aria-label="Blood donation services">
-              <button type="button" onclick="goTo('donor')">Register as a Donor</button>
-              <button type="button" onclick="goTo('find')">Find Blood Donors</button>
-              <button type="button" onclick="goTo('request')">Request Blood</button>
-            </div>
-          </div>
-        </section>
 
 
         <!-- QUICK ACTIONS -->
@@ -754,6 +714,28 @@
                 maxlength="10"
                 title="Enter a valid 10-digit Indian mobile number"
                 placeholder="Mobile number"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label class="form-label">
+                Alternate Mobile <span class="optional-mark">Optional</span>
+              </label>
+
+              <input
+                class="form-control"
+                name="Alternate_Mobile"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel"
+                pattern="[6-9][0-9]{9}"
+                minlength="10"
+                maxlength="10"
+                title="Enter a valid 10-digit Indian mobile number"
+                placeholder="Alternate mobile number"
               >
 
             </div>
@@ -1839,6 +1821,7 @@
         <div class="edit-grid">
           <label>Full Name <span class="required-mark">* Mandatory</span><input class="form-control" name="Name" required></label>
           <label>Mobile Number <span class="required-mark">* Mandatory</span><input class="form-control" name="Mobile" required inputmode="tel"></label>
+          <label>Alternate Mobile <span class="optional-mark">Optional</span><input class="form-control" name="Alternate_Mobile" inputmode="tel" maxlength="10" pattern="[6-9][0-9]{9}"></label>
           <label>Email<input class="form-control" name="Email" type="email"></label>
           <label>Blood Group <span class="required-mark">* Mandatory</span><select class="form-control" name="Blood_Group" required><option value="">Select Blood Group</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></label>
           <label>Gender <span class="required-mark">* Mandatory</span><select class="form-control" name="Gender" required><option value="">Select Gender</option><option>Male</option><option>Female</option><option>Other</option></select></label>
@@ -2945,6 +2928,16 @@
           data.Donor_Name = donorName;
           data.DonorName = donorName;
 
+          const alternateMobile = String(data.Alternate_Mobile || data.alternateMobile || "").replace(/\D/g, "").trim();
+          if (alternateMobile && !/^[6-9]\d{9}$/.test(alternateMobile)) {
+            message.className = "form-message error";
+            message.textContent = "Enter a valid 10-digit alternate mobile number.";
+            form.elements.namedItem("Alternate_Mobile")?.focus();
+            return;
+          }
+          data.Alternate_Mobile = alternateMobile;
+          data.alternateMobile = alternateMobile;
+
 
           try {
 
@@ -2977,6 +2970,46 @@
 
             const registrationResult = await BloodDonationAPI.registerDonor(data);
             if (registrationResult && registrationResult.success === false) throw new Error(registrationResult.error || "Registration failed.");
+
+            // Duplicate registration: nothing is saved. Show the existing donor
+            // record and prepare that donor's existing ID card for download.
+            if (registrationResult?.duplicate && registrationResult?.existingDonor) {
+              __pendingDonorPhotoDataUrl = "";
+              const existingDonor = registrationResult.existingDonor;
+              const existingId = String(existingDonor.Donor_ID || existingDonor.donorId || registrationResult.donorId || "").trim();
+              message.className = "form-message error";
+              message.textContent = `⚠️ Data already registered/updated. Existing Donor ID: ${existingId || "—"}`;
+
+              const idAction = document.getElementById("newDonorIdCardAction");
+              const idStatus = document.getElementById("newDonorIdCardStatus");
+              if (idAction) idAction.style.display = "block";
+              if (idStatus) {
+                idStatus.className = "form-message success";
+                idStatus.textContent = "⏳ Existing donor found. Preparing the existing ID card…";
+              }
+              window.__NEW_DONOR_ID_CARD_BLOB = null;
+              window.__NEW_DONOR_ID_CARD_FILE = null;
+              try {
+                const idBlob = await createProfessionalDonorIdCard(existingDonor);
+                const safeName = String(existingDonor.Name || existingDonor.name || "Donor")
+                  .replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "") || "Donor";
+                window.__NEW_DONOR_ID_CARD_BLOB = idBlob;
+                window.__NEW_DONOR_ID_CARD_FILE = new File([idBlob], `${safeName}_Donor_ID_Card.png`, { type: "image/png" });
+                if (idStatus) {
+                  idStatus.className = "form-message success";
+                  idStatus.textContent = `✓ Existing donor ID card is ready — ${existingId || "Donor"}.`;
+                }
+              } catch (cardError) {
+                console.error("Existing donor ID card error:", cardError);
+                if (idStatus) {
+                  idStatus.className = "form-message error";
+                  idStatus.textContent = "Existing donor found, but the ID card could not be prepared. Please try again.";
+                }
+              }
+              form.elements.namedItem("Name")?.focus();
+              return;
+            }
+
             const registeredDonorId = registrationResult?.donorId || registrationResult?.Donor_ID || "";
             if (registeredDonorId && __pendingDonorPhotoDataUrl) saveCachedDonorPhoto(registeredDonorId, __pendingDonorPhotoDataUrl);
             __pendingDonorPhotoDataUrl = "";
@@ -4227,7 +4260,7 @@
       if (!donor) return toast("Donor details not found.");
       const form = document.getElementById("adminDonorEditForm");
       const fields = {
-        Donor_ID:["Donor_ID","donorId"], Name:["Name","name"], Mobile:["Mobile","mobile","Phone"], Email:["Email","email"],
+        Donor_ID:["Donor_ID","donorId"], Name:["Name","name"], Mobile:["Mobile","mobile","Phone"], Alternate_Mobile:["Alternate_Mobile","alternateMobile"], Email:["Email","email"],
         Blood_Group:["Blood_Group","bloodGroup","BloodGroup"], Gender:["Gender","gender"], DOB:["DOB","dob"], District:["District","district"],
         City:["City","city"], Address:["Address","address"], Last_Donation_Date:["Last_Donation_Date","lastDonationDate"],
         Aadhaar_Number:["Aadhaar_Number","aadhaarNumber"], Referred_By:["Referred_By","referredBy"], Status:["Status","status"], Available:["Available","available"]
@@ -4249,7 +4282,7 @@
       try{
         submit.disabled=true; msg.className="form-message success"; msg.textContent="Updating donor…";
         const result=await BloodDonationAPI.updateDonor({
-          donorId:this.elements.namedItem("Donor_ID").value, name:this.elements.namedItem("Name").value.trim(), mobile:this.elements.namedItem("Mobile").value.trim(),
+          donorId:this.elements.namedItem("Donor_ID").value, name:this.elements.namedItem("Name").value.trim(), mobile:this.elements.namedItem("Mobile").value.trim(), alternateMobile:this.elements.namedItem("Alternate_Mobile").value.trim(),
           email:this.elements.namedItem("Email").value.trim(), bloodGroup:this.elements.namedItem("Blood_Group").value, gender:this.elements.namedItem("Gender").value,
           dob:this.elements.namedItem("DOB").value, district:this.elements.namedItem("District").value.trim(), city:this.elements.namedItem("City").value.trim(),
           address:this.elements.namedItem("Address").value.trim(), lastDonationDate:this.elements.namedItem("Last_Donation_Date").value,
@@ -4306,6 +4339,7 @@
       "Donor ID",
       "Name",
       "Mobile",
+      "Alternate Mobile",
       "Email",
       "Blood Group",
       "Gender",
@@ -4325,6 +4359,7 @@
     const DONOR_IMPORT_ALIASES = {
       name: ["Name", "Donor Name", "Donor_Name", "DonorName"],
       mobile: ["Mobile", "Mobile Number", "Phone", "Phone Number"],
+      alternateMobile: ["Alternate Mobile", "Alternate_Mobile", "Alternate Mobile Number", "Secondary Mobile"],
       email: ["Email", "Email Address"],
       bloodGroup: ["Blood Group", "Blood_Group", "BloodGroup"],
       gender: ["Gender", "Sex"],
@@ -4383,6 +4418,7 @@
     function donorImportRowToPayload(row) {
       const name = String(excelCell(row, DONOR_IMPORT_ALIASES.name) || "").trim();
       const mobile = String(excelCell(row, DONOR_IMPORT_ALIASES.mobile) || "").replace(/\D/g, "").trim();
+      const alternateMobile = String(excelCell(row, DONOR_IMPORT_ALIASES.alternateMobile) || "").replace(/\D/g, "").trim();
       const email = String(excelCell(row, DONOR_IMPORT_ALIASES.email) || "").trim();
       const bloodGroup = String(excelCell(row, DONOR_IMPORT_ALIASES.bloodGroup) || "").trim().toUpperCase();
       const gender = String(excelCell(row, DONOR_IMPORT_ALIASES.gender) || "").trim();
@@ -4398,7 +4434,7 @@
       const photoUrl = String(excelCell(row, DONOR_IMPORT_ALIASES.photoUrl) || "").trim();
 
       return {
-        name, mobile, email, bloodGroup, gender, dob, district,
+        name, mobile, alternateMobile, email, bloodGroup, gender, dob, district,
         city: townVillage,
         address, lastDonationDate, aadhaarNumber, referredBy,
         available, status, photoUrl, Photo_URL: photoUrl
@@ -4453,6 +4489,7 @@
         "Donor ID": value(donor,"Donor_ID","donorId","DonorID","ID","id"),
         "Name": value(donor,"Name","name"),
         "Mobile": value(donor,"Mobile","mobile","Phone"),
+        "Alternate Mobile": value(donor,"Alternate_Mobile","alternateMobile"),
         "Email": value(donor,"Email","email"),
         "Blood Group": value(donor,"Blood_Group","bloodGroup","BloodGroup"),
         "Gender": value(donor,"Gender","gender"),
