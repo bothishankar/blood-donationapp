@@ -263,6 +263,7 @@ function enrichDonor(donor = {}) {
 function normalizeDonor(donor = {}) {
   const name = clean(first(donor, "name", "Name", "Donor_Name", "DonorName"));
   const mobile = clean(first(donor, "mobile", "Mobile", "Phone"));
+  const alternateMobile = clean(first(donor, "alternateMobile", "Alternate_Mobile", "Alternate Mobile", "Secondary Mobile"));
   const email = clean(first(donor, "email", "Email"));
   const bloodGroup = clean(first(donor, "bloodGroup", "Blood_Group", "BloodGroup"));
   const gender = clean(first(donor, "gender", "Gender"));
@@ -285,6 +286,8 @@ function normalizeDonor(donor = {}) {
     DonorName: name,
     mobile,
     Mobile: mobile,
+    alternateMobile,
+    Alternate_Mobile: alternateMobile,
     email,
     Email: email,
     bloodGroup,
