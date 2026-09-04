@@ -42,6 +42,18 @@
   }
   </script>
 
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Poongurichi Nanbargal Blood Donors Club",
+    "alternateName": "Poongurichi Nanbargal",
+    "url": "https://bothishankar.github.io/blood-donationapp/",
+    "description": "Poongurichi Nanbargal Blood Donors Club helps connect voluntary blood donors with people who need blood."
+  }
+  </script>
+
   <meta name="theme-color" content="#123b82">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -57,6 +69,13 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
+    .seo-community-intro{margin:30px 0 10px;padding:0}
+    .seo-community-inner{padding:26px 28px;border:1px solid #dbe5f0;border-radius:22px;background:#f8fbff}
+    .seo-community-inner h2{margin:6px 0 10px;font-size:clamp(24px,3vw,34px);line-height:1.15}
+    .seo-community-inner p{max-width:900px;margin:0;color:#536273;line-height:1.7}
+    .seo-community-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+    .seo-community-links button{border:1px solid #cbd8e6;background:#fff;border-radius:10px;padding:10px 14px;font:inherit;font-weight:700;color:#123b82;cursor:pointer}
+    .seo-community-links button:hover{transform:translateY(-1px)}
     .donor-photo-preview{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid #dbe5f0;border-radius:14px;background:#f7fbff;color:#123b82;font-weight:700}
     .donor-photo-preview img{width:64px;height:76px;object-fit:cover;border-radius:10px;border:2px solid #d7e2ef}
     .donor-photo-preview.error{border-color:#e14b5a;color:#b4232f;background:#fff4f5}
@@ -335,6 +354,27 @@
           </div>
 
         </div>
+
+
+        <!-- SEO / COMMUNITY INTRO -->
+
+        <section class="seo-community-intro" aria-labelledby="club-seo-title">
+          <div class="seo-community-inner">
+            <div class="section-kicker">🩸 Poongurichi Blood Donation</div>
+            <h2 id="club-seo-title">Poongurichi Nanbargal Blood Donors Club</h2>
+            <p>
+              <strong>Poongurichi Nanbargal Blood Donors Club</strong> is a community blood donor network
+              that connects voluntary blood donors with people who need blood. You can
+              <strong>register as a blood donor</strong>, <strong>find blood donors</strong> by blood group
+              and location, or <strong>raise a blood request</strong> when blood is needed.
+            </p>
+            <div class="seo-community-links" aria-label="Blood donation services">
+              <button type="button" onclick="goTo('donor')">Register as a Donor</button>
+              <button type="button" onclick="goTo('find')">Find Blood Donors</button>
+              <button type="button" onclick="goTo('request')">Request Blood</button>
+            </div>
+          </div>
+        </section>
 
 
         <!-- QUICK ACTIONS -->
