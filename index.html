@@ -203,6 +203,14 @@
         </button>
 
 
+        <div class="language-switcher" id="languageSwitcher">
+          <button type="button" class="language-btn" id="languageBtn" aria-haspopup="listbox" aria-expanded="false" onclick="toggleLanguageMenu()">🌐 <span id="languageBtnLabel">English</span> ▾</button>
+          <div class="language-menu" id="languageMenu" role="listbox" aria-label="Language">
+            <button type="button" role="option" data-lang="en" onclick="setAppLanguage('en')">🇬🇧 English</button>
+            <button type="button" role="option" data-lang="ta" onclick="setAppLanguage('ta')">🇮🇳 தமிழ்</button>
+          </div>
+        </div>
+
         <button
           class="admin-btn"
           onclick="openAdmin()"
@@ -222,6 +230,13 @@
 
   <!-- Mobile menu: Admin Login is available from the hamburger button. -->
   <div id="mobileMenu" class="mobile-menu-panel" aria-hidden="true">
+    <div class="mobile-language-row">
+      <span class="mobile-language-label">🌐 Language</span>
+      <div class="mobile-language-buttons">
+        <button type="button" data-lang="en" onclick="setAppLanguage('en'); closeMobileMenu();">🇬🇧 English</button>
+        <button type="button" data-lang="ta" onclick="setAppLanguage('ta'); closeMobileMenu();">🇮🇳 தமிழ்</button>
+      </div>
+    </div>
     <button
       class="mobile-menu-admin"
       type="button"
@@ -2947,6 +2962,11 @@
               new FormData(form)
             );
 
+          // Store the donor's preferred card language. If Tamil text is entered,
+          // the ID card is automatically generated in Tamil even when the app
+          // selector is currently English.
+          data.Language = (typeof detectPNBDCTamilObject === "function" && detectPNBDCTamilObject(data)) ? "ta" : getAppLanguage();
+
           // The photo file is uploaded separately; the resulting URL is stored with the donor record.
           delete data.Donor_Photo_File;
 
@@ -3032,6 +3052,7 @@
             if (registrationResult?.duplicate && registrationResult?.existingDonor) {
               __pendingDonorPhotoDataUrl = "";
               const existingDonor = registrationResult.existingDonor;
+              existingDonor.Language = (typeof detectPNBDCTamilObject === "function" && detectPNBDCTamilObject(existingDonor)) ? "ta" : (existingDonor.Language || getAppLanguage());
               const existingId = String(existingDonor.Donor_ID || existingDonor.donorId || registrationResult.donorId || "").trim();
               message.className = "form-message error";
               message.textContent = `⚠️ Data already registered/updated. Existing Donor ID: ${existingId || "—"}`;
@@ -3075,7 +3096,8 @@
               Donor_ID: registeredDonorId,
               donorId: registeredDonorId,
               Photo_URL: data.Photo_URL || data.photoUrl || "",
-              photoUrl: data.photoUrl || data.Photo_URL || ""
+              photoUrl: data.photoUrl || data.Photo_URL || "",
+              Language: data.Language || getAppLanguage()
             };
 
             // Prepare the ID card immediately after the donor is saved.
@@ -4113,8 +4135,6 @@
       const storedPhotoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url") || "").trim();
       const cachedPhoto = getCachedDonorPhoto(donorIdForPhoto);
       let photoUrl = cachedPhoto || storedPhotoUrl;
-      // If Google Drive blocks the browser canvas because of CORS, ask Apps Script
-      // to read the Drive file server-side and return a data URL.
       if (!cachedPhoto && storedPhotoUrl) {
         try {
           const serverPhoto = await Promise.race([
@@ -4127,12 +4147,49 @@
           }
         } catch (_) {}
       }
+
+      const cardLang = (typeof getDonorCardLanguage === "function") ? getDonorCardLanguage(donor) : getAppLanguage();
+      const ta = cardLang === "ta";
+      const t = ta ? {
+        club1:"பூங்குறிச்சி நண்பர்கள்",
+        club2:"இரத்த தான நன்கொடையாளர்கள் சங்கம்",
+        official:"அதிகாரப்பூர்வ நன்கொடையாளர் அடையாள அட்டை",
+        photo:"நன்கொடையாளர் புகைப்படம்",
+        blood:"இரத்த வகை",
+        id:"நன்கொடையாளர் ID",
+        mobile:"கைபேசி எண்",
+        dob:"பிறந்த தேதி",
+        location:"இடம்",
+        footer:"இரத்த தானம் செய்வோம் • உயிரைக் காப்போம் • ஹீரோவாக இருப்போம்"
+      } : {
+        club1:"POONGURICHI NANBARGAL",
+        club2:"BLOOD DONORS CLUB",
+        official:"OFFICIAL DONOR ID CARD",
+        photo:"DONOR PHOTO",
+        blood:"BLOOD GROUP",
+        id:"DONOR ID",
+        mobile:"MOBILE",
+        dob:"DATE OF BIRTH",
+        location:"LOCATION",
+        footer:"DONATE BLOOD • SAVE LIFE • BE A HERO"
+      };
+
       const canvas = document.createElement("canvas");
       canvas.width = 1200; canvas.height = 760;
       const ctx = canvas.getContext("2d");
       if (!ctx) throw new Error("Your browser cannot generate the ID card.");
 
       const rr = (x,y,w,h,r,fill,stroke,sw=1) => { ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.lineWidth=sw;ctx.strokeStyle=stroke;ctx.stroke();} };
+      const fontFamily = '"Noto Sans Tamil","Nirmala UI","Latha",Arial,sans-serif';
+      const fitText = (text, maxWidth, startSize, weight=700) => {
+        let size = startSize;
+        while (size > 14) {
+          ctx.font = `${weight} ${size}px ${fontFamily}`;
+          if (ctx.measureText(String(text)).width <= maxWidth) break;
+          size -= 1;
+        }
+        return size;
+      };
       const logo = await loadImageSafe("icons/poongurichi-logo.jpeg");
       const photo = photoUrl ? await loadImageForCard(photoUrl) : null;
 
@@ -4140,9 +4197,11 @@
       rr(30,30,1140,700,34,"#ffffff","#cbd8e8",4);
       rr(30,30,1140,155,34,"#123b82",null);
       if (logo) { ctx.save(); ctx.beginPath(); ctx.arc(120,108,62,0,Math.PI*2); ctx.clip(); ctx.drawImage(logo,58,46,124,124); ctx.restore(); }
-      ctx.fillStyle="#ffffff"; ctx.font="800 42px Arial"; ctx.fillText("POONGURICHI NANBARGAL",215,92);
-      ctx.font="500 24px Arial"; ctx.fillText("BLOOD DONORS CLUB",215,132);
-      ctx.font="700 20px Arial"; ctx.fillText("OFFICIAL DONOR ID CARD",890,110);
+
+      ctx.fillStyle="#ffffff";
+      ctx.font=`800 ${ta ? 34 : 42}px ${fontFamily}`; ctx.fillText(t.club1,215,92);
+      ctx.font=`500 ${ta ? 22 : 24}px ${fontFamily}`; ctx.fillText(t.club2,215,132);
+      ctx.font=`700 ${ta ? 18 : 20}px ${fontFamily}`; ctx.textAlign="right"; ctx.fillText(t.official,1135,110); ctx.textAlign="left";
 
       rr(72,220,250,330,24,"#f3f7fc","#d7e2ef",2);
       if (photo) {
@@ -4151,19 +4210,24 @@
         ctx.drawImage(photo,197-w/2,365-h/2,w,h); ctx.restore();
       } else {
         ctx.fillStyle="#dce9f7"; ctx.fillRect(92,240,210,250);
-        ctx.fillStyle="#123b82"; ctx.font="700 70px Arial"; ctx.textAlign="center"; ctx.fillText(name.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase(),197,390); ctx.textAlign="left";
+        ctx.fillStyle="#123b82"; ctx.font=`700 70px ${fontFamily}`; ctx.textAlign="center"; ctx.fillText(name.split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase(),197,390); ctx.textAlign="left";
       }
-      ctx.fillStyle="#5d6f84"; ctx.font="600 18px Arial"; ctx.textAlign="center"; ctx.fillText("DONOR PHOTO",197,525); ctx.textAlign="left";
+      ctx.fillStyle="#5d6f84"; ctx.font=`600 ${ta ? 16 : 18}px ${fontFamily}`; ctx.textAlign="center"; ctx.fillText(t.photo,197,525); ctx.textAlign="left";
 
-      ctx.fillStyle="#123b82"; ctx.font="800 38px Arial"; ctx.fillText(name,365,260);
-      rr(365,285,165,62,30,"#d9273f",null); ctx.fillStyle="#ffffff"; ctx.font="800 32px Arial"; ctx.textAlign="center"; ctx.fillText(blood,447,327); ctx.textAlign="left";
-      ctx.fillStyle="#64748b"; ctx.font="600 18px Arial"; ctx.fillText("BLOOD GROUP",550,325);
+      ctx.fillStyle="#123b82";
+      ctx.font=`800 ${fitText(name,680,38,800)}px ${fontFamily}`; ctx.fillText(name,365,260);
+      rr(365,285,165,62,30,"#d9273f",null); ctx.fillStyle="#ffffff"; ctx.font=`800 32px ${fontFamily}`; ctx.textAlign="center"; ctx.fillText(blood,447,327); ctx.textAlign="left";
+      ctx.fillStyle="#64748b"; ctx.font=`600 ${ta ? 16 : 18}px ${fontFamily}`; ctx.fillText(t.blood,550,325);
 
-      const fields=[["DONOR ID",donorId],["MOBILE",mobile],["DATE OF BIRTH",dob],["LOCATION",[city,district].filter(Boolean).join(", ") || "—"]];
+      const fields=[[t.id,donorId],[t.mobile,mobile],[t.dob,dob],[t.location,[city,district].filter(Boolean).join(", ") || "—"]];
       let fy=400;
-      fields.forEach(([label,val])=>{ ctx.fillStyle="#123b82"; ctx.font="700 18px Arial"; ctx.fillText(label,365,fy); ctx.fillStyle="#172033"; ctx.font="600 25px Arial"; ctx.fillText(String(val||"—"),565,fy); ctx.strokeStyle="#e1e8f0"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(365,fy+18); ctx.lineTo(1090,fy+18); ctx.stroke(); fy+=62; });
+      fields.forEach(([label,val])=>{
+        ctx.fillStyle="#123b82"; ctx.font=`700 ${ta ? 16 : 18}px ${fontFamily}`; ctx.fillText(label,365,fy);
+        ctx.fillStyle="#172033"; ctx.font=`600 ${fitText(String(val||"—"),500,25,600)}px ${fontFamily}`; ctx.fillText(String(val||"—"),565,fy);
+        ctx.strokeStyle="#e1e8f0"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(365,fy+18); ctx.lineTo(1090,fy+18); ctx.stroke(); fy+=62;
+      });
 
-      rr(365,665,725,40,18,"#eef6ff",null); ctx.fillStyle="#123b82"; ctx.font="700 18px Arial"; ctx.textAlign="center"; ctx.fillText("DONATE BLOOD • SAVE LIFE • BE A HERO",727,691); ctx.textAlign="left";
+      rr(365,665,725,40,18,"#eef6ff",null); ctx.fillStyle="#123b82"; ctx.font=`700 ${ta ? 15 : 18}px ${fontFamily}`; ctx.textAlign="center"; ctx.fillText(t.footer,727,691); ctx.textAlign="left";
       return await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error("Could not create ID card PNG.")),"image/png",1));
     }
 
@@ -4297,7 +4361,27 @@
         const url = URL.createObjectURL(pngBlob);
         const win = window.open("", "_blank");
         if (win) {
-          win.document.write(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Share Donor Details</title><style>body{margin:0;background:#eef3f8;font-family:Arial;text-align:center;padding:20px;color:#123b82}img{max-width:100%;height:auto;border-radius:16px;box-shadow:0 8px 30px #0002}a,button{display:inline-block;margin:14px 6px;padding:14px 20px;border:0;border-radius:12px;background:#1261d8;color:#fff;font-weight:700;font-size:16px;text-decoration:none}p{color:#5f7087}</style></head><body><h2>Donor Details PNG</h2><p>Image created successfully. Save it and share it on WhatsApp.</p><img src="${url}" alt="Donor details"><br><a href="${url}" download="${safeName}_Blood_Donor_Details.png">⬇️ Save PNG</a><p><b>iPhone:</b> long-press the image to save it, then share it from Photos.<br><b>Android:</b> tap Save PNG, then share it from Gallery.</p></body></html>`);
+          win.document.write(`<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Share Donor Details</title><style>body{margin:0;background:#eef3f8;font-family:Arial;text-align:center;padding:20px;color:#123b82}img{max-width:100%;height:auto;border-radius:16px;box-shadow:0 8px 30px #0002}a,button{display:inline-block;margin:14px 6px;padding:14px 20px;border:0;border-radius:12px;background:#1261d8;color:#fff;font-weight:700;font-size:16px;text-decoration:none}p{color:#5f7087}
+
+/* =========================================================
+   PNBDC WHOLE-APP LANGUAGE SWITCHER
+   ========================================================= */
+.language-switcher{position:relative;display:flex;align-items:center;margin-left:4px}
+.language-btn{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);color:inherit;border-radius:12px;padding:9px 12px;font:700 13px/1.1 inherit;cursor:pointer;white-space:nowrap;transition:.2s ease}
+.language-btn:hover{background:rgba(255,255,255,.15);transform:translateY(-1px)}
+.language-menu{position:absolute;right:0;top:calc(100% + 8px);min-width:150px;padding:6px;background:#fff;border:1px solid #dbe4ef;border-radius:14px;box-shadow:0 16px 38px rgba(16,42,74,.18);display:none;z-index:9999}
+.language-menu.show{display:block;animation:pnLangDrop .16s ease-out}
+.language-menu button{display:block;width:100%;border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:10px;color:#172033;font:700 14px/1.2 Arial,sans-serif;cursor:pointer}
+.language-menu button:hover,.language-menu button.active{background:#eef5ff;color:#123b82}
+.mobile-language-row{padding:12px 14px;margin:8px 10px;border:1px solid rgba(18,59,130,.12);border-radius:14px;background:rgba(18,59,130,.045)}
+.mobile-language-label{display:block;font-weight:800;margin-bottom:8px;color:#123b82}
+.mobile-language-buttons{display:flex;gap:8px}
+.mobile-language-buttons button{flex:1;border:1px solid #d7e2ef;background:#fff;border-radius:10px;padding:9px 8px;font-weight:700;cursor:pointer}
+.mobile-language-buttons button.active{background:#123b82;color:#fff;border-color:#123b82}
+@keyframes pnLangDrop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+/* Tamil-friendly UI font fallback. */
+html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha",Arial,sans-serif}
+</style></head><body><h2>Donor Details PNG</h2><p>Image created successfully. Save it and share it on WhatsApp.</p><img src="${url}" alt="Donor details"><br><a href="${url}" download="${safeName}_Blood_Donor_Details.png">⬇️ Save PNG</a><p><b>iPhone:</b> long-press the image to save it, then share it from Photos.<br><b>Android:</b> tap Save PNG, then share it from Gallery.</p></body></html>`);
           win.document.close();
           setTimeout(()=>URL.revokeObjectURL(url),60000);
           return;
@@ -5435,6 +5519,106 @@
     });
 
 
+
+    /* =========================================================
+       PNBDC WHOLE-APP LANGUAGE ENGINE — ENGLISH / TAMIL
+       ========================================================= */
+    const PNBDC_TRANSLATIONS = {
+      "Home":"முகப்பு", "Become Donor":"நன்கொடையாளராக பதிவு", "Become a Donor":"நன்கொடையாளராக பதிவு செய்யுங்கள்", "Find Blood":"இரத்தம் தேடுங்கள்", "Find Blood / Donor":"இரத்தம் / நன்கொடையாளர் தேடல்", "Request Blood":"இரத்தம் கோருங்கள்", "About":"எங்களை பற்றி", "Admin Login":"நிர்வாகி உள்நுழைவு", "Install App":"ஆப்பை நிறுவுங்கள்", "Notifications":"அறிவிப்புகள்", "Language":"மொழி",
+      "Community Blood Donor Network":"சமூக இரத்த நன்கொடையாளர் வலைப்பின்னல்", "One donation.":"ஒரு இரத்த தானம்.", "Many lives.":"பல உயிர்கள்.", "Connect people who need blood with people willing to help. Find a donor near you, become a donor, and make a real difference in your community.":"இரத்தம் தேவைப்படுபவர்களை உதவ முன்வரும் நன்கொடையாளர்களுடன் இணைக்கிறோம். அருகிலுள்ள நன்கொடையாளரைத் தேடி, நன்கொடையாளராக பதிவு செய்து, உங்கள் சமூகத்தில் உண்மையான மாற்றத்தை ஏற்படுத்துங்கள்.",
+      "🔎 Find Blood":"🔎 இரத்தம் தேடுங்கள்", "🩸 Become a Donor":"🩸 நன்கொடையாளராக பதிவு செய்யுங்கள்", "🚨 Request Blood":"🚨 இரத்தம் கோருங்கள்", "SAVE LIVES":"உயிர்களைக் காப்போம்", "Registered donors":"பதிவு செய்த நன்கொடையாளர்கள்", "24/7":"24/7", "Community support":"சமூக ஆதரவு", "QUICK ACTIONS":"விரைவு செயல்கள்", "Search available donors by blood group and location.":"இரத்த வகை மற்றும் இருப்பிடத்தின் அடிப்படையில் கிடைக்கும் நன்கொடையாளர்களைத் தேடுங்கள்.", "Register your details and help someone in need.":"உங்கள் விவரங்களைப் பதிவு செய்து தேவைப்படுபவர்களுக்கு உதவுங்கள்.", "Need Blood?":"இரத்தம் தேவையா?", "Send a blood request to the donor network.":"நன்கொடையாளர் வலைப்பின்னலுக்கு இரத்தக் கோரிக்கையை அனுப்புங்கள்.",
+      "EVENTS":"நிகழ்வுகள்", "Community":"சமூகம்", "Blood Camps & Events":"இரத்த தான முகாம்கள் மற்றும் நிகழ்வுகள்", "Blood donation camps and community activities.":"இரத்த தான முகாம்கள் மற்றும் சமூக செயல்பாடுகள்.", "View All →":"அனைத்தையும் பார்க்க →", "DONOR PHOTO GALLERY":"நன்கொடையாளர் புகைப்படத் தொகுப்பு", "Our Donors":"எங்கள் நன்கொடையாளர்கள்", "Our Donor Community":"எங்கள் நன்கொடையாளர் சமூகம்", "Celebrating the people who help save lives.":"உயிர்களைக் காப்பாற்ற உதவும் நபர்களைக் கொண்டாடுகிறோம்.", "BLOOD GROUP":"இரத்த வகை", "Availability":"கிடைக்கும் நிலை", "Blood Group Availability":"இரத்த வகை கிடைக்கும் நிலை", "Live member counts from registered donors.":"பதிவு செய்த நன்கொடையாளர்களின் தற்போதைய எண்ணிக்கை.", "Loading...":"ஏற்றப்படுகிறது...", "Total Donors":"மொத்த நன்கொடையாளர்கள்", "Camps / Events":"முகாம்கள் / நிகழ்வுகள்",
+      "Blood donation is a voluntary act that can save a life. Be a hero — donate blood and help your community.":"இரத்த தானம் ஒரு உயிரைக் காப்பாற்றக்கூடிய தன்னார்வ செயலாகும். ஹீரோவாக இருங்கள் — இரத்த தானம் செய்து உங்கள் சமூகத்திற்கு உதவுங்கள்.",
+      "🩸 Give Hope":"🩸 நம்பிக்கை கொடுங்கள்", "Become a Blood Donor":"இரத்த நன்கொடையாளராகுங்கள்", "Register your details with Poongurichi Nanbargal Blood Donors Club.":"Poongurichi Nanbargal Blood Donors Club-ல் உங்கள் விவரங்களைப் பதிவு செய்யுங்கள்.", "Name":"பெயர்", "Mobile":"கைபேசி எண்", "Alternate Mobile":"மாற்று கைபேசி எண்", "Email":"மின்னஞ்சல்", "Gender":"பாலினம்", "Male":"ஆண்", "Female":"பெண்", "Other":"மற்றவை", "Date of Birth":"பிறந்த தேதி", "District":"மாவட்டம்", "Town/Village":"நகரம் / கிராமம்", "City":"நகரம்", "Address":"முகவரி", "Last Donation Date":"கடைசி இரத்த தான தேதி", "Donor Photo":"நன்கொடையாளர் புகைப்படம்", "Aadhaar Number":"ஆதார் எண்", "Referred By":"பரிந்துரைத்தவர்", "Select":"தேர்ந்தெடுக்கவும்", "Select blood group":"இரத்த வகையைத் தேர்ந்தெடுக்கவும்", "New donor — no previous donation (NA)":"புதிய நன்கொடையாளர் — முன்பு இரத்த தானம் செய்யவில்லை (NA)", "Photo ready for ID card":"ID கார்டுக்கான புகைப்படம் தயாராக உள்ளது", "🩸 Register as Donor":"🩸 நன்கொடையாளராக பதிவு செய்யுங்கள்", "✓ Registration saved. Your ID card is ready.":"✓ பதிவு வெற்றிகரமாக சேமிக்கப்பட்டது. உங்கள் ID கார்டு தயாராக உள்ளது.", "⬇️ Download Donor ID Card":"⬇️ நன்கொடையாளர் ID கார்டை பதிவிறக்குங்கள்", "Cancel":"ரத்து", "Optional":"விருப்பம்", "* Mandatory":"* கட்டாயம்", "* Mandatory fields":"* கட்டாய புலங்கள்",
+      "Find available registered donors by blood group and location.":"இரத்த வகை மற்றும் இருப்பிடத்தின் அடிப்படையில் பதிவு செய்த நன்கொடையாளர்களைத் தேடுங்கள்.", "All Blood Groups":"அனைத்து இரத்த வகைகளும்", "Search for available donors.":"கிடைக்கும் நன்கொடையாளர்களைத் தேடுங்கள்.", "Search":"தேடல்", "🚨 Urgent Help":"🚨 அவசர உதவி", "Submit a request and our donor network can help connect you with available donors.":"கோரிக்கையைச் சமர்ப்பிக்கவும்; எங்கள் நன்கொடையாளர் வலைப்பின்னல் கிடைக்கும் நன்கொடையாளர்களுடன் உங்களை இணைக்க உதவும்.", "Patient Name":"நோயாளியின் பெயர்", "No. of Units":"தேவையான அலகுகள்", "Contact Mobile":"தொடர்பு கைபேசி எண்", "Hospital":"மருத்துவமனை", "Additional Details":"கூடுதல் விவரங்கள்", "🚨 Submit Request":"🚨 கோரிக்கையைச் சமர்ப்பிக்கவும்",
+      "❤️ Our Mission":"❤️ எங்கள் நோக்கம்", "About Poongurichi Nanbargal":"Poongurichi Nanbargal பற்றி", "A community-driven blood donor network created to make finding help easier when every minute matters.":"ஒவ்வொரு நிமிடமும் முக்கியமான நேரத்தில் உதவியை எளிதாகக் கண்டுபிடிக்க உருவாக்கப்பட்ட சமூக அடிப்படையிலான இரத்த நன்கொடையாளர் வலைப்பின்னல்.", "Together, we can make blood available when it matters most.":"மிகவும் தேவையான நேரத்தில் இரத்தம் கிடைக்க நாம் ஒன்றிணைந்து செயல்படலாம்.", "Our goal is to connect donors and people in need through a simple, accessible community platform.":"எளிமையான, அனைவரும் அணுகக்கூடிய சமூக தளத்தின் மூலம் நன்கொடையாளர்களையும் தேவைப்படுபவர்களையும் இணைப்பதே எங்கள் நோக்கம்.", "Our Community":"எங்கள் சமூகம்", "Every registered donor helps strengthen the local donor network and makes it easier for families to find support.":"ஒவ்வொரு பதிவு செய்த நன்கொடையாளரும் உள்ளூர் நன்கொடையாளர் வலைப்பின்னலை வலுப்படுத்தி, குடும்பங்கள் உதவியை எளிதாகக் கண்டுபிடிக்க உதவுகிறார்.",
+      "Administration":"நிர்வாகம்", "Admin Dashboard":"நிர்வாக டாஷ்போர்டு", "Manage donors, blood requests, upcoming events and About content.":"நன்கொடையாளர்கள், இரத்தக் கோரிக்கைகள், வரவிருக்கும் நிகழ்வுகள் மற்றும் About உள்ளடக்கத்தை நிர்வகிக்கவும்.", "🚪 Logout":"🚪 வெளியேறு", "Manage Donors":"நன்கொடையாளர்களை நிர்வகிக்கவும்", "Edit all donor details":"அனைத்து நன்கொடையாளர் விவரங்களையும் திருத்தவும்", "View active requests":"செயலில் உள்ள கோரிக்கைகளைப் பார்க்கவும்", "Add & upload photos":"புகைப்படங்களைச் சேர்த்து பதிவேற்றவும்", "Clear one or all":"ஒன்றை அல்லது அனைத்தையும் அழிக்கவும்", "🔗 Social Links":"🔗 சமூக இணைப்புகள்", "Edit social links":"சமூக இணைப்புகளைத் திருத்தவும்", "⚙️ Fields":"⚙️ புலங்கள்", "Edit all website fields":"அனைத்து இணையதள புலங்களையும் திருத்தவும்", "Registered Donors":"பதிவு செய்த நன்கொடையாளர்கள்", "View, edit and manage every registered donor record.":"ஒவ்வொரு பதிவு செய்த நன்கொடையாளர் பதிவையும் பார்க்க, திருத்த மற்றும் நிர்வகிக்கவும்.", "✕ Clear":"✕ அழிக்க", "Entries":"பதிவுகள்", "All":"அனைத்தும்", "📥 Import Excel":"📥 Excel இறக்குமதி", "📄 Excel Template":"📄 Excel மாதிரி", "📤 Export Excel":"📤 Excel ஏற்றுமதி", "Loading donors…":"நன்கொடையாளர்கள் ஏற்றப்படுகின்றனர்…", "🚨 Blood Requests":"🚨 இரத்தக் கோரிக்கைகள்", "Review active and submitted blood requests.":"செயலில் உள்ள மற்றும் சமர்ப்பிக்கப்பட்ட இரத்தக் கோரிக்கைகளைப் பரிசீலிக்கவும்.", "Loading requests…":"கோரிக்கைகள் ஏற்றப்படுகின்றன…", "📅 Add Event":"📅 நிகழ்வைச் சேர்க்கவும்", "Create a new upcoming blood donation event.":"புதிய வரவிருக்கும் இரத்த தான நிகழ்வை உருவாக்கவும்.", "Event Image":"நிகழ்வு படம்", "➕ Create Event":"➕ நிகழ்வை உருவாக்கவும்", "💙 Donor Photos":"💙 நன்கொடையாளர் புகைப்படங்கள்", "Add photos for the public donor gallery. Photos auto-rotate and support mobile swipe.":"பொது நன்கொடையாளர் புகைப்படத் தொகுப்பில் புகைப்படங்களைச் சேர்க்கவும். புகைப்படங்கள் தானாக மாறும் மற்றும் மொபைல் ஸ்வைப் வசதி உள்ளது.", "Photo Title":"புகைப்படத் தலைப்பு", "Display Order":"காட்சி வரிசை", "➕ Add Donor Photo":"➕ நன்கொடையாளர் புகைப்படத்தைச் சேர்க்கவும்", "ℹ️ About Content":"ℹ️ About உள்ளடக்கம்", "Edit the public About section.":"பொது About பகுதியைத் திருத்தவும்.", "About Title":"About தலைப்பு", "About Content":"About உள்ளடக்கம்", "💾 Save About":"💾 About-ஐ சேமிக்கவும்", "Club Name":"கிளப் பெயர்", "Logo URL":"Logo URL", "Copyright Text":"காப்புரிமை உரை", "Header Subtitle":"Header துணைத்தலைப்பு", "Developer Name":"உருவாக்குநர் பெயர்", "Developer Contact":"உருவாக்குநர் தொடர்பு", "Blood Need Contact 1 Name":"இரத்தத் தேவைக்கான தொடர்பு 1 பெயர்", "Blood Need Contact 1 Phone":"இரத்தத் தேவைக்கான தொடர்பு 1 தொலைபேசி", "Blood Need Contact 2 Name":"இரத்தத் தேவைக்கான தொடர்பு 2 பெயர்", "Blood Need Contact 2 Phone":"இரத்தத் தேவைக்கான தொடர்பு 2 தொலைபேசி", "Instagram URL":"Instagram URL", "Facebook URL":"Facebook URL", "YouTube URL":"YouTube URL", "Gmail URL":"Gmail URL", "Footer Text":"Footer உரை", "Footer Description":"Footer விளக்கம்", "💾 Save Header & Footer":"💾 Header & Footer-ஐ சேமிக்கவும்", "📅 Existing Events":"📅 ஏற்கனவே உள்ள நிகழ்வுகள்", "Edit or remove events. Event images are uploaded securely by Admin.":"நிகழ்வுகளைத் திருத்தவும் அல்லது நீக்கவும். நிகழ்வு படங்கள் நிர்வாகியால் பாதுகாப்பாக பதிவேற்றப்படுகின்றன.", "Follow Us":"எங்களைப் பின்தொடருங்கள்", "Developed By":"உருவாக்கியது", "All rights reserved.":"அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.", "Donate":"தானம்", "Find":"தேடல்", "Request":"கோரிக்கை", "Edit Event":"நிகழ்வைத் திருத்தவும்", "Replace Event Image":"நிகழ்வு படத்தை மாற்றவும்", "Save":"சேமிக்கவும்", "Refresh":"புதுப்பிக்கவும்", "↻ Refresh":"↻ புதுப்பிக்கவும்"
+    };
+
+    let PNBDC_APP_LANGUAGE = localStorage.getItem("PNBDC_APP_LANGUAGE") || "en";
+    const pnOriginalText = new WeakMap();
+    let pnTranslating = false;
+
+    function getAppLanguage(){ return PNBDC_APP_LANGUAGE === "ta" ? "ta" : "en"; }
+    function containsTamilPNBDC(text){ return /[\u0B80-\u0BFF]/.test(String(text || "")); }
+    function detectPNBDCTamilObject(obj){
+      if (!obj || typeof obj !== "object") return false;
+      return Object.keys(obj).some(k => containsTamilPNBDC(obj[k]));
+    }
+    function getDonorCardLanguage(donor){
+      const stored = String(value(donor,"Language","language","Preferred_Language","preferredLanguage") || "").toLowerCase();
+      if (stored === "ta" || stored === "tamil") return "ta";
+      if (stored === "en" || stored === "english") return containsTamilPNBDC(donor?.Name) || containsTamilPNBDC(donor?.Address) || containsTamilPNBDC(donor?.City) || containsTamilPNBDC(donor?.District) ? "ta" : getAppLanguage();
+      return detectPNBDCTamilObject(donor) ? "ta" : getAppLanguage();
+    }
+    function normalizePNText(text){ return String(text || "").replace(/\s+/g," ").trim(); }
+    function translatePNTextNode(node, lang){
+      if (!node || !node.parentElement) return;
+      if (node.parentElement.closest("script,style,template")) return;
+      let original = pnOriginalText.get(node);
+      const current = node.nodeValue;
+      if (original === undefined) { original = current; pnOriginalText.set(node, original); }
+      const key = normalizePNText(original);
+      if (!key) return;
+      const translated = lang === "ta" ? (PNBDC_TRANSLATIONS[key] || key) : key;
+      const leading = original.match(/^\s*/)?.[0] || "";
+      const trailing = original.match(/\s*$/)?.[0] || "";
+      node.nodeValue = leading + translated + trailing;
+    }
+    function translatePNAttributes(root, lang){
+      const attrs=["placeholder","title","aria-label"];
+      root.querySelectorAll?.("input,textarea,select,button,[title],[aria-label]").forEach(el=>{
+        attrs.forEach(attr=>{
+          if (!el.hasAttribute(attr)) return;
+          const marker="data-pn-en-"+attr;
+          const original=el.getAttribute(marker) ?? el.getAttribute(attr);
+          el.setAttribute(marker, original);
+          const key=normalizePNText(original);
+          if (!key) return;
+          el.setAttribute(attr, lang === "ta" ? (PNBDC_TRANSLATIONS[key] || key) : key);
+        });
+      });
+    }
+    function translatePNPage(){
+      if (pnTranslating) return;
+      pnTranslating=true;
+      try {
+        document.documentElement.setAttribute("data-language", getAppLanguage());
+        const walker=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+        const nodes=[]; let n; while(n=walker.nextNode()) nodes.push(n);
+        nodes.forEach(node=>translatePNTextNode(node,getAppLanguage()));
+        translatePNAttributes(document,getAppLanguage());
+        const label=document.getElementById("languageBtnLabel"); if(label) label.textContent=getAppLanguage()==="ta"?"தமிழ்":"English";
+        document.querySelectorAll(".language-menu button,.mobile-language-buttons button").forEach(b=>b.classList.toggle("active",b.dataset.lang===getAppLanguage()));
+      } finally { pnTranslating=false; }
+    }
+    function toggleLanguageMenu(){
+      const menu=document.getElementById("languageMenu"), btn=document.getElementById("languageBtn");
+      if(!menu) return; const show=!menu.classList.contains("show"); menu.classList.toggle("show",show); btn?.setAttribute("aria-expanded",String(show));
+    }
+    function setAppLanguage(lang){
+      PNBDC_APP_LANGUAGE = lang === "ta" ? "ta" : "en";
+      localStorage.setItem("PNBDC_APP_LANGUAGE",PNBDC_APP_LANGUAGE);
+      document.getElementById("languageMenu")?.classList.remove("show");
+      document.getElementById("languageBtn")?.setAttribute("aria-expanded","false");
+      translatePNPage();
+      try { toast(PNBDC_APP_LANGUAGE === "ta" ? "மொழி தமிழ் ஆக மாற்றப்பட்டது." : "Language changed to English."); } catch(_) {}
+    }
+    document.addEventListener("click", function(e){
+      const sw=document.getElementById("languageSwitcher");
+      if(sw && !sw.contains(e.target)) document.getElementById("languageMenu")?.classList.remove("show");
+    });
+    const pnLanguageObserver = new MutationObserver((mutations)=>{
+      if(pnTranslating || getAppLanguage()==="en") return;
+      let needs=false;
+      for(const m of mutations){ if(m.type==="childList" || m.type==="characterData" || m.type==="attributes"){ needs=true; break; } }
+      if(needs) requestAnimationFrame(()=>translatePNPage());
+    });
+    function initializePNBDCLanguage(){
+      translatePNPage();
+      pnLanguageObserver.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:["placeholder","title","aria-label"]});
+    }
+
     /* =========================================================
        INITIALIZE
        ========================================================= */
@@ -5489,6 +5673,7 @@
       "DOMContentLoaded",
       () => {
         registerPerformanceServiceWorker();
+        initializePNBDCLanguage();
         initializeApp();
       }
     );
@@ -5513,5 +5698,53 @@
 
   </script>
 
+
+<!-- PNBDC AI Assistant -->
+<button id="pn-bot-toggle" class="pn-bot-toggle" type="button" aria-label="PNBDC AI Assistant" title="PNBDC AI Assistant">
+  <span class="pn-bot-pulse"></span><span>🤖</span>
+</button>
+
+<div id="pn-bot-panel" class="pn-bot-panel" aria-hidden="true">
+  <div class="pn-bot-head">
+    <div>
+      <strong id="pn-bot-title">PNBDC AI Assistant</strong>
+      <small id="pn-bot-subtitle">Gemini AI + PNBDC Backup • English / தமிழ் / Thanglish</small>
+    </div>
+    <button id="pn-bot-close" type="button" aria-label="Close">×</button>
+  </div>
+  <div id="pn-bot-messages" class="pn-bot-messages">
+    <div class="pn-bot-msg bot" id="pn-bot-welcome">
+      Vanakkam! 👋 I’m PNBDC AI Assistant. Ask me about blood donation, donor search, blood requests, donor registration, eligibility, ID cards, notifications, events or club contact.
+    </div>
+  </div>
+  <div class="pn-bot-suggestions" id="pn-bot-suggestions">
+    <button type="button" data-q="How can I donate blood?">🩸 How to donate</button>
+    <button type="button" data-q="யார் இரத்த தானம் செய்யலாம்?">🇮🇳 தானம் செய்யலாமா?</button>
+    <button type="button" data-q="Find O+ donor">🔎 Find donor</button>
+    <button type="button" data-q="How to register as donor?">📝 Become donor</button>
+  </div>
+  <form id="pn-bot-form" class="pn-bot-input-row">
+    <input id="pn-bot-input" autocomplete="off" placeholder="Ask PNBDC AI..." />
+    <button type="submit" aria-label="Send">➤</button>
+  </form>
+</div>
+
+<style>
+.pn-bot-toggle{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border:0;border-radius:50%;background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;font-size:25px;box-shadow:0 12px 30px rgba(0,0,0,.22);z-index:9998;cursor:pointer}
+.pn-bot-pulse{position:absolute;inset:-4px;border:2px solid rgba(239,68,68,.35);border-radius:50%;animation:pnPulse 2s infinite}
+.pn-bot-panel{position:fixed;right:20px;bottom:90px;width:min(390px,calc(100vw - 28px));height:min(610px,calc(100vh - 115px));background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.22);z-index:9999;display:none;overflow:hidden;font-family:inherit}
+.pn-bot-panel.open{display:flex;flex-direction:column;animation:pnIn .18s ease-out}
+.pn-bot-head{padding:14px 16px;display:flex;justify-content:space-between;gap:10px;background:linear-gradient(135deg,#991b1b,#dc2626);color:#fff}
+.pn-bot-head strong{display:block;font-size:15px}.pn-bot-head small{opacity:.86;font-size:11px}.pn-bot-head button{background:transparent;color:#fff;border:0;font-size:26px;cursor:pointer}
+.pn-bot-messages{flex:1;overflow:auto;padding:14px;background:#f8fafc}
+.pn-bot-msg{max-width:86%;padding:10px 12px;border-radius:14px;margin:0 0 9px;font-size:13px;line-height:1.45;white-space:pre-wrap}
+.pn-bot-msg.bot{background:#fff;border:1px solid #e5e7eb;margin-right:auto}.pn-bot-msg.user{background:#fee2e2;color:#7f1d1d;margin-left:auto}
+.pn-bot-suggestions{display:flex;gap:7px;padding:8px 10px;overflow:auto;border-top:1px solid #eee}
+.pn-bot-suggestions button{white-space:nowrap;border:1px solid #e5e7eb;background:#fff;border-radius:999px;padding:7px 10px;font-size:11px;cursor:pointer}
+.pn-bot-input-row{display:flex;padding:10px;border-top:1px solid #eee;gap:8px}.pn-bot-input-row input{flex:1;border:1px solid #d1d5db;border-radius:12px;padding:10px 12px;outline:none}.pn-bot-input-row button{width:42px;border:0;border-radius:12px;background:#dc2626;color:#fff;cursor:pointer}
+@keyframes pnPulse{0%,100%{transform:scale(.95);opacity:.7}50%{transform:scale(1.12);opacity:0}}@keyframes pnIn{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+@media(max-width:600px){.pn-bot-toggle{right:14px;bottom:14px}.pn-bot-panel{right:10px;bottom:82px;width:calc(100vw - 20px);height:min(640px,calc(100vh - 100px))}}
+</style>
+<script src="pn-bot.js"></script>
 </body>
 </html>
