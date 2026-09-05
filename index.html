@@ -5700,15 +5700,19 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 
 
 <!-- PNBDC AI Assistant -->
-<button id="pn-bot-toggle" class="pn-bot-toggle" type="button" aria-label="PNBDC AI Assistant" title="PNBDC AI Assistant">
-  <span class="pn-bot-pulse"></span><span>🤖</span>
+<button id="pn-bot-toggle" class="pn-bot-toggle" type="button" aria-label="BothiAI – PNBDC AI Assistant" title="BothiAI – PNBDC AI Assistant">
+  <span class="pn-bot-pulse"></span>
+  <img class="pn-bot-icon" src="icons/bothiai-icon.png" alt="BothiAI">
 </button>
 
 <div id="pn-bot-panel" class="pn-bot-panel" aria-hidden="true">
   <div class="pn-bot-head">
-    <div>
-      <strong id="pn-bot-title">PNBDC AI Assistant</strong>
-      <small id="pn-bot-subtitle">Gemini AI + PNBDC Backup • English / தமிழ் / Thanglish</small>
+    <div class="pn-bot-brand">
+      <img class="pn-bot-head-logo" src="icons/bothiai-logo.png" alt="BothiAI">
+      <div>
+        <strong id="pn-bot-title">PNBDC AI Assistant</strong>
+        <small id="pn-bot-subtitle">BothiAI • English / தமிழ் / Thanglish</small>
+      </div>
     </div>
     <button id="pn-bot-close" type="button" aria-label="Close">×</button>
   </div>
@@ -5730,7 +5734,8 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 </div>
 
 <style>
-.pn-bot-toggle{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border:0;border-radius:50%;background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;font-size:25px;box-shadow:0 12px 30px rgba(0,0,0,.22);z-index:9998;cursor:pointer}
+.pn-bot-toggle{position:fixed;right:18px;bottom:92px;width:60px;height:60px;border:0;border-radius:50%;background:#fff;color:#fff;padding:0;box-shadow:0 12px 30px rgba(0,0,0,.22);z-index:9000;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:visible}
+.pn-bot-icon{width:56px;height:56px;display:block;object-fit:contain;border-radius:50%;position:relative;z-index:2}
 .pn-bot-pulse{position:absolute;inset:-4px;border:2px solid rgba(239,68,68,.35);border-radius:50%;animation:pnPulse 2s infinite}
 .pn-bot-panel{position:fixed;right:20px;bottom:90px;width:min(390px,calc(100vw - 28px));height:min(610px,calc(100vh - 115px));background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.22);z-index:9999;display:none;overflow:hidden;font-family:inherit}
 .pn-bot-panel.open{display:flex;flex-direction:column;animation:pnIn .18s ease-out}
@@ -5743,7 +5748,7 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 .pn-bot-suggestions button{white-space:nowrap;border:1px solid #e5e7eb;background:#fff;border-radius:999px;padding:7px 10px;font-size:11px;cursor:pointer}
 .pn-bot-input-row{display:flex;padding:10px;border-top:1px solid #eee;gap:8px}.pn-bot-input-row input{flex:1;border:1px solid #d1d5db;border-radius:12px;padding:10px 12px;outline:none}.pn-bot-input-row button{width:42px;border:0;border-radius:12px;background:#dc2626;color:#fff;cursor:pointer}
 @keyframes pnPulse{0%,100%{transform:scale(.95);opacity:.7}50%{transform:scale(1.12);opacity:0}}@keyframes pnIn{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
-@media(max-width:600px){.pn-bot-toggle{right:14px;bottom:14px}.pn-bot-panel{right:10px;bottom:82px;width:calc(100vw - 20px);height:min(640px,calc(100vh - 100px))}}
+@media(max-width:600px){.pn-bot-toggle{right:14px;bottom:90px;width:58px;height:58px}.pn-bot-icon{width:54px;height:54px}.pn-bot-panel{right:10px;bottom:158px;width:calc(100vw - 20px);height:min(640px,calc(100vh - 100px))}.pn-bot-head-logo{width:72px;height:40px}}
 </style>
 <script src="pn-bot.js"></script>
 </body>
