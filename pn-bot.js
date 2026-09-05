@@ -1,3 +1,4 @@
+
 (function () {
   "use strict";
 
@@ -8,19 +9,17 @@
 
   if (!toggle || !panel || !form) return;
 
-  const API_URL = window.PNBDC_API_URL ||
-    "https://script.google.com/macros/s/AKfycbwjk23yf4Ub8aRkQJ0WFv42RbzArCgkHf9Gf9WOMK9dtS8WneOh9YGyjZLZLLEH_Gw3/exec";
-
   const norm = s => String(s || "").toLowerCase()
     .normalize("NFKC")
     .replace(/[^\p{L}\p{N}\s+]/gu, " ")
     .replace(/\s+/g, " ").trim();
 
+  // Common Tamil/Thanglish variants + typo tolerance.
   const groups = {
     tamil: ["தமிழ்","tamil","tamizh","tami","taml"],
     donate: ["donate","donation","blood donation","give blood","ரத்த தானம்","இரத்த தானம்","ரத்தம் கொடுக்க","இரத்தம் கொடுக்க","ratham","ratham kudukka","blood kudukka","blood donate"],
     donor: ["donor","donors","நன்கொடையாளர்","நன்கொடையாளர்கள்","doner","donor search","find donor","donar"],
-    request: ["blood request","request blood","தேவை","இரத்தம் தேவை","ரத்தம் தேவை","blood venum","ratham venum","request"],
+    request: ["blood request","request blood","தேவை","இரத்தம் தேவை","ரத்தம் தேவை","blood venum","blood venum","ratham venum","request"],
     register: ["register","become donor","join donor","பதிவு","நன்கொடையாளராக","donor register","regster"],
     eligibility: ["eligible","eligibility","can i donate","who can donate","தானம் செய்யலாமா","யார் தானம்","eligiblity","age","வயது"],
     id: ["id card","donor id","அடையாள அட்டை","idcard","pn bdc","pndbc","pnbdc"],
@@ -69,7 +68,7 @@
       notification:"🔔 Open Notifications to view updates. If supported by your browser/device, you can enable notification permission there.",
       event:"📅 Open Events to see published blood-donation camps and club activities.",
       contact:"📞 For club contact details, open the About/Contact section. The assistant does not invent contact numbers.",
-      help:"🤖 I can help with donor registration, finding donors, blood requests, donation guidance, PNBDC IDs/cards, notifications, events and app navigation. Ask naturally in English, தமிழ் or Thanglish."
+      help:"🩸 BothiAI can help with donor registration, finding donors, blood requests, donation guidance, PNBDC IDs/cards, notifications, events and app navigation. Ask naturally in English, தமிழ் or Thanglish."
     },
     ta: {
       welcome:"வணக்கம்! 👋 நான் PNBDC AI Assistant. தமிழ், English அல்லது Thanglish-ல் கேட்கலாம். Spelling mistake இருந்தாலும் புரிந்துகொள்ள முயற்சிப்பேன்.",
@@ -82,11 +81,19 @@
       notification:"🔔 Notifications பகுதியில் அறிவிப்புகளைப் பார்க்கலாம். Browser/device ஆதரித்தால் அங்கே notification permission-ஐ Enable செய்யலாம்.",
       event:"📅 Events பகுதியில் வெளியிடப்பட்ட இரத்த தான முகாம்கள் மற்றும் club நிகழ்வுகளைப் பார்க்கலாம்.",
       contact:"📞 Club தொடர்பு விவரங்களுக்கு About/Contact பகுதியைத் திறக்கவும். நான் கற்பனையாக contact number உருவாக்கமாட்டேன்.",
-      help:"🤖 Donor registration, donor search, blood request, இரத்த தான வழிகாட்டுதல், PNBDC ID/Card, notifications, events மற்றும் app navigation ஆகியவற்றில் உதவலாம். தமிழ், English அல்லது Thanglish-ல் இயல்பாக கேளுங்கள்."
+      help:"🩸 BothiAI: Donor registration, donor search, blood request, இரத்த தான வழிகாட்டுதல், PNBDC ID/Card, notifications, events மற்றும் app navigation ஆகியவற்றில் உதவலாம். தமிழ், English அல்லது Thanglish-ல் இயல்பாக கேளுங்கள்."
     }
   };
 
-  function localAnswer(q){
+  function add(text, who){
+    const d=document.createElement("div");
+    d.className="pn-bot-msg "+who;
+    d.textContent=text;
+    messages.appendChild(d);
+    messages.scrollTop=messages.scrollHeight;
+  }
+
+  function answer(q){
     const L=lang(q), r=replies[L];
     if(has("donate",q)) return r.donate;
     if(has("donor",q)) return r.donor;
@@ -103,66 +110,6 @@
       : "I can help with Donor, Blood Request, Registration, Eligibility, ID Card, Notifications, Events or Contact. You can ask in Tamil, English or Thanglish.";
   }
 
-  function add(text, who){
-    const d=document.createElement("div");
-    d.className="pn-bot-msg "+who;
-    d.textContent=text;
-    messages.appendChild(d);
-    messages.scrollTop=messages.scrollHeight;
-    return d;
-  }
-
-  function setThinking(on){
-    if(on){
-      if($("pn-bot-thinking")) return $("pn-bot-thinking");
-      const el = add("🤔 Thinking…","bot");
-      el.id = "pn-bot-thinking";
-      return el;
-    }
-    const el=$("pn-bot-thinking");
-    if(el) el.remove();
-  }
-
-  function getHistory(){
-    return Array.from(messages.querySelectorAll(".pn-bot-msg:not(#pn-bot-welcome):not(.pn-bot-thinking)")).slice(-8).map(el=>({
-      role: el.classList.contains("user") ? "user" : "model",
-      text: el.textContent || ""
-    }));
-  }
-
-  async function askGemini(q){
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        redirect: "follow",
-        cache: "no-store",
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({
-          action: "aiChat",
-          message: q,
-          language: lang(q),
-          history: getHistory()
-        })
-      });
-      const text = await response.text();
-      if(!response.ok || !text.trim()) return null;
-      const result = JSON.parse(text);
-      if(result && result.success && result.answer) return result.answer;
-      return null;
-    } catch(e) {
-      return null;
-    }
-  }
-
-  async function respond(q){
-    setThinking(true);
-    const geminiAnswer = await askGemini(q);
-    setThinking(false);
-    // Gemini is primary. Any quota/rate-limit/API/network/configuration
-    // failure silently falls back to the built-in PNBDC assistant.
-    add(geminiAnswer || localAnswer(q),"bot");
-  }
-
   toggle.addEventListener("click",()=>{
     panel.classList.toggle("open");
     panel.setAttribute("aria-hidden", panel.classList.contains("open") ? "false" : "true");
@@ -171,19 +118,19 @@
   close && close.addEventListener("click",()=>panel.classList.remove("open"));
   document.querySelectorAll("#pn-bot-suggestions button").forEach(b=>b.addEventListener("click",()=>{
     const q=b.getAttribute("data-q")||"";
-    add(q,"user"); respond(q);
+    add(q,"user"); setTimeout(()=>add(answer(q),"bot"),180);
   }));
   form.addEventListener("submit",e=>{
     e.preventDefault();
     const q=(input.value||"").trim(); if(!q)return;
     add(q,"user"); input.value="";
-    respond(q);
+    setTimeout(()=>add(answer(q),"bot"),180);
   });
 
+  // Expose a tiny hook so the whole-web language system can refresh the assistant UI.
   window.PNBDCAI = {
     open:()=>{panel.classList.add("open"); input && input.focus();},
-    ask:q=>{if(q){add(q,"user");respond(q);}},
-    answer:localAnswer,
-    askGemini
+    ask:q=>{if(q){add(q,"user");setTimeout(()=>add(answer(q),"bot"),80);}},
+    answer
   };
 })();
