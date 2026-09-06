@@ -110,27 +110,61 @@
       : "I can help with Donor, Blood Request, Registration, Eligibility, ID Card, Notifications, Events or Contact. You can ask in Tamil, English or Thanglish.";
   }
 
+  const back = $("pn-bot-back");
+  const minimize = $("pn-bot-minimize");
+
+  function openPanel(){
+    panel.classList.add("open");
+    panel.setAttribute("aria-hidden","false");
+    if(input) setTimeout(()=>input.focus(),80);
+  }
+
+  function closePanel(){
+    panel.classList.remove("open");
+    panel.setAttribute("aria-hidden","true");
+  }
+
   toggle.addEventListener("click",()=>{
-    panel.classList.toggle("open");
-    panel.setAttribute("aria-hidden", panel.classList.contains("open") ? "false" : "true");
-    if(panel.classList.contains("open")) input && input.focus();
+    if(panel.classList.contains("open")) closePanel();
+    else openPanel();
   });
-  close && close.addEventListener("click",()=>panel.classList.remove("open"));
-  document.querySelectorAll("#pn-bot-suggestions button").forEach(b=>b.addEventListener("click",()=>{
-    const q=b.getAttribute("data-q")||"";
-    add(q,"user"); setTimeout(()=>add(answer(q),"bot"),180);
-  }));
+
+  close && close.addEventListener("click",closePanel);
+  back && back.addEventListener("click",closePanel);
+  minimize && minimize.addEventListener("click",closePanel);
+
+  function askFromButton(button){
+    const q=button.getAttribute("data-q")||"";
+    if(!q) return;
+    openPanel();
+    add(q,"user");
+    setTimeout(()=>add(answer(q),"bot"),180);
+  }
+
+  document.querySelectorAll("#pn-bot-suggestions button, .pn-bot-quick").forEach(b=>{
+    b.addEventListener("click",()=>askFromButton(b));
+  });
+
+  const seeAll=$("pn-bot-see-all");
+  if(seeAll){
+    seeAll.addEventListener("click",()=>{
+      document.querySelectorAll("#pn-bot-suggestions button").forEach(b=>b.style.display="flex");
+    });
+  }
+
   form.addEventListener("submit",e=>{
     e.preventDefault();
-    const q=(input.value||"").trim(); if(!q)return;
-    add(q,"user"); input.value="";
+    const q=(input.value||"").trim();
+    if(!q)return;
+    add(q,"user");
+    input.value="";
     setTimeout(()=>add(answer(q),"bot"),180);
   });
 
-  // Expose a tiny hook so the whole-web language system can refresh the assistant UI.
-  window.PNBDCAI = {
-    open:()=>{panel.classList.add("open"); input && input.focus();},
-    ask:q=>{if(q){add(q,"user");setTimeout(()=>add(answer(q),"bot"),80);}},
+  window.PNBDCAI={
+    open:openPanel,
+    close:closePanel,
+    ask:q=>{if(q){openPanel();add(q,"user");setTimeout(()=>add(answer(q),"bot"),80);}},
     answer
   };
 })();
