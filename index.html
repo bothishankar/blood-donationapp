@@ -5699,56 +5699,97 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
   </script>
 
 
-<!-- PNBDC AI Assistant -->
+<!-- PNBDC BothiAI Assistant -->
 <button id="pn-bot-toggle" class="pn-bot-toggle" type="button" aria-label="BothiAI – PNBDC AI Assistant" title="BothiAI – PNBDC AI Assistant">
   <span class="pn-bot-pulse"></span>
   <img class="pn-bot-icon" src="icons/bothiai-icon.png" alt="BothiAI">
 </button>
 
 <div id="pn-bot-panel" class="pn-bot-panel" aria-hidden="true">
-  <div class="pn-bot-head">
-    <div class="pn-bot-brand">
-      <img class="pn-bot-head-logo" src="icons/bothiai-logo.png" alt="BothiAI">
-      <div>
-        <strong id="pn-bot-title">PNBDC AI Assistant</strong>
-        <small id="pn-bot-subtitle">BothiAI • English / தமிழ் / Thanglish</small>
-      </div>
+  <div class="pn-bot-topbar">
+    <button id="pn-bot-back" class="pn-bot-back" type="button">← Back to App</button>
+    <div class="pn-bot-window-actions">
+      <button id="pn-bot-minimize" type="button" aria-label="Minimize">−</button>
+      <button id="pn-bot-close" type="button" aria-label="Close">×</button>
     </div>
-    <button id="pn-bot-close" type="button" aria-label="Close">×</button>
   </div>
-  <div id="pn-bot-messages" class="pn-bot-messages">
-    <div class="pn-bot-msg bot" id="pn-bot-welcome">
-      Vanakkam! 👋 I’m PNBDC AI Assistant. Ask me about blood donation, donor search, blood requests, donor registration, eligibility, ID cards, notifications, events or club contact.
+
+  <div class="pn-bot-brandbar">
+    <img class="pn-bot-brand-logo" src="icons/bothiai-logo.png" alt="BothiAI">
+    <div class="pn-bot-brand-copy">
+      <strong>BothiAI</strong>
+      <span>PNBDC AI Assistant</span>
     </div>
+    <span class="pn-bot-status"><i></i> Online</span>
+  </div>
+
+  <div class="pn-bot-welcome-card">
+    <div class="pn-bot-welcome-title">Vanakkam! 👋</div>
+    <div class="pn-bot-welcome-text">I’m <strong>BothiAI</strong>. How can I help you today?</div>
+    <div class="pn-bot-welcome-sub">Ask about blood donation, donors, blood requests, registration, eligibility, ID cards, events or contact.</div>
+  </div>
+
+  <div class="pn-bot-section-title">✨ Quick Actions</div>
+  <div class="pn-bot-quick-grid">
+    <button class="pn-bot-quick" type="button" data-q="How can I donate blood?"><span class="qa-icon qa-red">🩸</span><span>How to<br>Donate</span></button>
+    <button class="pn-bot-quick" type="button" data-q="Find O+ donor"><span class="qa-icon qa-blue">👥</span><span>Find<br>Donor</span></button>
+    <button class="pn-bot-quick" type="button" data-q="How to register as donor?"><span class="qa-icon qa-green">📝</span><span>Register<br>as Donor</span></button>
+    <button class="pn-bot-quick" type="button" data-q="When is the next blood donation camp?"><span class="qa-icon qa-purple">📅</span><span>Upcoming<br>Camps</span></button>
+  </div>
+
+  <div class="pn-bot-suggest-head">
+    <div class="pn-bot-section-title">💬 Suggested Questions</div>
+    <button id="pn-bot-see-all" type="button">See All →</button>
   </div>
   <div class="pn-bot-suggestions" id="pn-bot-suggestions">
-    <button type="button" data-q="How can I donate blood?">🩸 How to donate</button>
-    <button type="button" data-q="யார் இரத்த தானம் செய்யலாம்?">🇮🇳 தானம் செய்யலாமா?</button>
-    <button type="button" data-q="Find O+ donor">🔎 Find donor</button>
-    <button type="button" data-q="How to register as donor?">📝 Become donor</button>
+    <button type="button" data-q="Who can donate blood?"><span>Who can donate blood?</span><b>›</b></button>
+    <button type="button" data-q="How to register as donor?"><span>How to register as a donor?</span><b>›</b></button>
+    <button type="button" data-q="When should blood donation be postponed?"><span>When should donation be postponed?</span><b>›</b></button>
+    <button type="button" data-q="Show emergency blood requests."><span>Show emergency blood requests</span><b>›</b></button>
   </div>
+
+  <div id="pn-bot-messages" class="pn-bot-messages"></div>
+
   <form id="pn-bot-form" class="pn-bot-input-row">
-    <input id="pn-bot-input" autocomplete="off" placeholder="Ask PNBDC AI..." />
-    <button type="submit" aria-label="Send">➤</button>
+    <button id="pn-bot-attach" class="pn-bot-attach" type="button" aria-label="Attach">⌕</button>
+    <input id="pn-bot-input" autocomplete="off" placeholder="Ask BothiAI..." />
+    <button class="pn-bot-send" type="submit" aria-label="Send">➤</button>
   </form>
 </div>
 
 <style>
-.pn-bot-toggle{position:fixed;right:18px;bottom:92px;width:60px;height:60px;border:0;border-radius:50%;background:#fff;color:#fff;padding:0;box-shadow:0 12px 30px rgba(0,0,0,.22);z-index:9000;cursor:pointer;display:flex;align-items:center;justify-content:center;overflow:visible}
-.pn-bot-icon{width:56px;height:56px;display:block;object-fit:contain;border-radius:50%;position:relative;z-index:2}
-.pn-bot-pulse{position:absolute;inset:-4px;border:2px solid rgba(239,68,68,.35);border-radius:50%;animation:pnPulse 2s infinite}
-.pn-bot-panel{position:fixed;right:20px;bottom:90px;width:min(390px,calc(100vw - 28px));height:min(610px,calc(100vh - 115px));background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:20px;box-shadow:0 24px 70px rgba(0,0,0,.22);z-index:9999;display:none;overflow:hidden;font-family:inherit}
-.pn-bot-panel.open{display:flex;flex-direction:column;animation:pnIn .18s ease-out}
-.pn-bot-head{padding:14px 16px;display:flex;justify-content:space-between;gap:10px;background:linear-gradient(135deg,#991b1b,#dc2626);color:#fff}
-.pn-bot-head strong{display:block;font-size:15px}.pn-bot-head small{opacity:.86;font-size:11px}.pn-bot-head button{background:transparent;color:#fff;border:0;font-size:26px;cursor:pointer}
-.pn-bot-messages{flex:1;overflow:auto;padding:14px;background:#f8fafc}
-.pn-bot-msg{max-width:86%;padding:10px 12px;border-radius:14px;margin:0 0 9px;font-size:13px;line-height:1.45;white-space:pre-wrap}
-.pn-bot-msg.bot{background:#fff;border:1px solid #e5e7eb;margin-right:auto}.pn-bot-msg.user{background:#fee2e2;color:#7f1d1d;margin-left:auto}
-.pn-bot-suggestions{display:flex;gap:7px;padding:8px 10px;overflow:auto;border-top:1px solid #eee}
-.pn-bot-suggestions button{white-space:nowrap;border:1px solid #e5e7eb;background:#fff;border-radius:999px;padding:7px 10px;font-size:11px;cursor:pointer}
-.pn-bot-input-row{display:flex;padding:10px;border-top:1px solid #eee;gap:8px}.pn-bot-input-row input{flex:1;border:1px solid #d1d5db;border-radius:12px;padding:10px 12px;outline:none}.pn-bot-input-row button{width:42px;border:0;border-radius:12px;background:#dc2626;color:#fff;cursor:pointer}
-@keyframes pnPulse{0%,100%{transform:scale(.95);opacity:.7}50%{transform:scale(1.12);opacity:0}}@keyframes pnIn{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
-@media(max-width:600px){.pn-bot-toggle{right:14px;bottom:90px;width:58px;height:58px}.pn-bot-icon{width:54px;height:54px}.pn-bot-panel{right:10px;bottom:158px;width:calc(100vw - 20px);height:min(640px,calc(100vh - 100px))}.pn-bot-head-logo{width:72px;height:40px}}
+/* ================= BOTHIAI PREMIUM CHAT ================= */
+#pn-bot-toggle.pn-bot-toggle{position:fixed!important;right:16px!important;bottom:92px!important;width:56px!important;height:56px!important;padding:0!important;border:2px solid rgba(255,255,255,.96)!important;border-radius:50%!important;background:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 8px 25px rgba(0,0,0,.22),0 0 0 4px rgba(229,35,46,.07)!important;z-index:9000!important;cursor:pointer!important}
+.pn-bot-icon{width:51px;height:51px;object-fit:contain;display:block;border-radius:50%;position:relative;z-index:2}
+.pn-bot-pulse{position:absolute;inset:-5px;border:2px solid rgba(229,35,46,.28);border-radius:50%;animation:pnPulse 2.2s infinite;pointer-events:none}
+
+#pn-bot-panel.pn-bot-panel{position:fixed!important;right:18px!important;bottom:158px!important;width:min(430px,32vw)!important;height:min(690px,74vh)!important;min-width:360px!important;display:none;flex-direction:column;background:linear-gradient(180deg,#f8fbff 0%,#fff 52%,#f4f8fd 100%)!important;border:1px solid rgba(9,62,115,.12)!important;border-radius:24px!important;overflow:hidden!important;box-shadow:0 25px 75px rgba(0,0,0,.24),0 4px 22px rgba(0,65,125,.09)!important;z-index:8999!important;font-family:inherit}
+#pn-bot-panel.open{display:flex!important;animation:pnIn .18s ease-out}
+
+.pn-bot-topbar{height:50px;min-height:50px;padding:7px 10px 7px 11px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#fff,#edf6ff);border-bottom:1px solid rgba(9,62,115,.09)}
+.pn-bot-back{border:0;background:linear-gradient(135deg,#073d78,#0b68ce);color:#fff;border-radius:17px;padding:8px 13px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 12px rgba(7,61,120,.18)}
+.pn-bot-window-actions{display:flex;gap:6px}.pn-bot-window-actions button{width:32px;height:32px;border:1px solid rgba(0,0,0,.08);border-radius:50%;background:#fff;color:#27415d;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+
+.pn-bot-brandbar{min-height:72px;padding:8px 13px;display:flex;align-items:center;gap:9px;background:#fff;border-bottom:1px solid rgba(9,62,115,.08)}
+.pn-bot-brand-logo{width:86px;height:52px;object-fit:contain;flex:0 0 auto}.pn-bot-brand-copy{display:flex;flex-direction:column}.pn-bot-brand-copy strong{font-size:21px;line-height:1;color:#073d78;font-weight:900}.pn-bot-brand-copy span{font-size:10px;color:#718096;margin-top:4px}.pn-bot-status{margin-left:auto;display:flex;align-items:center;gap:4px;padding:5px 8px;border-radius:11px;background:#ecfdf3;color:#16803c;font-size:9px;font-weight:800}.pn-bot-status i{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.12)}
+
+.pn-bot-welcome-card{margin:9px 11px 8px;padding:12px 14px;border:1px solid rgba(11,99,201,.10);border-radius:17px;background:linear-gradient(135deg,#fff,#eff7ff);box-shadow:0 4px 15px rgba(0,50,100,.055)}
+.pn-bot-welcome-title{font-size:15px;font-weight:850;color:#073d78;margin-bottom:3px}.pn-bot-welcome-text{font-size:12px;line-height:1.4;color:#344d68}.pn-bot-welcome-sub{font-size:10px;line-height:1.4;color:#7a8da1;margin-top:4px}
+
+.pn-bot-section-title{padding:0 12px 6px;color:#073d78;font-size:12px;font-weight:850}.pn-bot-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:0 11px 8px}.pn-bot-quick{min-height:70px;padding:6px 3px;border:1px solid rgba(0,0,0,.055);border-radius:14px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#073d78;font-size:9px;font-weight:800;line-height:1.1;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.045)}.pn-bot-quick:hover{transform:translateY(-1px)}.qa-icon{width:27px;height:27px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}.qa-red{background:#fff0f1}.qa-blue{background:#edf6ff}.qa-green{background:#effbf3}.qa-purple{background:#f3efff}
+
+.pn-bot-suggest-head{display:flex;align-items:center;justify-content:space-between;padding-right:11px}.pn-bot-suggest-head .pn-bot-section-title{padding-bottom:6px}.pn-bot-suggest-head button{border:0;background:transparent;color:#0b68ce;font-size:10px;font-weight:800;cursor:pointer}
+.pn-bot-suggestions{display:flex;flex-direction:column;gap:5px;padding:0 11px 8px}.pn-bot-suggestions button{width:100%;min-height:33px;padding:6px 10px;border:1px solid rgba(0,0,0,.055);border-radius:11px;background:#fff;color:#304963;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:10px;cursor:pointer}.pn-bot-suggestions button b{font-size:17px;color:#8ba0b4;font-weight:400}
+
+.pn-bot-messages{flex:1;min-height:70px;overflow:auto;padding:6px 12px 8px;background:rgba(246,250,255,.72)}.pn-bot-msg{max-width:86%;padding:9px 11px;border-radius:14px;margin:0 0 7px;font-size:12px;line-height:1.42;white-space:pre-wrap}.pn-bot-msg.bot{background:#fff;border:1px solid #e1e9f1;margin-right:auto;box-shadow:0 2px 7px rgba(0,0,0,.03)}.pn-bot-msg.user{background:#eaf3ff;color:#073d78;margin-left:auto;border:1px solid #d5e8ff}
+
+.pn-bot-input-row{display:flex;align-items:center;padding:9px 10px;gap:7px;background:rgba(255,255,255,.97);border-top:1px solid rgba(9,62,115,.09)}.pn-bot-attach{width:36px;height:36px;flex:0 0 36px;border:1px solid #dbe5ef;border-radius:50%;background:#fff;color:#36536e;font-size:18px;cursor:pointer}.pn-bot-input-row input{flex:1;min-width:0;height:40px;border:1px solid #d5e0eb;border-radius:14px;padding:0 12px;outline:none;font-size:12px;background:#fff}.pn-bot-input-row input:focus{border-color:#0b68ce;box-shadow:0 0 0 3px rgba(11,104,206,.08)}.pn-bot-send{width:40px;height:40px;flex:0 0 40px;border:0;border-radius:13px;background:linear-gradient(135deg,#0b68ce,#1687f5);color:#fff;font-size:18px;cursor:pointer;box-shadow:0 5px 13px rgba(11,104,206,.23)}
+
+@keyframes pnPulse{0%,100%{transform:scale(.95);opacity:.65}50%{transform:scale(1.13);opacity:0}}@keyframes pnIn{from{transform:translateY(8px) scale(.985);opacity:0}to{transform:none;opacity:1}}
+
+@media(max-width:850px){#pn-bot-panel.pn-bot-panel{right:10px!important;bottom:145px!important;width:min(420px,calc(100vw - 20px))!important;min-width:0!important;height:min(620px,68vh)!important;max-height:calc(100vh - 160px)!important}.pn-bot-status{display:none}}
+@media(max-width:600px){#pn-bot-toggle.pn-bot-toggle{right:13px!important;bottom:88px!important;width:52px!important;height:52px!important}.pn-bot-icon{width:47px;height:47px}#pn-bot-panel.pn-bot-panel{right:8px!important;bottom:142px!important;width:calc(100vw - 16px)!important;height:min(610px,66vh)!important;max-height:calc(100vh - 155px)!important;border-radius:20px!important}.pn-bot-brand-logo{width:78px;height:48px}.pn-bot-brand-copy strong{font-size:18px}.pn-bot-welcome-card{margin:8px 9px 7px;padding:10px 12px}.pn-bot-quick-grid{gap:6px}.pn-bot-quick{min-height:65px;font-size:8.5px}.pn-bot-suggestions{gap:4px}.pn-bot-suggestions button{min-height:31px;font-size:9px}}
+@media(max-width:390px){#pn-bot-toggle.pn-bot-toggle{right:11px!important;bottom:84px!important;width:48px!important;height:48px!important}.pn-bot-icon{width:44px;height:44px}#pn-bot-panel.pn-bot-panel{right:6px!important;bottom:138px!important;width:calc(100vw - 12px)!important;height:64vh!important}.pn-bot-quick-grid{gap:4px}.pn-bot-quick{min-height:61px}.pn-bot-brand-logo{width:70px;height:44px}}
 </style>
 <script src="pn-bot.js"></script>
 </body>
