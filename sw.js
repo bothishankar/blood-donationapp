@@ -1,9 +1,9 @@
-const CACHE_NAME = 'poongurichi-layout-v2-final-20260909';
+const CACHE_NAME = 'poongurichi-final-20260909-01';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './style.css?v=20260909-layout-v2-final',
-  './app.js?v=20260909-layout-v2-final',
+  './style.css?v=20260909-final-1',
+  './app.js?v=20260909-final-1',
   './manifest.json',
   './icons/poongurichi-logo.jpeg',
   './icons/icon-192.png',
