@@ -697,9 +697,8 @@ window.BloodDonationAPI = {
     x.fillStyle="#eef5ff";x.roundRect(55,1120,1090,170,28);x.fill();x.fillStyle="#102a56";x.font="700 22px Arial";x.fillText("Additional Details",80,1160);x.font="500 24px Arial";
     const desc=String(req.description||"Please contact the attender for further details."); const lines=wrapCanvasText(x,desc,80,1205,1030,34); lines.slice(0,3).forEach((line,i)=>x.fillText(line,80,1205+i*34));
     x.fillStyle="#e72d50";x.font="700 20px Arial";x.fillText(`Request ID: ${req.requestId||""}`,70,1365);
-    x.fillStyle="#fff0f3";x.roundRect(70,1390,1060,52,26);x.fill();
-    x.fillStyle="#e72d50";x.font="900 18px Arial";x.textAlign="center";x.fillText("♥  MY CLUB  •  POONGURICHI NANBARGAL BLOODS CLUB  ♥",600,1423);x.textAlign="left";
-    x.fillStyle="#68758c";x.font="500 16px Arial";x.fillText("Please share responsibly. Verify the request before arranging donation.",70,1468);
+    x.fillStyle="#68758c";x.font="500 18px Arial";x.fillText("Please share responsibly. Verify the request before arranging donation.",70,1410);
+    x.fillStyle="#102a56";x.font="700 18px Arial";x.fillText("One donation. Many lives.",70,1450);
     return c.toDataURL("image/png");
   }
   function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){const words=String(text||"").split(/\s+/),lines=[];let line="";words.forEach(w=>{const test=line?line+" "+w:w;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=w;}else line=test;});if(line)lines.push(line);return lines;}
