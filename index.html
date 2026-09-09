@@ -4700,7 +4700,7 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
       box.innerHTML = '<div class="admin-loading">Loading donors…</div>';
 
       try {
-        const donors = await BloodDonationAPI.getDonors();
+        const donors = await BloodDonationAPI.getAdminDonors(getAdminUserId());
         window.__ADMIN_DONORS = Array.isArray(donors) ? donors : [];
         window.__ADMIN_DONOR_PAGE = 1;
         renderAdminDonorTable();
