@@ -55,7 +55,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260909-layout-v2-final">
+  <link rel="stylesheet" href="style.css?v=20260909-final-1">
   <style>
     .donor-photo-preview{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid #dbe5f0;border-radius:14px;background:#f7fbff;color:#123b82;font-weight:700}
     .donor-photo-preview img{width:64px;height:76px;object-fit:cover;border-radius:10px;border:2px solid #d7e2ef}
@@ -317,7 +317,6 @@
 
     <section id="page-home" class="page-section active">
   <div class="pn-home-v2">
-    <main>
       <section class="pn2-hero">
         <div class="pn2-hero-copy">
           <div class="pn2-kicker"><i></i> COMMUNITY BLOOD NETWORK</div>
@@ -391,7 +390,6 @@
         <div class="pn2-club-links"><button onclick="goTo('about')">About Club</button><button onclick="goTo('about')">Contacts</button><button onclick="goTo('about')">Developer</button></div>
         <p>Every donor matters. Every drop counts.</p>
       </section>
-    </main>
   </div>
 </section>
 
@@ -1792,12 +1790,12 @@
 
   <!-- =======================================================
        EXISTING API
-       IMPORTANT: app.js must remain in your repository
+       IMPORTANT: app.js is the canonical frontend bridge
        ======================================================= -->
 
   <!-- SheetJS: Excel import/export for Admin donor management -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260909-layout-v2-final"></script>
+  <script src="app.js?v=20260909-final-1"></script>
 <script>
 (function(){
   window.addEventListener("load", function(){
