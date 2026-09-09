@@ -554,3 +554,194 @@ window.BloodDonationAPI = {
   clearNotifications: (userId) =>
     api("clearNotifications", { userId: clean(userId) })
 };
+
+
+/* ============================================================
+   PNBDC DONOR SELF-UPDATE + ADMIN BLOOD REQUEST POSTER
+   Add-on: keeps existing application UI/logic intact.
+   ============================================================ */
+(function PNBDCUpdateAddon(){
+  const BOOT_KEY = "__PNBDC_UPDATE_ADDON_V1";
+  if (window[BOOT_KEY]) return;
+  window[BOOT_KEY] = true;
+
+  function esc(v){
+    return String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+  }
+  function toastMsg(msg){
+    if (typeof window.toast === "function") window.toast(msg);
+    else console.log(msg);
+  }
+  function apiCall(action,data){ return window.BloodDonationAPI.api(action,data); }
+
+  /* ---------- Donor self-update ---------- */
+  function injectDonorUpdate(){
+    const form = document.getElementById("donorForm");
+    if (!form || document.getElementById("pnDonorSelfUpdateCard")) return;
+    const card = form.closest(".content-card");
+    if (!card || !card.parentElement) return;
+
+    const wrap = document.createElement("div");
+    wrap.id = "pnDonorSelfUpdateCard";
+    wrap.className = "pn-self-update-card";
+    wrap.innerHTML = `
+      <div class="pn-self-update-icon">🩸</div>
+      <div class="pn-self-update-copy">
+        <strong>Already a Registered Donor?</strong>
+        <span>Update your last blood donation date securely using your Donor ID and Date of Birth.</span>
+      </div>
+      <button type="button" class="pn-self-update-btn" onclick="window.PNBDCOpenDonorUpdate()">✏️ Update Last Donation</button>
+    `;
+    card.parentElement.insertBefore(wrap, card);
+  }
+
+  function ensureDonorUpdateModal(){
+    if (document.getElementById("pnDonorSelfUpdateModal")) return;
+    const modal = document.createElement("div");
+    modal.id = "pnDonorSelfUpdateModal";
+    modal.className = "pn-self-modal";
+    modal.innerHTML = `
+      <div class="pn-self-modal-card" role="dialog" aria-modal="true" aria-labelledby="pnSelfUpdateTitle">
+        <div class="pn-self-modal-head">
+          <div><div class="pn-self-kicker">PNBDC DONOR PORTAL</div><h2 id="pnSelfUpdateTitle">Update Last Donation</h2></div>
+          <button type="button" class="pn-self-close" aria-label="Close" onclick="window.PNBDCCloseDonorUpdate()">×</button>
+        </div>
+        <p class="pn-self-help">Use your <b>Donor ID</b> as ID and your <b>Date of Birth</b> as password.</p>
+        <form id="pnDonorSelfUpdateForm" class="pn-self-form">
+          <label>Donor ID <span>Required</span><input id="pnSelfDonorId" autocomplete="username" placeholder="PNBDC000001" required></label>
+          <label>Date of Birth / Password <span>DDMMYYYY</span><input id="pnSelfDob" inputmode="numeric" autocomplete="current-password" maxlength="10" placeholder="18022008" required></label>
+          <div class="pn-self-divider"></div>
+          <label>Last Donation Date <span>Required</span><input id="pnSelfLastDonation" type="date" required></label>
+          <div id="pnSelfUpdateMessage" class="pn-self-message"></div>
+          <button id="pnSelfUpdateSubmit" type="submit" class="pn-self-submit">💾 Save Last Donation Date</button>
+        </form>
+        <div class="pn-self-note">🔒 Only the last donation date is changed. Your other donor details remain unchanged.</div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener("click", e => { if (e.target === modal) window.PNBDCCloseDonorUpdate(); });
+    document.getElementById("pnDonorSelfUpdateForm").addEventListener("submit", submitDonorUpdate);
+  }
+
+  async function submitDonorUpdate(e){
+    e.preventDefault();
+    const idEl=document.getElementById("pnSelfDonorId");
+    const dobEl=document.getElementById("pnSelfDob");
+    const dateEl=document.getElementById("pnSelfLastDonation");
+    const msg=document.getElementById("pnSelfUpdateMessage");
+    const btn=document.getElementById("pnSelfUpdateSubmit");
+    const donorId=String(idEl.value||"").trim().toUpperCase();
+    const dob=String(dobEl.value||"").replace(/\D/g,"");
+    const lastDonationDate=String(dateEl.value||"").trim();
+    if(!/^PNBDC\d{6}$/.test(donorId)){msg.className="pn-self-message error";msg.textContent="Enter a valid PNBDC Donor ID.";idEl.focus();return;}
+    if(!/^\d{8}$/.test(dob)){msg.className="pn-self-message error";msg.textContent="Enter DOB as DDMMYYYY. Example: 18022008";dobEl.focus();return;}
+    if(!lastDonationDate){msg.className="pn-self-message error";msg.textContent="Please select your last donation date.";dateEl.focus();return;}
+    const selected=new Date(lastDonationDate+"T00:00:00");
+    const today=new Date(); today.setHours(0,0,0,0);
+    if(selected>today){msg.className="pn-self-message error";msg.textContent="Last donation date cannot be in the future.";dateEl.focus();return;}
+    try{
+      btn.disabled=true; btn.textContent="Checking details…";
+      msg.className="pn-self-message info"; msg.textContent="Verifying Donor ID and DOB…";
+      const result=await apiCall("updateDonorSelf",{donorId,dob,lastDonationDate});
+      if(result?.success===false) throw new Error(result.error||"Unable to update donor details.");
+      msg.className="pn-self-message success"; msg.textContent="✓ Last donation date updated successfully.";
+      toastMsg("Last donation date updated successfully.");
+      setTimeout(()=>{ window.PNBDCCloseDonorUpdate(); },900);
+      if(typeof window.loadDonors === "function") { try{ await window.loadDonors(); }catch(_){} }
+    }catch(err){
+      msg.className="pn-self-message error"; msg.textContent=err?.message||"Unable to update donor details.";
+    }finally{btn.disabled=false;btn.textContent="💾 Save Last Donation Date";}
+  }
+
+  window.PNBDCOpenDonorUpdate=function(){ ensureDonorUpdateModal(); const m=document.getElementById("pnDonorSelfUpdateModal"); m.classList.add("show"); setTimeout(()=>document.getElementById("pnSelfDonorId")?.focus(),80); };
+  window.PNBDCCloseDonorUpdate=function(){ document.getElementById("pnDonorSelfUpdateModal")?.classList.remove("show"); };
+
+  /* ---------- Admin blood-request poster ---------- */
+  function getRefId(item){ return String(item?.referenceId || item?.Reference_ID || item?.requestId || item?.Request_ID || "").trim(); }
+  function isBloodRequest(item){ return String(item?.type || item?.Type || "").toLowerCase()==="blood request"; }
+
+  async function generateRequestPoster(requestId, button){
+    if(!requestId) return toastMsg("Request ID is not available.");
+    try{
+      if(button){button.disabled=true;button.textContent="Generating…";}
+      const admin = typeof window.getAdminUserId === "function" ? window.getAdminUserId() : "";
+      const result=await apiCall("getRequestById",{requestId,userId:admin});
+      if(result?.success===false) throw new Error(result.error||"Unable to load blood request.");
+      const req=result.request||result.data||result.result;
+      if(!req) throw new Error("Blood request not found.");
+      const dataUrl=await drawRequestPoster(req);
+      const a=document.createElement("a");
+      const safe=String(req.requestId||requestId).replace(/[^a-zA-Z0-9_-]/g,"_");
+      a.href=dataUrl; a.download=`${safe}_Blood_Request.png`; document.body.appendChild(a); a.click(); a.remove();
+      toastMsg("Blood request image downloaded.");
+    }catch(err){console.error(err);toastMsg(err?.message||"Unable to generate request image.");}
+    finally{if(button){button.disabled=false;button.textContent="🖼️ Generate Request";}}
+  }
+
+  function loadImage(src){return new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve(img);img.onerror=reject;img.src=src;});}
+  async function drawRequestPoster(req){
+    const c=document.createElement("canvas"); c.width=1200; c.height=1500; const x=c.getContext("2d");
+    const bg=x.createLinearGradient(0,0,1200,1500); bg.addColorStop(0,"#f7fbff"); bg.addColorStop(1,"#ffffff"); x.fillStyle=bg;x.fillRect(0,0,1200,1500);
+    x.fillStyle="#102a56"; x.fillRect(0,0,1200,210);
+    try{const logo=await loadImage("icons/poongurichi-logo.jpeg");x.drawImage(logo,60,45,120,120);}catch(_){x.fillStyle="#e72d50";x.beginPath();x.arc(120,105,55,0,Math.PI*2);x.fill();}
+    x.fillStyle="#fff";x.font="800 38px Arial";x.fillText("Poongurichi Nanbargal",210,90);x.font="500 22px Arial";x.fillText("Blood Donors Club",210,128);
+    x.fillStyle="#e72d50";x.roundRect(870,55,260,85,42);x.fill();x.fillStyle="#fff";x.font="900 32px Arial";x.textAlign="center";x.fillText(String(req.priority||"NORMAL").toUpperCase(),1000,110);x.textAlign="left";
+    x.fillStyle="#102a56";x.font="900 44px Arial";x.fillText("URGENT BLOOD REQUEST",60,285);
+    x.fillStyle="#e72d50";x.font="900 110px Arial";x.textAlign="center";x.fillText(String(req.bloodGroup||"?").toUpperCase(),600,440);
+    x.fillStyle="#102a56";x.font="800 28px Arial";x.fillText(`${req.unitsRequired||"1"} UNIT(S) REQUIRED`,60,500);
+    const rows=[
+      ["Patient",req.patientName], ["Hospital",req.hospital], ["Location",[req.location,req.district].filter(Boolean).join(", ")],
+      ["Required Date",req.requiredDate||"As soon as possible"], ["Required Time",req.requiredTime||""], ["Contact",req.contactNumber]
+    ];
+    let y=590;
+    rows.forEach(([label,val])=>{x.fillStyle="#5b6b83";x.font="700 22px Arial";x.fillText(label.toUpperCase(),70,y);x.fillStyle="#102a56";x.font="600 28px Arial";x.fillText(String(val||"—"),300,y);y+=90;});
+    x.fillStyle="#eef5ff";x.roundRect(55,1120,1090,170,28);x.fill();x.fillStyle="#102a56";x.font="700 22px Arial";x.fillText("Additional Details",80,1160);x.font="500 24px Arial";
+    const desc=String(req.description||"Please contact the attender for further details."); const lines=wrapCanvasText(x,desc,80,1205,1030,34); lines.slice(0,3).forEach((line,i)=>x.fillText(line,80,1205+i*34));
+    x.fillStyle="#e72d50";x.font="700 20px Arial";x.fillText(`Request ID: ${req.requestId||""}`,70,1365);
+    x.fillStyle="#fff0f3";x.roundRect(70,1390,1060,52,26);x.fill();
+    x.fillStyle="#e72d50";x.font="900 18px Arial";x.textAlign="center";x.fillText("♥  MY CLUB  •  POONGURICHI NANBARGAL BLOODS CLUB  ♥",600,1423);x.textAlign="left";
+    x.fillStyle="#68758c";x.font="500 16px Arial";x.fillText("Please share responsibly. Verify the request before arranging donation.",70,1468);
+    return c.toDataURL("image/png");
+  }
+  function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight){const words=String(text||"").split(/\s+/),lines=[];let line="";words.forEach(w=>{const test=line?line+" "+w:w;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=w;}else line=test;});if(line)lines.push(line);return lines;}
+
+  function decorateBloodRequestNotifications(){
+    if(typeof window.adminIsLoggedIn === "function" && !window.adminIsLoggedIn()) return;
+    const list=document.getElementById("notificationList"); if(!list) return;
+    const items=[...list.querySelectorAll(".notification-item")];
+    items.forEach((el)=>{
+      if(el.querySelector(".pn-generate-request-btn")) return;
+      const text=String(el.textContent||"");
+      const match=text.match(/\b(REQ[A-Z0-9_-]*)\b/i);
+      const ref=match ? match[1] : "";
+      if(!ref) return;
+      const content=el.querySelector(".notification-item-content"); if(!content) return;
+      const btn=document.createElement("button"); btn.type="button"; btn.className="pn-generate-request-btn"; btn.textContent="🖼️ Generate Request";
+      btn.addEventListener("click",e=>{e.stopPropagation();generateRequestPoster(ref,btn);}); content.appendChild(btn);
+    });
+  }
+
+  function hookNotificationRenderer(){
+    if(typeof window.renderNotifications !== "function") return false;
+    if(window.renderNotifications.__pnHooked) return true;
+    const original=window.renderNotifications;
+    function wrapped(){const out=original.apply(this,arguments);setTimeout(decorateBloodRequestNotifications,0);return out;}
+    wrapped.__pnHooked=true; window.renderNotifications=wrapped; return true;
+  }
+
+  function injectStyles(){
+    if(document.getElementById("pn-update-addon-styles")) return;
+    const s=document.createElement("style");s.id="pn-update-addon-styles";s.textContent=`
+      .pn-self-update-card{display:flex;align-items:center;gap:14px;margin:0 0 18px;padding:16px 18px;border:1px solid #dbe7f5;border-radius:18px;background:linear-gradient(135deg,#f7fbff,#fff);box-shadow:0 10px 28px rgba(16,42,86,.07)}
+      .pn-self-update-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:#fff0f3;font-size:24px;flex:0 0 48px}.pn-self-update-copy{flex:1;min-width:0}.pn-self-update-copy strong{display:block;color:#102a56;font-size:15px}.pn-self-update-copy span{display:block;color:#68758c;font-size:12px;margin-top:2px}.pn-self-update-btn{border:0;border-radius:12px;background:#102a56;color:#fff;padding:11px 14px;font-weight:800;white-space:nowrap}.pn-self-update-btn:hover{background:#1769e0}
+      .pn-self-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(9,22,44,.58);backdrop-filter:blur(8px)}.pn-self-modal.show{display:flex}.pn-self-modal-card{width:min(480px,100%);background:#fff;border:1px solid #dce7f4;border-radius:24px;padding:24px;box-shadow:0 30px 90px rgba(0,0,0,.28)}.pn-self-modal-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.pn-self-kicker{font-size:10px;font-weight:900;letter-spacing:.12em;color:#e72d50}.pn-self-modal h2{margin:3px 0 0;color:#102a56;font-size:24px}.pn-self-close{width:36px;height:36px;border:0;border-radius:11px;background:#f1f5f9;font-size:22px;color:#102a56}.pn-self-help{margin:13px 0 18px;color:#68758c;font-size:13px;line-height:1.5}.pn-self-form{display:grid;gap:13px}.pn-self-form label{display:flex;flex-direction:column;gap:6px;color:#102a56;font-size:12px;font-weight:850}.pn-self-form label span{font-size:10px;color:#7a8799;font-weight:700}.pn-self-form input{width:100%;min-height:48px;border:1px solid #d8e0ec;background:#fbfcfe;border-radius:12px;padding:0 13px;outline:none;color:#12213f}.pn-self-form input:focus{border-color:#1769e0;box-shadow:0 0 0 4px rgba(23,105,224,.09);background:#fff}.pn-self-divider{height:1px;background:#edf1f7;margin:2px 0}.pn-self-submit{min-height:49px;border:0;border-radius:13px;background:linear-gradient(135deg,#1769e0,#104eb4);color:#fff;font-weight:850}.pn-self-submit:disabled{opacity:.65}.pn-self-message{display:none;padding:11px 13px;border-radius:11px;font-size:12px;font-weight:750}.pn-self-message.success,.pn-self-message.error,.pn-self-message.info{display:block}.pn-self-message.success{background:#ecfbf5;color:#08734b}.pn-self-message.error{background:#fff0f3;color:#b8183b}.pn-self-message.info{background:#eef5ff;color:#1557c0}.pn-self-note{margin-top:13px;padding:10px 12px;border-radius:11px;background:#f7f9fc;color:#68758c;font-size:11px;line-height:1.45}.pn-generate-request-btn{display:inline-flex;align-items:center;justify-content:center;margin-top:9px;border:1px solid #cfe0f7;background:#eef5ff;color:#1557c0;border-radius:10px;padding:7px 10px;font-size:11px;font-weight:850;cursor:pointer}.pn-generate-request-btn:hover{background:#dfeeff}.pn-generate-request-btn:disabled{opacity:.6}
+      @media(max-width:640px){.pn-self-update-card{align-items:flex-start;flex-wrap:wrap}.pn-self-update-copy{flex-basis:calc(100% - 64px)}.pn-self-update-btn{width:100%}.pn-self-modal{padding:10px}.pn-self-modal-card{padding:19px;border-radius:20px}.pn-self-modal h2{font-size:21px}}
+    `;document.head.appendChild(s);
+  }
+
+  function boot(){
+    injectStyles(); ensureDonorUpdateModal(); injectDonorUpdate(); hookNotificationRenderer();
+    decorateBloodRequestNotifications();
+    if(!window.__pnAddonTimer){window.__pnAddonTimer=setInterval(()=>{injectDonorUpdate();hookNotificationRenderer();decorateBloodRequestNotifications();},1200);setTimeout(()=>{clearInterval(window.__pnAddonTimer);window.__pnAddonTimer=null;},30000);}
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+})();
