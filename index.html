@@ -55,7 +55,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20260909-layout-v2-final">
   <style>
     .donor-photo-preview{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid #dbe5f0;border-radius:14px;background:#f7fbff;color:#123b82;font-weight:700}
     .donor-photo-preview img{width:64px;height:76px;object-fit:cover;border-radius:10px;border:2px solid #d7e2ef}
@@ -315,467 +315,85 @@
          HOME
          ===================================================== -->
 
-    <section
-      id="page-home"
-      class="page-section active"
-    >
-
-      <div class="container">
-
-
-        <!-- HERO -->
-
-        <div class="hero">
-
-          <div class="hero-content">
-
-            <div class="hero-badge">
-              <span class="hero-badge-dot"></span>
-              Community Blood Donor Network
-            </div>
-
-            <h1 class="hero-title">
-              One donation.
-              <br>
-              <span>Many lives.</span>
-            </h1>
-
-            <p class="hero-text">
-              Connect people who need blood with people
-              willing to help. Find a donor near you,
-              become a donor, and make a real difference
-              in your community.
-            </p>
-
-            <div class="hero-actions">
-
-              <button
-                class="btn btn-primary"
-                onclick="goTo('find')"
-              >
-                🔎 Find Blood
-              </button>
-
-              <button
-                class="btn btn-danger"
-                onclick="goTo('donor')"
-              >
-                🩸 Become a Donor
-              </button>
-
-              <button
-                class="btn btn-light"
-                onclick="goTo('request')"
-              >
-                🚨 Request Blood
-              </button>
-
-            </div>
-
+    <section id="page-home" class="page-section active">
+  <div class="pn-home-v2">
+    <main>
+      <section class="pn2-hero">
+        <div class="pn2-hero-copy">
+          <div class="pn2-kicker"><i></i> COMMUNITY BLOOD NETWORK</div>
+          <h1>Give blood.<br><em>Give hope.</em></h1>
+          <p>One donation can become someone's second chance. Find a donor, become a donor, or raise a blood request in seconds.</p>
+          <div class="pn2-hero-actions">
+            <button type="button" class="pn2-btn pn2-btn-primary" onclick="goTo('find')">🔎 Find Blood</button>
+            <button type="button" class="pn2-btn pn2-btn-white" onclick="goTo('donor')">🩸 Become a Donor</button>
           </div>
-
-
-          <div class="hero-visual">
-
-            <div class="hero-orbit">
-
-              <div class="hero-drop">
-
-                <div class="hero-drop-inner">
-
-                  <div class="hero-drop-heart">
-                    ♥
-                  </div>
-
-                  <div class="hero-drop-label">
-                    SAVE LIVES
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-
-            <div class="floating-card floating-one">
-
-              <strong id="heroDonorCount">
-                —
-              </strong>
-
-              <small>
-                Registered donors
-              </small>
-
-            </div>
-
-
-            <div class="floating-card floating-two">
-
-              <strong>
-                24/7
-              </strong>
-
-              <small>
-                Community support
-              </small>
-
-            </div>
-
+          <div class="pn2-hero-links">
+            <button type="button" onclick="goTo('request')">🚨 Need Blood?</button>
+            <button type="button" onclick="installAppNow()">📲 Download App</button>
           </div>
-
         </div>
-
-
-        <!-- QUICK ACTIONS -->
-
-        <div class="quick-actions">
-
-          <div
-            class="action-card"
-            onclick="goTo('find')"
-          >
-
-            <div class="action-icon blue">
-              🔎
-            </div>
-
-            <div>
-              <h3>Find Blood / Donor</h3>
-
-              <p>
-                Search available donors by blood group
-                and location.
-              </p>
-            </div>
-
-            <div class="action-arrow">
-              →
-            </div>
-
-          </div>
-
-
-          <div
-            class="action-card"
-            onclick="goTo('donor')"
-          >
-
-            <div class="action-icon red">
-              🩸
-            </div>
-
-            <div>
-              <h3>Become a Donor</h3>
-
-              <p>
-                Register your details and help someone
-                in need.
-              </p>
-            </div>
-
-            <div class="action-arrow">
-              →
-            </div>
-
-          </div>
-
-
-          <div
-            class="action-card"
-            onclick="goTo('request')"
-          >
-
-            <div class="action-icon green">
-              🚑
-            </div>
-
-            <div>
-              <h3>Need Blood?</h3>
-
-              <p>
-                Send a blood request to the donor network.
-              </p>
-            </div>
-
-            <div class="action-arrow">
-              →
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- EVENTS -->
-
-        <div class="events-section">
-
-          <div class="section-heading-row">
-
-            <div class="section-head">
-
-              <div class="section-kicker">
-                ❤️ Community
-              </div>
-
-              <h2 class="section-title">
-                Blood Camps & Events
-              </h2>
-
-              <p class="section-description">
-                Blood donation camps and community
-                activities.
-              </p>
-
-            </div>
-
-            <button
-              class="view-all-btn"
-              onclick="showAllEvents()"
-            >
-              View All →
-            </button>
-
-          </div>
-
-
-          <div
-            id="eventsContainer"
-            class="events-grid"
-          >
-
-            <div class="loading">
-              <span class="spinner"></span>
-              Loading events...
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- DONOR PHOTO GALLERY -->
-
-        <section class="donor-gallery-section">
-
-          <div class="section-head">
-            <div class="section-kicker">💙 Our Donors</div>
-            <h2 class="section-title">Our Donor Community</h2>
-            <p class="section-description">Celebrating the people who help save lives.</p>
-          </div>
-
-          <div id="donorPhotoGallery" class="donor-photo-gallery">
-            <div class="donor-photo-loading">Loading donor photos…</div>
-          </div>
-
-        </section>
-
-
-        <!-- BLOOD GROUP -->
-
-        <div class="blood-section">
-
-          <div class="section-head">
-
-            <div class="section-kicker">
-              🩸 Availability
-            </div>
-
-            <h2 class="section-title">
-              Blood Group Availability
-            </h2>
-
-            <p class="section-description">
-              Live member counts from registered donors.
-            </p>
-
-          </div>
-
-
-          <div
-            id="bloodGrid"
-            class="blood-grid"
-          >
-
-            <div class="loading">
-              <span class="spinner"></span>
-              Loading...
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- STATS -->
-
-        <div class="stats-grid">
-
-          <div class="stat-card">
-
-            <div class="stat-top">
-
-              <div class="stat-icon">
-                👥
-              </div>
-
-              <div class="stat-label">
-                Total Donors
-              </div>
-
-            </div>
-
-            <div
-              id="statDonors"
-              class="stat-value"
-            >
-              —
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div class="stat-top">
-
-              <div class="stat-icon">
-                🩸
-              </div>
-
-              <div class="stat-label">
-                Blood Requests
-              </div>
-
-            </div>
-
-            <div
-              id="statRequests"
-              class="stat-value"
-            >
-              —
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div class="stat-top">
-
-              <div class="stat-icon">
-                📅
-              </div>
-
-              <div class="stat-label">
-                Camps / Events
-              </div>
-
-            </div>
-
-            <div
-              id="statEvents"
-              class="stat-value"
-            >
-              —
-            </div>
-
-          </div>
-
-
-          <div class="stat-card">
-
-            <div class="stat-top">
-
-              <div class="stat-icon">
-                ❤️
-              </div>
-
-              <div class="stat-label">
-                Blood Groups
-              </div>
-
-            </div>
-
-            <div
-              id="statGroups"
-              class="stat-value"
-            >
-              —
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- INFO -->
-
-        <div class="info-banner">
-
-          <div class="info-icon">
-            i
-          </div>
-
-          <p>
-            Blood donation is a voluntary act that can
-            save a life. Be a hero — donate blood and
-            help your community.
-          </p>
-
-        </div>
-
-      </div>
-
-      <!-- =====================================================
-           LATEST UPDATES
-           ===================================================== -->
-      <section class="pn-latest-updates" aria-labelledby="pnLatestTitle">
-        <div class="pn-latest-head">
-          <div>
-            <div class="pn-latest-kicker">✨ NEW • சமீபத்திய புதுப்பிப்புகள்</div>
-            <h2 id="pnLatestTitle">Latest Updates</h2>
-            <p>New features designed to make blood donation faster, smarter and more professional.</p>
-          </div>
-          <span class="pn-live-pill"><i></i> Live Experience</span>
-        </div>
-        <div class="pn-latest-grid">
-          <article class="pn-update-card pn-update-red">
-            <span class="pn-update-badge">NEW</span><div class="pn-update-icon">🩸</div>
-            <h3>Update Last Donation</h3>
-            <p>Registered donors can securely update their last donation date using Donor ID + DOB.</p>
-            <button type="button" onclick="document.querySelector('.pn-self-update-btn')?.click()">Update Details <b>→</b></button>
-          </article>
-          <article class="pn-update-card pn-update-blue">
-            <span class="pn-update-badge">NEW</span><div class="pn-update-icon">🖼️</div>
-            <h3>Blood Request Image</h3>
-            <p>Admins can generate a professional blood-request poster directly from a request notification.</p>
-            <button type="button" onclick="goTo('admin')">Admin Request Tools <b>→</b></button>
-          </article>
-          <article class="pn-update-card pn-update-purple">
-            <div class="pn-update-icon">🤖</div>
-            <h3>BothiAI Assistant</h3>
-            <p>Ask questions in English, தமிழ் or Tanglish about donors, requests, donation and the app.</p>
-            <button type="button" onclick="document.getElementById('pn-bot-toggle')?.click()">Ask BothiAI <b>→</b></button>
-          </article>
-          <article class="pn-update-card pn-update-green">
-            <div class="pn-update-icon">🌐</div>
-            <h3>English + தமிழ்</h3>
-            <p>Use the whole website in your preferred language, with Tamil-aware donor ID cards and labels.</p>
-            <button type="button" onclick="document.querySelector('.language-btn, [data-lang=ta]')?.click()">Change Language <b>→</b></button>
-          </article>
-          <article class="pn-update-card pn-update-gold">
-            <div class="pn-update-icon">🪪</div>
-            <h3>Premium Donor ID</h3>
-            <p>Professional donor ID cards include photo, blood group, Donor ID, DOB, mobile and location.</p>
-            <button type="button" onclick="goTo('donor')">Become a Donor <b>→</b></button>
-          </article>
+        <div class="pn2-hero-art" aria-hidden="true">
+          <div class="pn2-glow"></div><div class="pn2-ring pn2-ring-a"></div><div class="pn2-ring pn2-ring-b"></div>
+          <div class="pn2-drop"><span>♥</span><small>SAVE<br>LIVES</small></div>
+          <div class="pn2-mini-card pn2-mini-top"><b id="heroDonorCount">—</b><span>Registered donors</span></div>
+          <div class="pn2-mini-card pn2-mini-bottom"><b>24/7</b><span>Community support</span></div>
         </div>
       </section>
 
-    </section>
+      <section class="pn2-live" aria-label="Blood availability">
+        <div class="pn2-live-title"><span>●</span><div><strong>LIVE BLOOD NEED</strong><small>Community availability</small></div></div>
+        <button type="button" onclick="goTo('find')">Check availability <b>→</b></button>
+      </section>
+
+      <section class="pn2-section pn2-actions-section">
+        <div class="pn2-section-head"><div><span>QUICK ACCESS</span><h2>What do you need?</h2></div><div class="pn2-head-mark">✦</div></div>
+        <div class="pn2-action-grid">
+          <button type="button" class="pn2-action pn2-action-red" onclick="goTo('donor')"><i>🩸</i><strong>Become a Donor</strong><small>Join our donor family</small><b>→</b></button>
+          <button type="button" class="pn2-action pn2-action-blue" onclick="goTo('find')"><i>🔎</i><strong>Find Blood</strong><small>Search donors securely</small><b>→</b></button>
+          <button type="button" class="pn2-action pn2-action-orange" onclick="goTo('request')"><i>🚑</i><strong>Request Blood</strong><small>Send an urgent request</small><b>→</b></button>
+          <button type="button" class="pn2-action pn2-action-purple" onclick="goTo('events')"><i>📅</i><strong>Camps & Events</strong><small>See upcoming activities</small><b>→</b></button>
+        </div>
+      </section>
+
+      <section class="pn2-section pn2-community-section">
+        <div class="pn2-section-head"><div><span>OUR COMMUNITY</span><h2>Donors who make it possible</h2></div><button type="button" onclick="goTo('find')">View donors →</button></div>
+        <div id="donorPhotoGallery" class="pn2-donor-gallery"><div class="pn2-loading">Loading donor community…</div></div>
+      </section>
+
+      <section class="pn2-blood-section">
+        <div class="pn2-section-head"><div><span>BLOOD GROUPS</span><h2>Availability at a glance</h2></div><button type="button" onclick="goTo('find')">Find donor →</button></div>
+        <div id="bloodGrid" class="pn2-blood-grid"><div class="pn2-loading">Loading blood groups…</div></div>
+      </section>
+
+      <section class="pn2-stats">
+        <div><i>👥</i><b id="statDonors">—</b><span>Total Donors</span></div>
+        <div><i>🩸</i><b id="statRequests">—</b><span>Blood Requests</span></div>
+        <div><i>📅</i><b id="statEvents">—</b><span>Camps & Events</span></div>
+        <div><i>❤️</i><b id="statGroups">—</b><span>Blood Groups</span></div>
+      </section>
+
+      <section class="pn2-section pn2-events-section">
+        <div class="pn2-section-head"><div><span>COMMUNITY</span><h2>Blood Camps & Events</h2></div><button type="button" onclick="showAllEvents()">View all →</button></div>
+        <div id="eventsContainer" class="pn2-events"><div class="pn2-loading">Loading events…</div></div>
+      </section>
+
+      <section class="pn2-updates">
+        <div class="pn2-section-head"><div><span>LATEST UPDATES</span><h2>What's new</h2></div><div class="pn2-live-dot">● Live</div></div>
+        <div class="pn2-update-grid">
+          <article><i>🩸</i><b>Update Last Donation</b><p>Registered donors can securely update their last donation date.</p><button type="button" onclick="document.querySelector('.pn-self-update-btn')?.click()">Update details →</button></article>
+          <article><i>🖼️</i><b>Blood Request Image</b><p>Admins can generate professional request posters from notifications.</p><button type="button" onclick="goTo('admin')">Admin tools →</button></article>
+          <article><i>🤖</i><b>BothiAI Assistant</b><p>Ask in English, தமிழ் or Tanglish about donation and the app.</p><button type="button" onclick="document.getElementById('pn-bot-toggle')?.click()">Ask BothiAI →</button></article>
+        </div>
+      </section>
+
+      <section class="pn2-club">
+        <div class="pn2-club-brand"><img src="icons/poongurichi-logo.jpeg" alt="PNBDC"><div><b>My Club</b><span>Poongurichi Nanbargal Blood Donors Club</span></div></div>
+        <div class="pn2-club-links"><button onclick="goTo('about')">About Club</button><button onclick="goTo('about')">Contacts</button><button onclick="goTo('about')">Developer</button></div>
+        <p>Every donor matters. Every drop counts.</p>
+      </section>
+    </main>
+  </div>
+</section>
 
 
     <!-- =====================================================
@@ -2179,7 +1797,26 @@
 
   <!-- SheetJS: Excel import/export for Admin donor management -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=20260909-layout-v2-final"></script>
+<script>
+(function(){
+  window.addEventListener("load", function(){
+    var api=window.BloodDonationAPI;
+    var required=["createSubAdmin","getAdminUsers","updateSubAdmin","setSubAdminStatus","deleteSubAdmin","getAdminDonors"];
+    var missing=required.filter(function(k){return !api || typeof api[k]!=="function";});
+    if(missing.length){
+      console.error("PNBDC API bridge missing:", missing);
+      var el=document.getElementById("adminManagementCard");
+      if(el){
+        var m=document.createElement("div");
+        m.className="form-message error";
+        m.textContent="System update required. Please refresh once or upload the latest PNBDC package. Missing: "+missing.join(", ");
+        el.insertBefore(m, el.firstChild);
+      }
+    }
+  });
+})();
+</script>
 
 
   <!-- =======================================================
