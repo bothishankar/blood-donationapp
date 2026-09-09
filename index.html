@@ -121,46 +121,29 @@
   .site-footer{position:relative;overflow:hidden}.site-footer::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.08),transparent 22%),radial-gradient(circle at 85% 70%,rgba(229,35,46,.12),transparent 24%);pointer-events:none}
   .mobile-bottom-nav{box-shadow:0 -8px 28px rgba(16,42,86,.12)!important;backdrop-filter:blur(18px);background:rgba(255,255,255,.94)!important}.mobile-bottom-nav a,.mobile-bottom-nav button{transition:transform .2s ease,color .2s ease}.mobile-bottom-nav a:active,.mobile-bottom-nav button:active{transform:scale(.92)}
   .notification-item,.admin-card,.donor-card,.request-card,.event-card{transition:transform .25s ease,box-shadow .25s ease}.notification-item:hover,.admin-card:hover,.donor-card:hover,.request-card:hover,.event-card:hover{transform:translateY(-4px)}
-  .pn-premium-loader{position:fixed;inset:0;z-index:20000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 38%,#ffffff 0%,#eef6ff 48%,#dfeaf8 100%);transition:opacity .45s ease,visibility .45s ease}.pn-premium-loader.hide{opacity:0;visibility:hidden;pointer-events:none}.pn-loader-orb{width:86px;height:86px;border-radius:28px;background:#fff;display:grid;place-items:center;box-shadow:0 18px 55px rgba(16,42,86,.16),0 0 0 8px rgba(229,35,46,.06);animation:pnLoaderPop .9s cubic-bezier(.2,1.4,.4,1) both}.pn-loader-orb img{width:72px;height:72px;object-fit:contain;border-radius:22px}.pn-loader-name{margin-top:18px;color:var(--pn-navy);font-size:20px;font-weight:900;letter-spacing:-.02em}.pn-loader-sub{margin-top:5px;color:#718198;font-size:12px;font-weight:700}.pn-loader-line{width:190px;height:4px;margin-top:18px;background:#dfe8f3;border-radius:999px;overflow:hidden}.pn-loader-line span{display:block;width:42%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--pn-red),var(--pn-blue));animation:pnLoaderLine 1s ease-in-out infinite}
+    .pn-splash-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}.pn-splash-particles i{position:absolute;width:5px;height:5px;border-radius:50%;background:rgba(229,35,46,.7);box-shadow:0 0 18px rgba(229,35,46,.55);animation:pnParticleFloat 4.5s ease-in-out infinite}.pn-splash-particles i:nth-child(1){left:16%;top:30%;animation-delay:-.8s}.pn-splash-particles i:nth-child(2){left:78%;top:24%;animation-delay:-2s}.pn-splash-particles i:nth-child(3){left:24%;top:68%;animation-delay:-3s}.pn-splash-particles i:nth-child(4){left:83%;top:67%;animation-delay:-1.5s}.pn-splash-particles i:nth-child(5){left:50%;top:17%;animation-delay:-2.6s}.pn-splash-particles i:nth-child(6){left:52%;top:82%;animation-delay:-3.7s}.pn-splash-heartbeat{position:absolute;top:13%;font-size:18px;color:rgba(229,35,46,.5);animation:pnHeartBeat 1.35s ease-in-out infinite}.pn-loader-club{margin-top:2px;color:#e72d50;font-size:16px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;animation:pnSplashText .8s .18s both}.pn-loader-tagline{margin-top:12px;color:#102a56;font-size:13px;font-weight:850;letter-spacing:.01em;animation:pnSplashText .8s .3s both}.pn-loader-tagline b{color:#e72d50}.pn-loader-status{display:flex;align-items:center;gap:7px;margin-top:10px;color:#8491a5;font-size:10px;font-weight:750}.pn-loader-dot{width:6px;height:6px;border-radius:50%;background:#18a957;box-shadow:0 0 0 4px rgba(24,169,87,.10);animation:pnSoftPulse 1.2s infinite}.pn-loader-ring{position:absolute;border-radius:50%;border:1px solid rgba(229,45,80,.18);pointer-events:none}.pn-loader-ring-a{inset:-10px;animation:pnRingPulse 2.2s ease-out infinite}.pn-loader-ring-b{inset:-22px;border-color:rgba(11,99,201,.12);animation:pnRingPulse 2.2s .55s ease-out infinite}.pn-premium-loader{position:fixed;inset:0;z-index:20000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,#ffffff 0%,#eef6ff 44%,#d9e7f7 100%);transition:opacity .55s ease,visibility .55s ease;overflow:hidden}.pn-premium-loader::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(229,35,46,.11),rgba(11,99,201,.04) 45%,transparent 70%);animation:pnSplashAura 3.2s ease-in-out infinite}.pn-premium-loader.hide{opacity:0;visibility:hidden;pointer-events:none}.pn-loader-orb{position:relative;width:108px;height:108px;border-radius:34px;background:rgba(255,255,255,.92);display:grid;place-items:center;box-shadow:0 22px 70px rgba(16,42,86,.18),0 0 0 10px rgba(229,35,46,.05);animation:pnLoaderPop 1s cubic-bezier(.2,1.4,.4,1) both;z-index:1}.pn-loader-orb img{width:88px;height:88px;object-fit:contain;border-radius:28px}.pn-loader-name{margin-top:20px;color:#102a56;font-size:23px;font-weight:950;letter-spacing:-.03em;z-index:1;animation:pnSplashText .8s .08s both}.pn-loader-sub{margin-top:5px;color:#718198;font-size:11px;font-weight:750;letter-spacing:.04em;z-index:1}.pn-loader-line{width:210px;height:5px;margin-top:18px;background:#dfe8f3;border-radius:999px;overflow:hidden;z-index:1;box-shadow:inset 0 1px 2px rgba(16,42,86,.08)}.pn-loader-line span{display:block;width:42%;height:100%;border-radius:999px;background:linear-gradient(90deg,#e72d50,#1769e0,#e72d50);animation:pnLoaderLine 1.05s ease-in-out infinite}.pn-loader-status{position:relative;z-index:1}.pn-loader-club,.pn-loader-tagline,.pn-loader-status{position:relative;z-index:1}
   .pn-reveal{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1)}.pn-reveal.pn-visible{opacity:1;transform:none}.pn-stagger>*{opacity:0;transform:translateY(12px);animation:pnStagger .55s cubic-bezier(.2,.8,.2,1) forwards}.pn-stagger>*:nth-child(2){animation-delay:.05s}.pn-stagger>*:nth-child(3){animation-delay:.10s}.pn-stagger>*:nth-child(4){animation-delay:.15s}.pn-stagger>*:nth-child(5){animation-delay:.20s}
-  @keyframes pnHeroEnter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}@keyframes pnCardRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes pnDropFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}@keyframes pnOrbitSpin{to{transform:rotate(360deg)}}@keyframes pnGlowFloat{from{transform:translate3d(0,-8px,0) scale(.96)}to{transform:translate3d(18px,18px,0) scale(1.05)}}@keyframes pnSoftPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.04);opacity:.86}}@keyframes pnLoaderPop{0%{opacity:0;transform:scale(.55) rotate(-10deg)}75%{transform:scale(1.08) rotate(2deg)}100%{opacity:1;transform:none}}@keyframes pnLoaderLine{0%{transform:translateX(-140%)}100%{transform:translateX(360%)}}@keyframes pnStagger{to{opacity:1;transform:none}}
+  @keyframes pnParticleFloat{0%,100%{transform:translate3d(0,0,0);opacity:.25}50%{transform:translate3d(8px,-22px,0) scale(1.4);opacity:1}}@keyframes pnHeartBeat{0%,100%{transform:scale(1);opacity:.35}15%{transform:scale(1.18);opacity:.75}30%{transform:scale(.98);opacity:.4}45%{transform:scale(1.16);opacity:.65}}@keyframes pnRingPulse{0%{transform:scale(.82);opacity:.8}100%{transform:scale(1.22);opacity:0}}@keyframes pnSplashAura{0%,100%{transform:scale(.88);opacity:.7}50%{transform:scale(1.08);opacity:1}}@keyframes pnSplashText{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}@keyframes pnHeroEnter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}@keyframes pnCardRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes pnDropFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}@keyframes pnOrbitSpin{to{transform:rotate(360deg)}}@keyframes pnGlowFloat{from{transform:translate3d(0,-8px,0) scale(.96)}to{transform:translate3d(18px,18px,0) scale(1.05)}}@keyframes pnSoftPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.04);opacity:.86}}@keyframes pnLoaderPop{0%{opacity:0;transform:scale(.55) rotate(-10deg)}75%{transform:scale(1.08) rotate(2deg)}100%{opacity:1;transform:none}}@keyframes pnLoaderLine{0%{transform:translateX(-140%)}100%{transform:translateX(360%)}}@keyframes pnStagger{to{opacity:1;transform:none}}
   @media(max-width:1100px){.pn-latest-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:720px){.pn-latest-updates{padding:20px;border-radius:24px}.pn-latest-head{align-items:flex-start;flex-direction:column}.pn-latest-head h2{font-size:26px}.pn-latest-grid{grid-template-columns:1fr 1fr}.pn-update-card{min-height:215px;padding:16px}.pn-update-card p{min-height:72px}.pn-live-pill{align-self:flex-start}.pn-page-glow{display:none}}
   @media(max-width:480px){.pn-latest-grid{grid-template-columns:1fr}.pn-update-card{min-height:auto}.pn-update-card p{min-height:auto}.pn-loader-name{font-size:18px}.pn-loader-sub{font-size:11px}}
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.pn-premium-loader{display:none}.pn-reveal{opacity:1;transform:none}}
 </style>
 
-<style id="pn-final-v2-theme">
-/* FINAL V2 visual layer — preserves existing application logic, IDs, forms and API */
-:root{--pnNavy:#0b2f68;--pnBlue:#1264d7;--pnRed:#e51f3f;--pnText:#102d59;--pnMuted:#6c7b90}
-body{background:radial-gradient(circle at 0 0,rgba(255,214,222,.55),transparent 27%),radial-gradient(circle at 100% 12%,rgba(205,229,255,.65),transparent 32%),#f4f8fd!important;color:var(--pnText)!important}
-.site-header{background:rgba(255,255,255,.90)!important;backdrop-filter:blur(22px)!important;box-shadow:0 8px 30px rgba(16,45,89,.08)!important}
-.brand-logo{border-radius:50%!important;object-fit:contain!important;box-shadow:0 5px 18px rgba(16,45,89,.13)!important;transition:transform .3s cubic-bezier(.2,1.5,.4,1)}.brand:hover .brand-logo{transform:scale(1.06) rotate(-4deg)}
-.hero{border-radius:30px!important;background:linear-gradient(145deg,#edf6ff 0%,#fff 72%)!important;border:1px solid rgba(255,255,255,.95)!important;box-shadow:0 22px 65px rgba(16,45,89,.12)!important;overflow:hidden!important;position:relative!important}.hero:before{content:"";position:absolute;right:-80px;top:-100px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(229,31,63,.15),transparent 70%);pointer-events:none}.hero-content{animation:pnV2In .7s cubic-bezier(.16,1,.3,1)}.hero-visual{animation:pnV2In .8s .1s both cubic-bezier(.16,1,.3,1)}.hero-title{font-weight:950!important;letter-spacing:-.045em!important}.hero-title span{color:var(--pnBlue)!important}.hero-badge{box-shadow:0 8px 25px rgba(16,45,89,.08)!important}
-.hero-actions{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}.hero-actions .btn{min-height:55px!important;border-radius:17px!important;font-weight:900!important;box-shadow:0 10px 25px rgba(16,45,89,.10)!important;position:relative;overflow:hidden}.hero-actions .btn:after{content:"";position:absolute;top:-80%;left:-80%;width:45%;height:240%;transform:rotate(25deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transition:.6s}.hero-actions .btn:hover:after{left:140%}
-.quick-actions,.pn-home-extra-actions{display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:10px!important;margin:0 0 12px!important}.pn-home-extra-actions{margin-bottom:26px!important}.action-card{min-height:150px!important;margin:0!important;padding:15px 12px!important;border-radius:21px!important;background:rgba(255,255,255,.96)!important;border:1px solid rgba(16,45,89,.07)!important;box-shadow:0 9px 27px rgba(16,45,89,.075)!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-start!important;position:relative!important;overflow:hidden!important;transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s ease!important}.action-card:after{content:"";position:absolute;right:-35px;bottom:-45px;width:100px;height:100px;border-radius:50%;background:rgba(18,100,215,.07)}.action-card:hover{transform:translateY(-5px)!important;box-shadow:0 20px 42px rgba(16,45,89,.13)!important}.action-icon{width:47px!important;height:47px!important;border-radius:15px!important;display:grid!important;place-items:center!important;font-size:24px!important;margin-bottom:10px!important;flex:0 0 auto}.action-icon.purple{background:#f0eaff!important}.action-icon.orange{background:#fff2dc!important}.action-icon.green{background:#e7f8f0!important}.action-card h3{font-size:13px!important;line-height:1.18!important;margin:0 0 5px!important;font-weight:900!important}.action-card p{font-size:10px!important;line-height:1.4!important;color:var(--pnMuted)!important;margin:0!important}.action-arrow{position:absolute!important;right:11px!important;bottom:10px!important;color:var(--pnBlue)!important;font-weight:900!important}
-.section-title{font-weight:950!important;letter-spacing:-.025em}.section-kicker{font-weight:900!important;color:var(--pnRed)!important}.section-description{color:#6b7b90!important}
-.pn-latest-updates{border-radius:27px!important;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(239,247,255,.86))!important;box-shadow:0 20px 55px rgba(16,45,89,.10)!important;border:1px solid rgba(16,45,89,.06)!important}.pn-latest-grid{grid-template-columns:repeat(2,1fr)!important}.pn-update-card{border-radius:21px!important;box-shadow:0 9px 26px rgba(16,45,89,.07)!important;transition:.28s cubic-bezier(.2,.8,.2,1)!important}.pn-update-card:hover{transform:translateY(-6px)!important;box-shadow:0 20px 42px rgba(16,45,89,.13)!important}
-.content-card,.stat-card,.event-card,.admin-card{border-radius:23px!important;box-shadow:0 9px 27px rgba(16,45,89,.075)!important;border:1px solid rgba(16,45,89,.07)!important}.stat-card:hover,.event-card:hover,.admin-card:hover{transform:translateY(-5px);box-shadow:0 20px 42px rgba(16,45,89,.13)!important}
-.form-control,.admin-input{border-radius:15px!important;border-color:#d9e5f2!important;background:#fbfdff!important;transition:.2s!important}.form-control:focus,.admin-input:focus{border-color:var(--pnBlue)!important;box-shadow:0 0 0 4px rgba(18,100,215,.1),0 9px 22px rgba(16,45,89,.06)!important;transform:translateY(-1px)}.btn,.admin-small-btn,.admin-action-btn{border-radius:15px!important;transition:.22s!important}.btn:hover,.admin-small-btn:hover,.admin-action-btn:hover{transform:translateY(-2px)}
-.search-toolbar{border-radius:22px!important;background:linear-gradient(145deg,#eef6ff,#fff)!important;box-shadow:0 10px 28px rgba(16,45,89,.07)!important}.admin-table-wrap{border-radius:20px!important;box-shadow:0 10px 28px rgba(16,45,89,.07)!important}.admin-status-pill{border-radius:999px!important}
-.site-footer{background:linear-gradient(145deg,#082b63,#124d9f)!important;position:relative!important;overflow:hidden!important;padding-bottom:105px!important}.site-footer:before{content:"";position:absolute;width:360px;height:360px;right:-170px;top:-200px;border-radius:50%;background:rgba(255,255,255,.07)}
-.mobile-bottom-nav{background:rgba(255,255,255,.95)!important;backdrop-filter:blur(20px)!important;border:1px solid rgba(16,45,89,.08)!important;box-shadow:0 -10px 35px rgba(16,45,89,.14)!important;border-radius:25px!important}.mobile-nav-btn{border-radius:18px!important;transition:.22s!important}.mobile-nav-btn:active{transform:scale(.92)}
-@media(max-width:600px){.container{width:min(calc(100% - 20px),520px)!important}.header-inner{min-height:74px!important}.brand-name{font-size:16px!important}.brand-meta{font-size:10px!important}.hero{margin:12px 0 18px!important;padding:23px 17px!important;border-radius:26px!important}.hero-title{font-size:41px!important}.hero-text{font-size:14px!important;line-height:1.65!important}.hero-visual{min-height:205px!important}.quick-actions,.pn-home-extra-actions{grid-template-columns:repeat(3,1fr)!important;gap:8px!important}.action-card{min-height:137px!important;padding:12px 9px!important;border-radius:18px!important}.action-icon{width:42px!important;height:42px!important;font-size:21px!important;border-radius:13px!important}.action-card h3{font-size:11px!important}.action-card p{font-size:9px!important;line-height:1.3!important}.action-arrow{font-size:16px!important}.pn-latest-updates{padding:18px!important;border-radius:23px!important}.pn-latest-grid{grid-template-columns:1fr!important}.pn-update-card{min-height:0!important}.stats-grid{grid-template-columns:repeat(2,1fr)!important}.section-title{font-size:25px!important}main{padding-bottom:88px!important}}
-@media(max-width:360px){.brand-name{font-size:14px!important}.brand-meta{display:none!important}.brand-logo{width:47px!important;height:47px!important}.hero-title{font-size:36px!important}.action-card{min-height:128px!important;padding:10px 8px!important}.action-card h3{font-size:10px!important}}
-@media(min-width:760px){.quick-actions,.pn-home-extra-actions{grid-template-columns:repeat(3,1fr)!important}.hero-actions{grid-template-columns:repeat(3,1fr)!important}.pn-latest-grid{grid-template-columns:repeat(5,1fr)!important}}
-@keyframes pnV2In{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-</style>
 </head>
 
 
 <body>
 
   <div id="pn-premium-loader" class="pn-premium-loader" aria-label="Loading Poongurichi Nanbargal">
-    <div class="pn-loader-orb"><img src="icons/poongurichi-logo.jpeg" alt="PN"></div>
+    <div class="pn-splash-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="pn-splash-heartbeat" aria-hidden="true">♥</div>
+    <div class="pn-loader-orb"><span class="pn-loader-ring pn-loader-ring-a"></span><span class="pn-loader-ring pn-loader-ring-b"></span><img src="icons/poongurichi-logo.jpeg" alt="PN"></div>
     <div class="pn-loader-name">Poongurichi Nanbargal</div>
-    <div class="pn-loader-sub">Blood Donors Community</div>
+    <div class="pn-loader-club">Bloods Club</div>
+    <div class="pn-loader-tagline">One Donation. Many Lives. <b>♥</b></div>
+    <div class="pn-loader-sub">Together We Save Lives</div>
     <div class="pn-loader-line"><span></span></div>
+    <div class="pn-loader-status"><span class="pn-loader-dot"></span><span>Preparing your experience…</span></div>
   </div>
 
   <div class="pn-page-glow pn-glow-a"></div><div class="pn-page-glow pn-glow-b"></div>
@@ -523,25 +506,6 @@ body{background:radial-gradient(circle at 0 0,rgba(255,214,222,.55),transparent 
           </div>
 
         </div>
-
-          <!-- PREMIUM SIX-TILE HOME ACTIONS -->
-          <div class="pn-home-extra-actions" aria-label="More actions">
-            <div class="action-card" onclick="window.PNBDCOpenDonorUpdate ? window.PNBDCOpenDonorUpdate() : goTo('donor')">
-              <div class="action-icon purple">📅</div>
-              <div><h3>Update Last Donation</h3><p>Securely update your last donation date.</p></div>
-              <div class="action-arrow">→</div>
-            </div>
-            <div class="action-card" onclick="goTo('donor')">
-              <div class="action-icon orange">🪪</div>
-              <div><h3>My Donor ID Card</h3><p>Register and prepare your professional ID card.</p></div>
-              <div class="action-arrow">→</div>
-            </div>
-            <div class="action-card" onclick="showAllEvents ? showAllEvents() : goTo('home')">
-              <div class="action-icon green">🏕️</div>
-              <div><h3>Blood Camps</h3><p>See upcoming community donation camps.</p></div>
-              <div class="action-arrow">→</div>
-            </div>
-          </div>
 
 
         <!-- EVENTS -->
@@ -1638,6 +1602,8 @@ body{background:radial-gradient(circle at 0 0,rgba(255,214,222,.55),transparent 
           <button type="button" class="admin-action-btn" onclick="openNotifications()"><span>🔔</span><strong>Notifications</strong><small>Clear one or all</small></button>
           <button type="button" class="admin-action-btn" onclick="adminJumpTo('social')"><span>🔗</span><strong>Social Links</strong><small>Edit social links</small></button>
           <button type="button" class="admin-action-btn" onclick="adminJumpTo('fields')"><span>⚙️</span><strong>Fields</strong><small>Edit all website fields</small></button>
+          <button type="button" class="admin-action-btn rbac-admin-only" onclick="adminJumpTo('admin-management')"><span>🛡️</span><strong>Admin Management</strong><small>Create Sub Admin & permissions</small></button>
+          <button type="button" class="admin-action-btn rbac-report-access" onclick="adminJumpTo('reports')"><span>📊</span><strong>Reports</strong><small>Export Excel reports</small></button>
         </div>
 
         <div class="admin-stat-grid">
@@ -1678,13 +1644,13 @@ body{background:radial-gradient(circle at 0 0,rgba(255,214,222,.55),transparent 
                   Entries
                   <select id="adminDonorEntryCount" class="form-control" onchange="renderAdminDonorTable()" style="width:auto;min-width:85px;padding:8px 10px;">
                     <option value="10" selected>10</option>
-                    <option value="25">25</option>
+                    <option value="20">20</option>
                     <option value="50">50</option>
                     <option value="all">All</option>
                   </select>
                 </label>
                 <input id="adminDonorImportFile" type="file" accept=".xlsx,.xls,.csv" hidden onchange="importDonorsFromExcel(event)">
-                <button type="button" class="admin-small-btn" onclick="document.getElementById('adminDonorImportFile')?.click()">📥 Import Excel</button>
+                <button type="button" class="admin-small-btn" onclick="document.getElementById('adminDonorImportFile')?.click()">📥 Bulk Upload</button>
                 <button type="button" class="admin-small-btn" onclick="downloadDonorExcelTemplate()">📄 Excel Template</button>
                 <button type="button" class="admin-small-btn" onclick="exportDonorsToExcel()">📤 Export Excel</button>
                 <button type="button" class="admin-small-btn" onclick="loadAdminDonors()">↻ Refresh</button>
@@ -1793,6 +1759,44 @@ body{background:radial-gradient(circle at 0 0,rgba(255,214,222,.55),transparent 
             </form>
           </div>
 
+          <div id="adminManagementCard" data-admin-tab="admin-management" class="admin-card admin-wide rbac-card">
+            <div class="admin-card-head">
+              <div>
+                <h2>🛡️ Admin & Sub Admin Management</h2>
+                <p>Create Sub Admins and assign View / Add / Edit / Delete / Import / Export / Generate permissions.</p>
+              </div>
+              <button type="button" class="admin-small-btn" onclick="loadAdminUsers()">↻ Refresh</button>
+            </div>
+            <form id="subAdminForm" class="admin-form rbac-form">
+              <input type="hidden" id="subAdminEditId" value="">
+              <div class="rbac-form-grid">
+                <label>Name <span class="required-mark">* Mandatory</span><input id="subAdminName" class="form-control" required placeholder="Sub Admin Name"></label>
+                <label>Username <span class="required-mark">* Mandatory</span><input id="subAdminUsername" class="form-control" required placeholder="Username"></label>
+                <label>Password <span class="required-mark">* 6+ chars</span><input id="subAdminPassword" class="form-control" type="password" placeholder="Password"></label>
+                <label>Mobile<input id="subAdminMobile" class="form-control" inputmode="tel" placeholder="Mobile"></label>
+                <label>Email<input id="subAdminEmail" class="form-control" type="email" placeholder="Email"></label>
+              </div>
+              <div class="rbac-permissions-panel">
+                <div class="rbac-permissions-head"><strong>Permissions</strong><button type="button" class="admin-small-btn" onclick="toggleAllSubAdminPermissions(true)">Select All</button><button type="button" class="admin-small-btn" onclick="toggleAllSubAdminPermissions(false)">Clear</button></div>
+                <div id="subAdminPermissions" class="rbac-permissions-grid"></div>
+              </div>
+              <div id="subAdminMessage" class="form-message"></div>
+              <div class="rbac-form-actions"><button class="btn btn-primary" type="submit">🛡️ Create Sub Admin</button><button class="admin-small-btn" type="button" onclick="resetSubAdminForm()">Reset</button></div>
+            </form>
+            <div id="adminUsersTable" class="admin-table-wrap" style="margin-top:18px"><div class="admin-loading">Loading admin users…</div></div>
+          </div>
+
+          <div id="adminReportsCard" data-admin-tab="reports" class="admin-card admin-wide rbac-card">
+            <div class="admin-card-head"><div><h2>📊 Reports & Excel</h2><p>Export operational reports for donors and blood requests.</p></div></div>
+            <div class="rbac-report-grid">
+              <button type="button" class="admin-report-btn" onclick="exportAdminReport('donors')">👥 Donor Master Excel</button>
+              <button type="button" class="admin-report-btn" onclick="exportAdminReport('blood-group')">🩸 Blood Group Report</button>
+              <button type="button" class="admin-report-btn" onclick="exportAdminReport('location')">📍 Location Report</button>
+              <button type="button" class="admin-report-btn" onclick="exportAdminReport('last-donation')">📅 Last Donation Report</button>
+              <button type="button" class="admin-report-btn" onclick="exportAdminReport('requests')">🚨 Blood Request Excel</button>
+            </div>
+          </div>
+
           <div id="adminSettingsCard" data-admin-tab="settings" class="admin-card admin-wide">
             <div class="admin-card-head">
               <div>
@@ -1849,8 +1853,8 @@ body{background:radial-gradient(circle at 0 0,rgba(255,214,222,.55),transparent 
       <div class="footer-contact-block">
         <div class="footer-contact-title">For Blood Need Contact</div>
         <div class="footer-contact-buttons" id="footerBloodContacts">
-          <a class="footer-call-btn" href="tel:7402591722"><span>☎ Ragubathi</span><strong>7402591722</strong></a>
-          <a class="footer-call-btn" href="tel:9585555993"><span>☎ Dhanavenkadesh</span><strong>9585555993</strong></a>
+          <a class="footer-call-btn" href="tel:7402591727"><span>☎ Ragubathi</span><strong>7402591727</strong></a>
+          <a class="footer-call-btn" href="tel:9585559593"><span>☎ Dhanavenkadesh</span><strong>9585559593</strong></a>
         </div>
       </div>
 
@@ -4018,9 +4022,9 @@ body{background:radial-gradient(circle at 0 0,rgba(255,214,222,.55),transparent 
       const developer = get("Developer Name", "Bothishankar.Natarajan");
       const developerPhone = get("Developer Contact", "9677824319");
       const c1n = get("Blood Need Contact 1 Name", "Ragubathi");
-      const c1p = get("Blood Need Contact 1 Phone", "7402591722");
+      const c1p = get("Blood Need Contact 1 Phone", "7402591727");
       const c2n = get("Blood Need Contact 2 Name", "Dhanavenkadesh");
-      const c2p = get("Blood Need Contact 2 Phone", "9585555993");
+      const c2p = get("Blood Need Contact 2 Phone", "9585559593");
       const setText = (id, text) => { const el=document.getElementById(id); if(el) el.textContent=text; };
       setText("headerClubName", "Poongurichi Nanbargal");
       setText("headerSubtitle", "Poongurichi Nanbargal Blood Donor's Club");
@@ -4580,8 +4584,10 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 
     function adminJumpTo(tab) {
       if (!ensureAdminAccess()) return;
-      const validTabs = new Set(["donors","requests","events","fields","social"]);
+      const validTabs = new Set(["donors","requests","events","fields","social","admin-management","reports"]);
       if (!validTabs.has(tab)) return;
+      const tabPermission = {donors:"donors.view",requests:"requests.view",events:"events.view",fields:"settings.view",social:"social.view","admin-management":"admin.manage",reports:"reports.view"}[tab];
+      if (tabPermission && !adminHasPermission(tabPermission)) { toast("You do not have permission to access this section."); return; }
 
       const cards = [...document.querySelectorAll("[data-admin-tab]")];
       cards.forEach(card => {
@@ -4797,7 +4803,7 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
       const message = document.getElementById("adminDonorImportMessage");
       try {
         if (message) { message.className = "form-message success"; message.textContent = "Preparing donor Excel file…"; }
-        const donors = await BloodDonationAPI.getDonors();
+        const donors = await BloodDonationAPI.getAdminDonors(getAdminUserId());
         if (!donors.length) {
           if (message) { message.className = "form-message error"; message.textContent = "No donor records available to export."; }
           return;
@@ -4949,12 +4955,14 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
         Number(value(s, "bloodGroups", "groups", "Blood_Groups")) || 0;
 
       await Promise.allSettled([
-        loadAdminDonors(),
-        loadAdminRequests(),
-        loadAdminEvents(),
-        loadAdminAbout(),
-        loadAdminSettings()
+        adminHasPermission('donors.view') ? loadAdminDonors() : Promise.resolve(),
+        adminHasPermission('requests.view') ? loadAdminRequests() : Promise.resolve(),
+        adminHasPermission('events.view') ? loadAdminEvents() : Promise.resolve(),
+        adminHasPermission('about.view') ? loadAdminAbout() : Promise.resolve(),
+        adminHasPermission('settings.view') ? loadAdminSettings() : Promise.resolve(),
+        adminHasPermission('admin.manage') ? loadAdminUsers() : Promise.resolve()
       ]);
+      applyAdminRbacUI();
     }
 
     function clearAdminDonorSearch() {
@@ -5346,6 +5354,119 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
         submit.disabled = false;
       }
     });
+
+    function applyAdminRbacUI() {
+      const role=String(getAdminUser().role||'').toLowerCase();
+      const full=['admin','superadmin','super admin'].includes(role);
+      const tabPermissions={donors:'donors.view',requests:'requests.view',events:'events.view',fields:'settings.view',social:'social.view',"admin-management":'admin.manage',reports:'reports.view'};
+      document.querySelectorAll('[data-admin-tab]').forEach(card=>{ const tab=card.dataset.adminTab; if(tabPermissions[tab] && !full && !adminHasPermission(tabPermissions[tab])) card.style.display='none'; });
+      document.querySelectorAll('.admin-action-btn').forEach(btn=>{ const text=btn.textContent||''; let perm=null; if(text.includes('Manage Donors'))perm='donors.view'; else if(text.includes('Blood Requests'))perm='requests.view'; else if(text.includes('Events'))perm='events.view'; else if(text.includes('Social'))perm='social.view'; else if(text.includes('Fields'))perm='settings.view'; else if(text.includes('Admin Management'))perm='admin.manage'; else if(text.includes('Reports'))perm='reports.view'; if(perm && !full && !adminHasPermission(perm)) btn.style.display='none'; });
+      const mg=document.getElementById('adminManagementCard'); if(mg && !full && !adminHasPermission('admin.manage')) mg.style.display='none';
+    }
+
+    const RBAC_PERMISSION_GROUPS = [
+      ['Dashboard',['dashboard.view','dashboard.export']],
+      ['Donors',['donors.view','donors.add','donors.edit','donors.delete','donors.import','donors.export','donors.generate']],
+      ['Blood Requests',['requests.view','requests.add','requests.edit','requests.delete','requests.export','requests.generate']],
+      ['Events / Camps',['events.view','events.add','events.edit','events.delete','events.export','events.generate']],
+      ['Latest Updates',['updates.view','updates.add','updates.edit','updates.delete','updates.export']],
+      ['Notifications',['notifications.view','notifications.add','notifications.edit','notifications.delete']],
+      ['Reports',['reports.view','reports.export']],
+      ['Social / Donor Photos',['social.view','social.add','social.edit','social.delete']],
+      ['About Club',['about.view','about.edit']],
+      ['Settings / Website Fields',['settings.view','settings.edit']],
+      ['Admin Management',['admin.manage']]
+    ];
+
+    function adminHasPermission(permission) {
+      const user = getAdminUser();
+      const role = String(user.role || '').toLowerCase();
+      if (role === 'admin' || role === 'superadmin' || role === 'super admin') return true;
+      const permissions = Array.isArray(user.permissions) ? user.permissions : [];
+      return permissions.includes('*') || permissions.includes(permission);
+    }
+
+    function renderSubAdminPermissions(selected=[]) {
+      const box=document.getElementById('subAdminPermissions'); if(!box) return;
+      const chosen=new Set(Array.isArray(selected)?selected:[]);
+      box.innerHTML=RBAC_PERMISSION_GROUPS.map(([group,perms])=>`<div class="rbac-permission-group"><div class="rbac-group-title">${escapeHtml(group)}</div>${perms.map(p=>`<label><input type="checkbox" value="${escapeHtml(p)}" ${chosen.has(p)?'checked':''}> <span>${escapeHtml(p.split('.')[1] || p)}</span></label>`).join('')}</div>`).join('');
+    }
+
+    function toggleAllSubAdminPermissions(on) {
+      document.querySelectorAll('#subAdminPermissions input[type=checkbox]').forEach(cb=>cb.checked=!!on);
+    }
+
+    function selectedSubAdminPermissions() {
+      return [...document.querySelectorAll('#subAdminPermissions input[type=checkbox]:checked')].map(cb=>cb.value);
+    }
+
+    function resetSubAdminForm() {
+      const f=document.getElementById('subAdminForm'); if(f) f.reset();
+      const id=document.getElementById('subAdminEditId'); if(id) id.value='';
+      const btn=f?.querySelector('button[type=submit]'); if(btn) btn.textContent='🛡️ Create Sub Admin';
+      renderSubAdminPermissions([]);
+      const msg=document.getElementById('subAdminMessage'); if(msg) msg.textContent='';
+    }
+
+    async function loadAdminUsers() {
+      if(!adminHasPermission('admin.manage')) return;
+      const box=document.getElementById('adminUsersTable'); if(!box) return;
+      try {
+        const result=await BloodDonationAPI.getAdminUsers(getAdminUserId());
+        const users=Array.isArray(result?.users)?result.users:[];
+        if(!users.length){box.innerHTML='<div class="admin-empty">No admin/sub admin accounts found.</div>';return;}
+        box.innerHTML=`<table class="admin-table"><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Status</th><th>Permissions</th><th>Action</th></tr></thead><tbody>${users.map(u=>`<tr><td>${escapeHtml(u.name||'—')}</td><td>${escapeHtml(u.username||'—')}</td><td>${escapeHtml(u.role||'—')}</td><td>${escapeHtml(u.status||'—')}</td><td><div class="rbac-chip-list">${(u.permissions||[]).slice(0,8).map(x=>`<span>${escapeHtml(x)}</span>`).join('')}${(u.permissions||[]).length>8?`<span>+${u.permissions.length-8}</span>`:''}</div></td><td>${String(u.role||'').toLowerCase().includes('sub')?`<button class="admin-small-btn" type="button" onclick='editSubAdmin(${JSON.stringify(u).replace(/'/g,"&#39;")})'>Edit</button> <button class="admin-small-btn" type="button" onclick="toggleSubAdminStatus('${escapeHtml(u.userId)}','${String(u.status).toLowerCase()==='active'?'Inactive':'Active'}')">${String(u.status).toLowerCase()==='active'?'Disable':'Enable'}</button> <button class="admin-small-btn danger" type="button" onclick="deleteSubAdminAccount('${escapeHtml(u.userId)}')">Delete</button>`:'—'}</td></tr>`).join('')}</tbody></table>`;
+      } catch(e) { box.innerHTML=`<div class="form-message error">${escapeHtml(e?.message||'Unable to load admin users.')}</div>`; }
+    }
+
+    function editSubAdmin(user) {
+      document.getElementById('subAdminEditId').value=user.userId||'';
+      document.getElementById('subAdminName').value=user.name||'';
+      document.getElementById('subAdminUsername').value=user.username||'';
+      document.getElementById('subAdminPassword').value='';
+      document.getElementById('subAdminMobile').value=user.mobile||'';
+      document.getElementById('subAdminEmail').value=user.email||'';
+      renderSubAdminPermissions(user.permissions||[]);
+      const btn=document.querySelector('#subAdminForm button[type=submit]'); if(btn) btn.textContent='💾 Update Sub Admin';
+      document.getElementById('adminManagementCard')?.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+
+    async function toggleSubAdminStatus(targetUserId,status) {
+      try { await BloodDonationAPI.setSubAdminStatus(targetUserId,status,getAdminUserId()); toast('Sub Admin '+status.toLowerCase()+'.'); await loadAdminUsers(); } catch(e){ toast(e?.message||'Unable to update Sub Admin.'); }
+    }
+    async function deleteSubAdminAccount(targetUserId) {
+      if(!confirm('Delete this Sub Admin account?')) return;
+      try { await BloodDonationAPI.deleteSubAdmin(targetUserId,getAdminUserId()); toast('Sub Admin deleted.'); await loadAdminUsers(); } catch(e){ toast(e?.message||'Unable to delete Sub Admin.'); }
+    }
+
+    document.getElementById('subAdminForm')?.addEventListener('submit', async function(e){
+      e.preventDefault();
+      const msg=document.getElementById('subAdminMessage');
+      const payload={userId:getAdminUserId(),name:document.getElementById('subAdminName').value.trim(),username:document.getElementById('subAdminUsername').value.trim(),password:document.getElementById('subAdminPassword').value,mobile:document.getElementById('subAdminMobile').value.trim(),email:document.getElementById('subAdminEmail').value.trim(),permissions:selectedSubAdminPermissions()};
+      const editId=document.getElementById('subAdminEditId').value.trim();
+      try {
+        if(!payload.name || !payload.username || (!editId && payload.password.length<6)) throw new Error('Name, username and password (minimum 6 characters) are required.');
+        msg.className='form-message success'; msg.textContent='Saving…';
+        if(editId){ payload.targetUserId=editId; delete payload.username; await BloodDonationAPI.updateSubAdmin(payload); toast('Sub Admin updated.'); }
+        else { await BloodDonationAPI.createSubAdmin(payload); toast('Sub Admin created.'); }
+        resetSubAdminForm(); await loadAdminUsers();
+      } catch(err){ msg.className='form-message error'; msg.textContent=err?.message||'Unable to save Sub Admin.'; }
+    });
+
+    function exportAdminReport(type) {
+      if(!adminHasPermission('reports.export')) { toast('Report export permission is not assigned.'); return; }
+      try {
+        let rows=[];
+        if(type==='requests') rows=(window.__ADMIN_REQUESTS||[]).map(r=>({...r}));
+        else rows=(window.__ADMIN_DONORS||[]).map(d=>({...d}));
+        if(type==='blood-group') rows=rows.reduce((a,d)=>{const k=value(d,'Blood_Group','bloodGroup')||'Unknown';const x=a.find(v=>v['Blood Group']===k);x?x.Count++:a.push({'Blood Group':k,Count:1});return a;},[]);
+        if(type==='location') rows=rows.reduce((a,d)=>{const k=[value(d,'City','city'),value(d,'District','district')].filter(Boolean).join(', ')||'Unknown';const x=a.find(v=>v.Location===k);x?x.Count++:a.push({Location:k,Count:1});return a;},[]);
+        if(type==='last-donation') rows=rows.map(d=>({Donor_ID:value(d,'Donor_ID','donorId'),Name:value(d,'Name','name'),'Blood Group':value(d,'Blood_Group','bloodGroup'),'Last Donation Date':value(d,'Last_Donation_Date','lastDonationDate')}));
+        if(!rows.length){toast('No data available for this report.');return;}
+        if(!window.XLSX){throw new Error('Excel library is not loaded.');}
+        const ws=XLSX.utils.json_to_sheet(rows); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'Report'); XLSX.writeFile(wb,`PNBDC_${type.replace(/[^a-z0-9]+/gi,'_')}_Report.xlsx`); toast('Report exported.');
+      }catch(e){toast(e?.message||'Unable to export report.');}
+    }
 
     function adminLogout() {
       try {
@@ -5910,6 +6031,12 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 @media(max-width:390px){#pn-bot-toggle.pn-bot-toggle{right:12px!important;bottom:90px!important;width:48px!important;height:48px!important}.pn-bot-panel{bottom:145px!important;height:min(620px,70vh)!important}.pn-bot-hero{min-height:86px;flex-basis:86px}.pn-bot-hero-logo{width:54px;height:54px}.pn-bot-hero-title{font-size:26px}.pn-bot-hero-subtitle{font-size:10px}.pn-bot-robot{width:102px;height:102px}.pn-bot-quick{min-height:66px;font-size:10px}.pn-bot-input-row input{font-size:12px}}
 @supports(padding-bottom:env(safe-area-inset-bottom)){@media(max-width:850px){#pn-bot-toggle.pn-bot-toggle{bottom:calc(92px + env(safe-area-inset-bottom))!important}#pn-bot-panel.pn-bot-panel{bottom:calc(150px + env(safe-area-inset-bottom))!important}}}
 .mobile-bottom-nav{z-index:2000!important}
+\n/* ===== PNBDC RBAC / SUB ADMIN PREMIUM UI ===== */
+.rbac-card{border:1px solid rgba(16,67,125,.10);background:linear-gradient(145deg,#fff,#f7fbff)}
+.rbac-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.rbac-form-grid label{display:flex;flex-direction:column;gap:6px;font-weight:700;color:#244564}
+.rbac-permissions-panel{margin-top:14px;border:1px solid #dbe7f2;border-radius:18px;padding:14px;background:#f8fbff}.rbac-permissions-head{display:flex;align-items:center;gap:8px;margin-bottom:12px}.rbac-permissions-head strong{margin-right:auto;font-size:17px;color:#123b6a}.rbac-permissions-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.rbac-permission-group{background:#fff;border:1px solid #e2ebf4;border-radius:14px;padding:11px}.rbac-group-title{font-weight:800;color:#0d4f92;margin-bottom:8px}.rbac-permission-group label{display:flex;align-items:center;gap:7px;font-size:13px;color:#405a72;margin:6px 0}.rbac-form-actions{display:flex;gap:10px;margin-top:12px}.rbac-chip-list{display:flex;flex-wrap:wrap;gap:4px}.rbac-chip-list span{font-size:10px;padding:4px 7px;border-radius:99px;background:#edf5ff;color:#145a9c}.admin-small-btn.danger{border-color:#ffd2d2;color:#b42323;background:#fff5f5}.rbac-report-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.admin-report-btn{min-height:82px;border:1px solid #d8e6f2;border-radius:18px;background:linear-gradient(145deg,#fff,#f5faff);font-weight:800;color:#123f70;cursor:pointer;box-shadow:0 8px 20px rgba(0,55,110,.06);transition:.2s}.admin-report-btn:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(0,55,110,.12)}
+@media(max-width:850px){.rbac-form-grid,.rbac-permissions-grid,.rbac-report-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.rbac-form-grid,.rbac-permissions-grid,.rbac-report-grid{grid-template-columns:1fr}.rbac-permissions-head{flex-wrap:wrap}.rbac-permissions-head strong{width:100%;margin-right:0}.rbac-form-actions{flex-direction:column}}
 </style>
 
 <script id="pn-premium-motion">
