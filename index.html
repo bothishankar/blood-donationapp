@@ -91,10 +91,62 @@
     .admin-import-progress{margin:8px 0 14px}
   </style>
 
+
+<style id="pn-premium-upgrade">
+  :root{--pn-red:#e5232e;--pn-blue:#0b63c9;--pn-navy:#102a56;--pn-glass:rgba(255,255,255,.76)}
+  html{scroll-behavior:smooth}
+  body{background:linear-gradient(180deg,#f7fbff 0%,#fff 42%,#f4f8fd 100%);overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-2;background:radial-gradient(circle at 12% 8%,rgba(229,35,46,.08),transparent 28%),radial-gradient(circle at 88% 18%,rgba(11,99,201,.10),transparent 30%),radial-gradient(circle at 50% 90%,rgba(16,42,86,.06),transparent 34%)}
+  .pn-page-glow{position:fixed;width:360px;height:360px;border-radius:50%;filter:blur(70px);opacity:.16;pointer-events:none;z-index:-1;animation:pnGlowFloat 10s ease-in-out infinite alternate}
+  .pn-glow-a{background:#e5232e;top:12%;left:-180px}.pn-glow-b{background:#0b63c9;right:-180px;bottom:12%;animation-delay:-4s}
+  .site-header{backdrop-filter:blur(18px);background:rgba(255,255,255,.88)!important;box-shadow:0 8px 30px rgba(16,42,86,.08)!important;transition:box-shadow .3s ease,background .3s ease}
+  .brand-logo{transition:transform .35s cubic-bezier(.2,1.5,.4,1),filter .35s ease}.brand:hover .brand-logo{transform:rotate(-5deg) scale(1.06);filter:drop-shadow(0 8px 12px rgba(229,35,46,.18))}
+  .hero{position:relative;isolation:isolate;overflow:hidden}.hero::after{content:"";position:absolute;inset:auto -10% -70px;height:160px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.55));pointer-events:none;z-index:-1}
+  .hero-content,.hero-visual{animation:pnHeroEnter .8s cubic-bezier(.2,.8,.2,1) both}.hero-visual{animation-delay:.12s}
+  .hero-drop{animation:pnDropFloat 4s ease-in-out infinite}.hero-orbit{animation:pnOrbitSpin 18s linear infinite}
+  .hero-badge{animation:pnSoftPulse 2.8s ease-in-out infinite}
+  .hero-actions button,.hero-actions a,.btn,.button,.admin-btn,[type=submit]{transition:transform .22s ease,box-shadow .22s ease,filter .22s ease;position:relative;overflow:hidden}
+  .hero-actions button:hover,.hero-actions a:hover,.btn:hover,.button:hover,.admin-btn:hover,[type=submit]:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(16,42,86,.15);filter:saturate(1.08)}
+  .hero-actions button::after,.hero-actions a::after,.btn::after,.button::after,.admin-btn::after,[type=submit]::after{content:"";position:absolute;top:-60%;left:-90%;width:55%;height:220%;transform:rotate(24deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.42),transparent);transition:left .55s ease;pointer-events:none}.hero-actions button:hover::after,.hero-actions a:hover::after,.btn:hover::after,.button:hover::after,.admin-btn:hover::after,[type=submit]:hover::after{left:130%}
+  .stats-grid{perspective:1000px}.stat-card{animation:pnCardRise .65s cubic-bezier(.2,.8,.2,1) both;transition:transform .3s ease,box-shadow .3s ease}.stat-card:hover{transform:translateY(-8px) rotateX(1deg);box-shadow:0 20px 42px rgba(16,42,86,.13)}
+  .stat-icon{transition:transform .35s ease}.stat-card:hover .stat-icon{transform:scale(1.12) rotate(-5deg)}
+  .content-card,.info-banner,.section-head{animation:pnCardRise .7s cubic-bezier(.2,.8,.2,1) both}
+  .form-group{transition:transform .2s ease}.form-group:focus-within{transform:translateY(-2px)}
+  .form-control{transition:border-color .2s ease,box-shadow .2s ease,background .2s ease,transform .2s ease}.form-control:focus{box-shadow:0 0 0 4px rgba(11,99,201,.10),0 10px 24px rgba(16,42,86,.06);transform:translateY(-1px)}
+  .pn-latest-updates{margin:34px 0 42px;padding:28px;border-radius:30px;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(239,247,255,.78));border:1px solid rgba(11,99,201,.12);box-shadow:0 22px 60px rgba(16,42,86,.10);position:relative;overflow:hidden}
+  .pn-latest-updates::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:rgba(229,35,46,.08);right:-100px;top:-130px;animation:pnGlowFloat 8s ease-in-out infinite alternate}
+  .pn-latest-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;position:relative;z-index:1}.pn-latest-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--pn-red);text-transform:uppercase}.pn-latest-head h2{margin:6px 0 4px;color:var(--pn-navy);font-size:32px;letter-spacing:-.03em}.pn-latest-head p{margin:0;color:#65748a;max-width:680px}.pn-live-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:999px;background:#fff;border:1px solid #dfe9f4;color:#41617e;font-size:12px;font-weight:800;white-space:nowrap}.pn-live-pill i{width:8px;height:8px;border-radius:50%;background:#18a957;box-shadow:0 0 0 5px rgba(24,169,87,.12);animation:pnSoftPulse 1.8s infinite}
+  .pn-latest-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:22px;position:relative;z-index:1}.pn-update-card{position:relative;min-height:235px;padding:20px;border-radius:22px;background:rgba(255,255,255,.9);border:1px solid rgba(16,42,86,.08);box-shadow:0 10px 26px rgba(16,42,86,.06);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease;overflow:hidden}.pn-update-card:hover{transform:translateY(-8px);box-shadow:0 22px 42px rgba(16,42,86,.13);border-color:rgba(11,99,201,.20)}.pn-update-card::after{content:"";position:absolute;inset:auto -30px -50px;width:120px;height:120px;border-radius:50%;background:var(--accent,rgba(11,99,201,.07));filter:blur(2px)}.pn-update-red{--accent:rgba(229,35,46,.11)}.pn-update-blue{--accent:rgba(11,99,201,.11)}.pn-update-purple{--accent:rgba(118,73,210,.11)}.pn-update-green{--accent:rgba(24,169,87,.11)}.pn-update-gold{--accent:rgba(224,163,32,.12)}
+  .pn-update-badge{position:absolute;right:14px;top:14px;padding:4px 8px;border-radius:999px;background:#fff0f2;color:var(--pn-red);font-size:9px;font-weight:900;letter-spacing:.08em}.pn-update-icon{width:52px;height:52px;display:grid;place-items:center;border-radius:16px;background:#f5f9ff;font-size:27px;box-shadow:inset 0 0 0 1px rgba(16,42,86,.05);transition:transform .35s cubic-bezier(.2,1.5,.4,1)}.pn-update-card:hover .pn-update-icon{transform:scale(1.12) rotate(-6deg)}.pn-update-card h3{margin:14px 0 8px;color:var(--pn-navy);font-size:17px}.pn-update-card p{margin:0;color:#68788d;font-size:12px;line-height:1.55;min-height:58px}.pn-update-card button{margin-top:14px;border:0;background:transparent;color:var(--pn-blue);font-size:12px;font-weight:900;padding:0;cursor:pointer}.pn-update-card button b{display:inline-block;transition:transform .2s ease}.pn-update-card button:hover b{transform:translateX(4px)}
+  .site-footer{position:relative;overflow:hidden}.site-footer::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.08),transparent 22%),radial-gradient(circle at 85% 70%,rgba(229,35,46,.12),transparent 24%);pointer-events:none}
+  .mobile-bottom-nav{box-shadow:0 -8px 28px rgba(16,42,86,.12)!important;backdrop-filter:blur(18px);background:rgba(255,255,255,.94)!important}.mobile-bottom-nav a,.mobile-bottom-nav button{transition:transform .2s ease,color .2s ease}.mobile-bottom-nav a:active,.mobile-bottom-nav button:active{transform:scale(.92)}
+  .notification-item,.admin-card,.donor-card,.request-card,.event-card{transition:transform .25s ease,box-shadow .25s ease}.notification-item:hover,.admin-card:hover,.donor-card:hover,.request-card:hover,.event-card:hover{transform:translateY(-4px)}
+    .pn-splash-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}.pn-splash-particles i{position:absolute;width:5px;height:5px;border-radius:50%;background:rgba(229,35,46,.7);box-shadow:0 0 18px rgba(229,35,46,.55);animation:pnParticleFloat 4.5s ease-in-out infinite}.pn-splash-particles i:nth-child(1){left:16%;top:30%;animation-delay:-.8s}.pn-splash-particles i:nth-child(2){left:78%;top:24%;animation-delay:-2s}.pn-splash-particles i:nth-child(3){left:24%;top:68%;animation-delay:-3s}.pn-splash-particles i:nth-child(4){left:83%;top:67%;animation-delay:-1.5s}.pn-splash-particles i:nth-child(5){left:50%;top:17%;animation-delay:-2.6s}.pn-splash-particles i:nth-child(6){left:52%;top:82%;animation-delay:-3.7s}.pn-splash-heartbeat{position:absolute;top:13%;font-size:18px;color:rgba(229,35,46,.5);animation:pnHeartBeat 1.35s ease-in-out infinite}.pn-loader-club{margin-top:2px;color:#e72d50;font-size:16px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;animation:pnSplashText .8s .18s both}.pn-loader-tagline{margin-top:12px;color:#102a56;font-size:13px;font-weight:850;letter-spacing:.01em;animation:pnSplashText .8s .3s both}.pn-loader-tagline b{color:#e72d50}.pn-loader-status{display:flex;align-items:center;gap:7px;margin-top:10px;color:#8491a5;font-size:10px;font-weight:750}.pn-loader-dot{width:6px;height:6px;border-radius:50%;background:#18a957;box-shadow:0 0 0 4px rgba(24,169,87,.10);animation:pnSoftPulse 1.2s infinite}.pn-loader-ring{position:absolute;border-radius:50%;border:1px solid rgba(229,45,80,.18);pointer-events:none}.pn-loader-ring-a{inset:-10px;animation:pnRingPulse 2.2s ease-out infinite}.pn-loader-ring-b{inset:-22px;border-color:rgba(11,99,201,.12);animation:pnRingPulse 2.2s .55s ease-out infinite}.pn-premium-loader{position:fixed;inset:0;z-index:20000;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,#ffffff 0%,#eef6ff 44%,#d9e7f7 100%);transition:opacity .55s ease,visibility .55s ease;overflow:hidden}.pn-premium-loader::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(229,35,46,.11),rgba(11,99,201,.04) 45%,transparent 70%);animation:pnSplashAura 3.2s ease-in-out infinite}.pn-premium-loader.hide{opacity:0;visibility:hidden;pointer-events:none}.pn-loader-orb{position:relative;width:108px;height:108px;border-radius:34px;background:rgba(255,255,255,.92);display:grid;place-items:center;box-shadow:0 22px 70px rgba(16,42,86,.18),0 0 0 10px rgba(229,35,46,.05);animation:pnLoaderPop 1s cubic-bezier(.2,1.4,.4,1) both;z-index:1}.pn-loader-orb img{width:88px;height:88px;object-fit:contain;border-radius:28px}.pn-loader-name{margin-top:20px;color:#102a56;font-size:23px;font-weight:950;letter-spacing:-.03em;z-index:1;animation:pnSplashText .8s .08s both}.pn-loader-sub{margin-top:5px;color:#718198;font-size:11px;font-weight:750;letter-spacing:.04em;z-index:1}.pn-loader-line{width:210px;height:5px;margin-top:18px;background:#dfe8f3;border-radius:999px;overflow:hidden;z-index:1;box-shadow:inset 0 1px 2px rgba(16,42,86,.08)}.pn-loader-line span{display:block;width:42%;height:100%;border-radius:999px;background:linear-gradient(90deg,#e72d50,#1769e0,#e72d50);animation:pnLoaderLine 1.05s ease-in-out infinite}.pn-loader-status{position:relative;z-index:1}.pn-loader-club,.pn-loader-tagline,.pn-loader-status{position:relative;z-index:1}
+  .pn-reveal{opacity:0;transform:translateY(18px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.2,1)}.pn-reveal.pn-visible{opacity:1;transform:none}.pn-stagger>*{opacity:0;transform:translateY(12px);animation:pnStagger .55s cubic-bezier(.2,.8,.2,1) forwards}.pn-stagger>*:nth-child(2){animation-delay:.05s}.pn-stagger>*:nth-child(3){animation-delay:.10s}.pn-stagger>*:nth-child(4){animation-delay:.15s}.pn-stagger>*:nth-child(5){animation-delay:.20s}
+  @keyframes pnParticleFloat{0%,100%{transform:translate3d(0,0,0);opacity:.25}50%{transform:translate3d(8px,-22px,0) scale(1.4);opacity:1}}@keyframes pnHeartBeat{0%,100%{transform:scale(1);opacity:.35}15%{transform:scale(1.18);opacity:.75}30%{transform:scale(.98);opacity:.4}45%{transform:scale(1.16);opacity:.65}}@keyframes pnRingPulse{0%{transform:scale(.82);opacity:.8}100%{transform:scale(1.22);opacity:0}}@keyframes pnSplashAura{0%,100%{transform:scale(.88);opacity:.7}50%{transform:scale(1.08);opacity:1}}@keyframes pnSplashText{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}@keyframes pnHeroEnter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}@keyframes pnCardRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes pnDropFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-10px) rotate(1deg)}}@keyframes pnOrbitSpin{to{transform:rotate(360deg)}}@keyframes pnGlowFloat{from{transform:translate3d(0,-8px,0) scale(.96)}to{transform:translate3d(18px,18px,0) scale(1.05)}}@keyframes pnSoftPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.04);opacity:.86}}@keyframes pnLoaderPop{0%{opacity:0;transform:scale(.55) rotate(-10deg)}75%{transform:scale(1.08) rotate(2deg)}100%{opacity:1;transform:none}}@keyframes pnLoaderLine{0%{transform:translateX(-140%)}100%{transform:translateX(360%)}}@keyframes pnStagger{to{opacity:1;transform:none}}
+  @media(max-width:1100px){.pn-latest-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:720px){.pn-latest-updates{padding:20px;border-radius:24px}.pn-latest-head{align-items:flex-start;flex-direction:column}.pn-latest-head h2{font-size:26px}.pn-latest-grid{grid-template-columns:1fr 1fr}.pn-update-card{min-height:215px;padding:16px}.pn-update-card p{min-height:72px}.pn-live-pill{align-self:flex-start}.pn-page-glow{display:none}}
+  @media(max-width:480px){.pn-latest-grid{grid-template-columns:1fr}.pn-update-card{min-height:auto}.pn-update-card p{min-height:auto}.pn-loader-name{font-size:18px}.pn-loader-sub{font-size:11px}}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.pn-premium-loader{display:none}.pn-reveal{opacity:1;transform:none}}
+</style>
+
 </head>
 
 
 <body>
+
+  <div id="pn-premium-loader" class="pn-premium-loader" aria-label="Loading Poongurichi Nanbargal">
+    <div class="pn-splash-particles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="pn-splash-heartbeat" aria-hidden="true">♥</div>
+    <div class="pn-loader-orb"><span class="pn-loader-ring pn-loader-ring-a"></span><span class="pn-loader-ring pn-loader-ring-b"></span><img src="icons/poongurichi-logo.jpeg" alt="PN"></div>
+    <div class="pn-loader-name">Poongurichi Nanbargal</div>
+    <div class="pn-loader-club">Bloods Club</div>
+    <div class="pn-loader-tagline">One Donation. Many Lives. <b>♥</b></div>
+    <div class="pn-loader-sub">Together We Save Lives</div>
+    <div class="pn-loader-line"><span></span></div>
+    <div class="pn-loader-status"><span class="pn-loader-dot"></span><span>Preparing your experience…</span></div>
+  </div>
+
+  <div class="pn-page-glow pn-glow-a"></div><div class="pn-page-glow pn-glow-b"></div>
 
   <!-- =======================================================
        HEADER
@@ -676,6 +728,52 @@
         </div>
 
       </div>
+
+      <!-- =====================================================
+           LATEST UPDATES
+           ===================================================== -->
+      <section class="pn-latest-updates" aria-labelledby="pnLatestTitle">
+        <div class="pn-latest-head">
+          <div>
+            <div class="pn-latest-kicker">✨ NEW • சமீபத்திய புதுப்பிப்புகள்</div>
+            <h2 id="pnLatestTitle">Latest Updates</h2>
+            <p>New features designed to make blood donation faster, smarter and more professional.</p>
+          </div>
+          <span class="pn-live-pill"><i></i> Live Experience</span>
+        </div>
+        <div class="pn-latest-grid">
+          <article class="pn-update-card pn-update-red">
+            <span class="pn-update-badge">NEW</span><div class="pn-update-icon">🩸</div>
+            <h3>Update Last Donation</h3>
+            <p>Registered donors can securely update their last donation date using Donor ID + DOB.</p>
+            <button type="button" onclick="document.querySelector('.pn-self-update-btn')?.click()">Update Details <b>→</b></button>
+          </article>
+          <article class="pn-update-card pn-update-blue">
+            <span class="pn-update-badge">NEW</span><div class="pn-update-icon">🖼️</div>
+            <h3>Blood Request Image</h3>
+            <p>Admins can generate a professional blood-request poster directly from a request notification.</p>
+            <button type="button" onclick="goTo('admin')">Admin Request Tools <b>→</b></button>
+          </article>
+          <article class="pn-update-card pn-update-purple">
+            <div class="pn-update-icon">🤖</div>
+            <h3>BothiAI Assistant</h3>
+            <p>Ask questions in English, தமிழ் or Tanglish about donors, requests, donation and the app.</p>
+            <button type="button" onclick="document.getElementById('pn-bot-toggle')?.click()">Ask BothiAI <b>→</b></button>
+          </article>
+          <article class="pn-update-card pn-update-green">
+            <div class="pn-update-icon">🌐</div>
+            <h3>English + தமிழ்</h3>
+            <p>Use the whole website in your preferred language, with Tamil-aware donor ID cards and labels.</p>
+            <button type="button" onclick="document.querySelector('.language-btn, [data-lang=ta]')?.click()">Change Language <b>→</b></button>
+          </article>
+          <article class="pn-update-card pn-update-gold">
+            <div class="pn-update-icon">🪪</div>
+            <h3>Premium Donor ID</h3>
+            <p>Professional donor ID cards include photo, blood group, Donor ID, DOB, mobile and location.</p>
+            <button type="button" onclick="goTo('donor')">Become a Donor <b>→</b></button>
+          </article>
+        </div>
+      </section>
 
     </section>
 
@@ -1715,8 +1813,8 @@
       <div class="footer-contact-block">
         <div class="footer-contact-title">For Blood Need Contact</div>
         <div class="footer-contact-buttons" id="footerBloodContacts">
-          <a class="footer-call-btn" href="tel:7402591722"><span>☎ Ragubathi</span><strong>7402591722</strong></a>
-          <a class="footer-call-btn" href="tel:9585555993"><span>☎ Dhanavenkadesh</span><strong>9585555993</strong></a>
+          <a class="footer-call-btn" href="tel:7402591727"><span>☎ Ragubathi</span><strong>7402591727</strong></a>
+          <a class="footer-call-btn" href="tel:9585559593"><span>☎ Dhanavenkadesh</span><strong>9585559593</strong></a>
         </div>
       </div>
 
@@ -3884,9 +3982,9 @@
       const developer = get("Developer Name", "Bothishankar.Natarajan");
       const developerPhone = get("Developer Contact", "9677824319");
       const c1n = get("Blood Need Contact 1 Name", "Ragubathi");
-      const c1p = get("Blood Need Contact 1 Phone", "7402591722");
+      const c1p = get("Blood Need Contact 1 Phone", "7402591727");
       const c2n = get("Blood Need Contact 2 Name", "Dhanavenkadesh");
-      const c2p = get("Blood Need Contact 2 Phone", "9585555993");
+      const c2p = get("Blood Need Contact 2 Phone", "9585559593");
       const setText = (id, text) => { const el=document.getElementById(id); if(el) el.textContent=text; };
       setText("headerClubName", "Poongurichi Nanbargal");
       setText("headerSubtitle", "Poongurichi Nanbargal Blood Donor's Club");
@@ -5777,6 +5875,26 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 @supports(padding-bottom:env(safe-area-inset-bottom)){@media(max-width:850px){#pn-bot-toggle.pn-bot-toggle{bottom:calc(92px + env(safe-area-inset-bottom))!important}#pn-bot-panel.pn-bot-panel{bottom:calc(150px + env(safe-area-inset-bottom))!important}}}
 .mobile-bottom-nav{z-index:2000!important}
 </style>
+
+<script id="pn-premium-motion">
+(function(){
+  function hideLoader(){
+    const l=document.getElementById('pn-premium-loader');
+    if(!l) return;
+    setTimeout(()=>l.classList.add('hide'),650);
+    setTimeout(()=>l.remove(),1200);
+  }
+  function motion(){
+    document.querySelectorAll('.section-head,.stats-grid,.info-banner,.content-card,.pn-latest-updates,.page-section').forEach(el=>el.classList.add('pn-reveal'));
+    document.querySelectorAll('.pn-latest-grid').forEach(el=>el.classList.add('pn-stagger'));
+    const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('pn-visible');io.unobserve(e.target)}}),{threshold:.08});
+    document.querySelectorAll('.pn-reveal').forEach(el=>io.observe(el));
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>{motion();hideLoader()}); else {motion();hideLoader()}
+  window.addEventListener('load',hideLoader,{once:true});
+})();
+</script>
+
 <script src="pn-bot.js"></script>
 </body>
 </html>
