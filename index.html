@@ -55,7 +55,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260909-final-1">
+  <link rel="stylesheet" href="style.css?v=20260910-adminfix-2">
   <style>
     .donor-photo-preview{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid #dbe5f0;border-radius:14px;background:#f7fbff;color:#123b82;font-weight:700}
     .donor-photo-preview img{width:64px;height:76px;object-fit:cover;border-radius:10px;border:2px solid #d7e2ef}
@@ -127,27 +127,6 @@
   @media(max-width:1100px){.pn-latest-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:720px){.pn-latest-updates{padding:20px;border-radius:24px}.pn-latest-head{align-items:flex-start;flex-direction:column}.pn-latest-head h2{font-size:26px}.pn-latest-grid{grid-template-columns:1fr 1fr}.pn-update-card{min-height:215px;padding:16px}.pn-update-card p{min-height:72px}.pn-live-pill{align-self:flex-start}.pn-page-glow{display:none}}
   @media(max-width:480px){.pn-latest-grid{grid-template-columns:1fr}.pn-update-card{min-height:auto}.pn-update-card p{min-height:auto}.pn-loader-name{font-size:18px}.pn-loader-sub{font-size:11px}}
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.pn-premium-loader{display:none}.pn-reveal{opacity:1;transform:none}}
-</style>
-
-
-<style id="pn-structural-fix">
-html,body{width:100%;max-width:100%;overflow-x:hidden}
-main{display:block;width:100%;overflow:visible}
-.page-section{position:relative!important;height:auto!important;min-height:0!important}
-.page-section.active{display:block!important;position:relative!important;height:auto!important;min-height:0!important;transform:none!important}
-#page-admin{position:relative!important;height:auto!important;min-height:0!important}
-.site-footer{position:relative!important;inset:auto!important;clear:both!important;width:100%!important;z-index:1!important}
-#page-about .about-highlight{background:linear-gradient(135deg,#0d3b78,#1267d6)!important;color:#fff!important}
-#page-about .about-highlight h2,#page-about .about-highlight p{color:#fff!important;opacity:1!important;visibility:visible!important}
-@media(max-width:720px){
- #adminDonorTable{width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:visible!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important}
- #adminDonorTable .admin-table{display:table!important;width:max-content!important;min-width:1100px!important;max-width:none!important;table-layout:auto!important}
- #adminDonorTable .admin-table thead{display:table-header-group!important}
- #adminDonorTable .admin-table tbody{display:table-row-group!important}
- #adminDonorTable .admin-table tr{display:table-row!important}
- #adminDonorTable .admin-table th,#adminDonorTable .admin-table td{display:table-cell!important;white-space:nowrap!important}
- #adminDonorTable .admin-table td:before{content:none!important;display:none!important}
-}
 </style>
 
 </head>
@@ -1202,6 +1181,15 @@ main{display:block;width:100%;overflow:visible}
 
     </section>
 
+
+  </main>
+
+
+  <!-- =======================================================
+       FOOTER
+       ======================================================= -->
+
+
     <!-- =====================================================
          ADMIN DASHBOARD
          ===================================================== -->
@@ -1471,8 +1459,7 @@ main{display:block;width:100%;overflow:visible}
       </div>
     </section>
 
-</main>
-<footer class="site-footer">
+  <footer class="site-footer">
     <div class="container footer-inner-premium">
       <div class="footer-brand-panel">
         <div class="footer-brand" id="footerClubName">Poongurichi Nanbargal Donor's Club</div>
@@ -4558,7 +4545,40 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 
     function getAdminUser() {
       try {
-        return BloodDonationAPI.adminSession() || {};
+        const raw = BloodDonationAPI.adminSession() || {};
+
+        // Normalize the login/session object. The backend may return
+        // Role / Permissions_JSON / User_ID while the UI expects
+        // role / permissions / userId. Without this normalization,
+        // a valid Admin can incorrectly be treated as a Sub Admin and
+        // all Admin dashboard cards get hidden.
+        const roleRaw = value(raw,
+          "role", "Role", "userRole", "User_Role", "accessRole", "Access_Role"
+        );
+
+        let permissionsRaw = value(raw,
+          "permissions", "Permissions", "Permissions_JSON", "permissions_json"
+        );
+        let permissions = [];
+        if (Array.isArray(permissionsRaw)) {
+          permissions = permissionsRaw.map(String);
+        } else if (typeof permissionsRaw === "string" && permissionsRaw.trim()) {
+          try {
+            const parsed = JSON.parse(permissionsRaw);
+            permissions = Array.isArray(parsed) ? parsed.map(String) : [];
+          } catch (_) {
+            permissions = permissionsRaw.split(",").map(x => x.trim()).filter(Boolean);
+          }
+        }
+
+        return {
+          ...raw,
+          role: String(roleRaw || "").trim().toLowerCase(),
+          permissions,
+          userId: value(raw, "userId", "User_ID", "UserId", "ID", "id", "Username", "username"),
+          username: value(raw, "username", "Username"),
+          name: value(raw, "name", "Name")
+        };
       } catch (error) {
         return {};
       }
@@ -5004,12 +5024,55 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
     });
 
     function applyAdminRbacUI() {
-      const role=String(getAdminUser().role||'').toLowerCase();
-      const full=['admin','superadmin','super admin'].includes(role);
-      const tabPermissions={donors:'donors.view',requests:'requests.view',events:'events.view',fields:'settings.view',social:'social.view',"admin-management":'admin.manage',reports:'reports.view'};
-      document.querySelectorAll('[data-admin-tab]').forEach(card=>{ const tab=card.dataset.adminTab; if(tabPermissions[tab] && !full && !adminHasPermission(tabPermissions[tab])) card.style.display='none'; });
-      document.querySelectorAll('.admin-action-btn').forEach(btn=>{ const text=btn.textContent||''; let perm=null; if(text.includes('Manage Donors'))perm='donors.view'; else if(text.includes('Blood Requests'))perm='requests.view'; else if(text.includes('Events'))perm='events.view'; else if(text.includes('Social'))perm='social.view'; else if(text.includes('Fields'))perm='settings.view'; else if(text.includes('Admin Management'))perm='admin.manage'; else if(text.includes('Reports'))perm='reports.view'; if(perm && !full && !adminHasPermission(perm)) btn.style.display='none'; });
-      const mg=document.getElementById('adminManagementCard'); if(mg && !full && !adminHasPermission('admin.manage')) mg.style.display='none';
+      const user = getAdminUser();
+      const role = String(user.role || '').trim().toLowerCase();
+      // Existing Admin / Super Admin accounts always have full dashboard access.
+      const full = [
+        'admin', 'administrator', 'superadmin', 'super admin', 'super_admin'
+      ].includes(role);
+
+      const tabPermissions = {
+        donors: 'donors.view',
+        requests: 'requests.view',
+        events: 'events.view',
+        fields: 'settings.view',
+        social: 'social.view',
+        'admin-management': 'admin.manage',
+        reports: 'reports.view'
+      };
+
+      // IMPORTANT: restore display when switching from a restricted session
+      // to a full Admin session. The old code only hid elements and never
+      // restored them, which made Admin rights appear to disappear.
+      document.querySelectorAll('[data-admin-tab]').forEach(card => {
+        const tab = card.dataset.adminTab;
+        if (!tabPermissions[tab]) return;
+        const allowed = full || adminHasPermission(tabPermissions[tab]);
+        card.style.display = allowed ? '' : 'none';
+      });
+
+      document.querySelectorAll('.admin-action-btn').forEach(btn => {
+        const text = btn.textContent || '';
+        let perm = null;
+        if (text.includes('Manage Donors')) perm = 'donors.view';
+        else if (text.includes('Blood Requests')) perm = 'requests.view';
+        else if (text.includes('Events')) perm = 'events.view';
+        else if (text.includes('Social')) perm = 'social.view';
+        else if (text.includes('Fields')) perm = 'settings.view';
+        else if (text.includes('Admin Management')) perm = 'admin.manage';
+        else if (text.includes('Reports')) perm = 'reports.view';
+
+        if (!perm) {
+          btn.style.display = '';
+          return;
+        }
+        btn.style.display = (full || adminHasPermission(perm)) ? '' : 'none';
+      });
+
+      const mg = document.getElementById('adminManagementCard');
+      if (mg) {
+        mg.style.display = (full || adminHasPermission('admin.manage')) ? '' : 'none';
+      }
     }
 
     const RBAC_PERMISSION_GROUPS = [
@@ -5028,9 +5091,9 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 
     function adminHasPermission(permission) {
       const user = getAdminUser();
-      const role = String(user.role || '').toLowerCase();
-      if (role === 'admin' || role === 'superadmin' || role === 'super admin') return true;
-      const permissions = Array.isArray(user.permissions) ? user.permissions : [];
+      const role = String(user.role || '').trim().toLowerCase();
+      if (['admin','administrator','superadmin','super admin','super_admin'].includes(role)) return true;
+      const permissions = Array.isArray(user.permissions) ? user.permissions.map(String) : [];
       return permissions.includes('*') || permissions.includes(permission);
     }
 
