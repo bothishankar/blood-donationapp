@@ -11,7 +11,7 @@ const NINETY_DAYS = 90;
 
 const API_READ_CACHE = new Map();
 const API_INFLIGHT = new Map();
-const API_CACHE_TTL = 15000;
+const API_CACHE_TTL = 30000;
 
 async function api(action, data = {}) {
   if (!action) throw new Error("API action is required.");
