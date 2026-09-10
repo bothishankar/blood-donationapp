@@ -1,4 +1,3 @@
-/* PNBDC FINAL STYLE — generated from current deployed source */
 /* =========================================================
        PREMIUM V2
        POONGURICHI NANBARGAL BLOOD DONORS CLUB
@@ -3905,353 +3904,193 @@ footer{position:relative!important;z-index:1!important}.footer{position:relative
 @keyframes pn1Pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.75}}
 
 
-/* ============================================================
-   PNBDC ADMIN DONOR TABLE — MOBILE LANDSCAPE MODE
-   FINAL OVERRIDE
-   Keep the admin donor list as the desktop-style wide table on
-   phones so the complete donor columns remain available by
-   horizontal finger swipe.
-   ============================================================ */
-@media (max-width: 720px){
-
-  /* Do NOT convert admin tables into vertical cards. */
-  #adminDonorTable.admin-table-wrap,
-  .admin-page #adminDonorTable.admin-table-wrap{
-    display:block !important;
-    width:100% !important;
-    max-width:100% !important;
-    overflow-x:auto !important;
-    overflow-y:visible !important;
-    -webkit-overflow-scrolling:touch !important;
-    overscroll-behavior-x:contain !important;
-    touch-action:pan-x pan-y !important;
-    scrollbar-width:thin !important;
-    border:1px solid #dce7f3 !important;
-    border-radius:18px !important;
-    background:#fff !important;
-    padding:0 !important;
-  }
-
-  #adminDonorTable .admin-table{
-    display:table !important;
-    width:max-content !important;
-    min-width:1050px !important;
-    max-width:none !important;
-    table-layout:auto !important;
-    border-collapse:separate !important;
-    border-spacing:0 !important;
-  }
-
-  #adminDonorTable .admin-table thead{
-    display:table-header-group !important;
-  }
-
-  #adminDonorTable .admin-table tbody{
-    display:table-row-group !important;
-  }
-
-  #adminDonorTable .admin-table tr{
-    display:table-row !important;
-    background:#fff !important;
-    border:0 !important;
-    border-radius:0 !important;
-    padding:0 !important;
-    box-shadow:none !important;
-  }
-
-  #adminDonorTable .admin-table th,
-  #adminDonorTable .admin-table td{
-    display:table-cell !important;
-    white-space:nowrap !important;
-    min-width:0 !important;
-    width:auto !important;
-    padding:13px 16px !important;
-    border-top:1px solid #e8eef6 !important;
-    vertical-align:middle !important;
-    overflow:visible !important;
-  }
-
-  #adminDonorTable .admin-table th{
-    position:sticky !important;
-    top:0 !important;
-    z-index:3 !important;
-    background:#edf5ff !important;
-    color:#14396e !important;
-  }
-
-  /* Remove the mobile "Name / Blood / Mobile / ..." pseudo-labels. */
-  #adminDonorTable .admin-table td:before{
-    content:none !important;
-    display:none !important;
-  }
-
-  #adminDonorTable .admin-table td:last-child{
-    display:table-cell !important;
-    border-top:1px solid #e8eef6 !important;
-    margin:0 !important;
-    padding:13px 16px !important;
-  }
-
-  #adminDonorTable .admin-table td:last-child button{
-    flex:none !important;
-    display:inline-flex !important;
-    width:auto !important;
-    margin:2px !important;
-  }
-
-  #adminDonorTable .admin-table td:nth-child(1){
-    min-width:180px !important;
-    white-space:normal !important;
-  }
-  #adminDonorTable .admin-table td:nth-child(2){min-width:90px !important}
-  #adminDonorTable .admin-table td:nth-child(3){min-width:145px !important}
-  #adminDonorTable .admin-table td:nth-child(4){min-width:170px !important}
-  #adminDonorTable .admin-table td:nth-child(5){min-width:160px !important}
-  #adminDonorTable .admin-table td:nth-child(6){min-width:145px !important}
-  #adminDonorTable .admin-table td:nth-child(7){min-width:260px !important}
-
-  /* A small visible cue that the table can be swiped. */
-  #adminDonorTable:after{
-    content:"← Swipe left / right to view all donor details →";
-    display:block !important;
-    position:sticky !important;
-    left:0 !important;
-    width:max-content !important;
-    max-width:100% !important;
-    padding:8px 12px !important;
-    margin:0 !important;
-    color:#527096 !important;
-    background:#f7fbff !important;
-    border-top:1px solid #e8eef6 !important;
-    font-size:11px !important;
-    font-weight:800 !important;
-  }
-}
-
-/* Desktop/tablet remains a normal wide table. */
-#adminDonorTable .admin-table{
-  min-width:1050px;
-}
-
-
-
 /* =========================================================
-   PNBDC FINAL STRUCTURAL FIX — MOBILE + ABOUT + ADMIN
-   This override intentionally comes LAST.
+   PNBDC FINAL STRUCTURAL OVERRIDES
+   These rules are intentionally LAST so earlier conflicting
+   mobile rules cannot win.
    ========================================================= */
 
-/* Never allow an animated page section to create a stacking
-   context that can visually overlap the footer. */
-main{
-  width:100% !important;
-  display:block !important;
-  position:relative !important;
-  overflow:visible !important;
+/* Never let a page section or footer create a viewport-sized
+   layer that visually sits over another section. */
+html, body {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
 }
-.page-section{
-  min-height:0 !important;
-  height:auto !important;
-  position:relative !important;
+main, .page-section, .page-section.active, .admin-page {
+  position: relative !important;
+  min-height: 0 !important;
+  height: auto !important;
+  transform: none !important;
 }
-.page-section.active{
-  min-height:0 !important;
-  height:auto !important;
-  animation:none !important;
-  transform:none !important;
-  opacity:1 !important;
+.page-section.active {
+  animation: none !important;
+  opacity: 1 !important;
 }
 
-/* ABOUT — readable mission card */
-#page-about .about-layout{
-  align-items:stretch !important;
-}
-#page-about .about-highlight{
-  background:linear-gradient(135deg,#0d3b78 0%,#1267d6 58%,#2a86e8 100%) !important;
-  color:#fff !important;
-  border-left:6px solid #ef233c !important;
-  min-height:0 !important;
+/* ABOUT: the current light background was inheriting the old
+   white text. Make the mission panel deliberately dark so
+   every line is readable. */
+#page-about .about-highlight {
+  background: linear-gradient(135deg,#0c3475 0%,#1267d6 58%,#1683e8 100%) !important;
+  color: #fff !important;
+  border-left: 6px solid #ef233c !important;
+  min-height: 0 !important;
+  height: auto !important;
 }
 #page-about .about-highlight h2,
-#page-about .about-highlight h2 *{
-  color:#fff !important;
-  opacity:1 !important;
-  visibility:visible !important;
+#page-about .about-highlight p {
+  color: #fff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
-#page-about .about-highlight p,
-#page-about .about-highlight p *{
-  color:rgba(255,255,255,.88) !important;
-  opacity:1 !important;
-  visibility:visible !important;
+#page-about .about-highlight p {
+  color: rgba(255,255,255,.88) !important;
 }
-#page-about .about-card{
-  color:#17375f !important;
-  min-height:0 !important;
+#page-about .about-heart {
+  color: #fff !important;
 }
-#page-about .about-card h3{
-  color:#102a56 !important;
-}
-#page-about .about-card p{
-  color:#66778d !important;
-}
-#page-about{
-  padding-bottom:145px !important;
+#page-about {
+  padding-bottom: 150px !important;
 }
 
-/* Footer is always in normal document flow. */
-.site-footer,
-footer.site-footer{
-  position:relative !important;
-  top:auto !important;
-  bottom:auto !important;
-  clear:both !important;
-  z-index:1 !important;
-  margin-top:28px !important;
+/* FOOTER: it must remain in normal document flow, never act
+   like a page overlay. */
+html body footer,
+html body .site-footer {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  float: none !important;
+  clear: both !important;
+  transform: none !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  height: auto !important;
 }
-.site-footer::before{
-  pointer-events:none !important;
-}
-.footer-inner-premium{
-  position:relative !important;
-  z-index:2 !important;
-}
-@media(max-width:700px){
-  .site-footer,
-  footer.site-footer{
-    padding-bottom:135px !important;
+@media (max-width: 720px) {
+  html body footer,
+  html body .site-footer {
+    margin-top: 28px !important;
+    padding-bottom: 145px !important;
   }
 }
 
-/* ADMIN DONOR TABLE — always a real horizontal table on phones.
-   It must NEVER turn into stacked donor cards. */
-@media(max-width:720px){
+/* ADMIN DONORS: restore a genuine wide HTML table on mobile.
+   The previous CSS explicitly changed it to donor cards. */
+@media (max-width: 720px) {
   #page-admin .admin-table-wrap,
-  #adminDonorTable.admin-table-wrap{
-    display:block !important;
-    width:100% !important;
-    max-width:100% !important;
-    overflow-x:auto !important;
-    overflow-y:visible !important;
-    -webkit-overflow-scrolling:touch !important;
-    touch-action:pan-x pan-y !important;
-    overscroll-behavior-x:contain !important;
-    scrollbar-width:thin !important;
-    border:1px solid #d8e4f2 !important;
-    border-radius:18px !important;
-    background:#fff !important;
+  #adminDonorTable.admin-table-wrap {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 62vh !important;
+    overflow-x: scroll !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-x: contain !important;
+    touch-action: pan-x pan-y !important;
+    scrollbar-width: auto !important;
+    border: 1px solid #dce7f3 !important;
+    border-radius: 18px !important;
+    background: #fff !important;
   }
 
   #page-admin .admin-table-wrap .admin-table,
-  #adminDonorTable .admin-table{
-    display:table !important;
-    width:max-content !important;
-    min-width:1050px !important;
-    max-width:none !important;
-    table-layout:auto !important;
-    border-collapse:separate !important;
-    border-spacing:0 !important;
+  #adminDonorTable .admin-table {
+    display: table !important;
+    width: max-content !important;
+    min-width: 1100px !important;
+    max-width: none !important;
+    table-layout: auto !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
   }
 
   #page-admin .admin-table thead,
-  #adminDonorTable .admin-table thead{
-    display:table-header-group !important;
+  #adminDonorTable .admin-table thead {
+    display: table-header-group !important;
   }
-
   #page-admin .admin-table tbody,
-  #adminDonorTable .admin-table tbody{
-    display:table-row-group !important;
+  #adminDonorTable .admin-table tbody {
+    display: table-row-group !important;
   }
-
   #page-admin .admin-table tr,
-  #adminDonorTable .admin-table tr{
-    display:table-row !important;
-    border:0 !important;
-    border-radius:0 !important;
-    padding:0 !important;
-    box-shadow:none !important;
+  #adminDonorTable .admin-table tr {
+    display: table-row !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
   }
-
   #page-admin .admin-table th,
   #page-admin .admin-table td,
   #adminDonorTable .admin-table th,
-  #adminDonorTable .admin-table td{
-    display:table-cell !important;
-    white-space:nowrap !important;
-    min-width:0 !important;
-    width:auto !important;
-    padding:13px 16px !important;
-    vertical-align:middle !important;
-    border-top:1px solid #e7eef6 !important;
-  }
-
-  #page-admin .admin-table thead{
-    display:table-header-group !important;
+  #adminDonorTable .admin-table td {
+    display: table-cell !important;
+    white-space: nowrap !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 13px 16px !important;
+    vertical-align: middle !important;
+    border-bottom: 1px solid #e7eef6 !important;
   }
   #page-admin .admin-table th,
-  #adminDonorTable .admin-table th{
-    position:sticky !important;
-    top:0 !important;
-    z-index:4 !important;
-    background:#edf5ff !important;
-    color:#14396e !important;
+  #adminDonorTable .admin-table th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 5 !important;
+    background: #edf5ff !important;
+    color: #14396e !important;
   }
-
   #page-admin .admin-table td:before,
-  #adminDonorTable .admin-table td:before{
-    content:none !important;
-    display:none !important;
+  #adminDonorTable .admin-table td:before {
+    content: none !important;
+    display: none !important;
   }
-
-  #adminDonorTable .admin-table td:nth-child(1){min-width:180px !important;}
-  #adminDonorTable .admin-table td:nth-child(2){min-width:90px !important;}
-  #adminDonorTable .admin-table td:nth-child(3){min-width:150px !important;}
-  #adminDonorTable .admin-table td:nth-child(4){min-width:180px !important;}
-  #adminDonorTable .admin-table td:nth-child(5){min-width:170px !important;}
-  #adminDonorTable .admin-table td:nth-child(6){min-width:150px !important;}
-  #adminDonorTable .admin-table td:nth-child(7){min-width:260px !important;}
-
-  #adminDonorTable .admin-table td:last-child{
-    display:table-cell !important;
-    padding:13px 16px !important;
-    border-top:1px solid #e7eef6 !important;
-    margin:0 !important;
+  #page-admin .admin-table td:last-child,
+  #adminDonorTable .admin-table td:last-child {
+    display: table-cell !important;
+    padding: 13px 16px !important;
+    margin: 0 !important;
+    border-top: 0 !important;
   }
-  #adminDonorTable .admin-table td:last-child button{
-    display:inline-flex !important;
-    width:auto !important;
-    flex:none !important;
-    margin:2px !important;
-  }
-
-  #adminDonorTable::after{
-    content:"← Swipe left / right to view all donor details →" !important;
-    display:block !important;
-    padding:8px 12px !important;
-    border-top:1px solid #e7eef6 !important;
-    background:#f7fbff !important;
-    color:#527096 !important;
-    font-size:11px !important;
-    font-weight:800 !important;
-    text-align:center !important;
+  #page-admin .admin-table td:last-child button,
+  #adminDonorTable .admin-table td:last-child button {
+    display: inline-flex !important;
+    width: auto !important;
+    flex: none !important;
+    margin: 2px !important;
   }
 }
 
-/* Mobile page content must clear the fixed bottom navigation. */
-@media(max-width:850px){
+/* The mobile nav is fixed, so every page needs guaranteed
+   document space beneath it. */
+@media (max-width: 720px) {
   #page-admin,
   #page-donor,
   #page-find,
   #page-request,
-  #page-about{
-    padding-bottom:150px !important;
-  }
-  .site-footer{
-    margin-bottom:0 !important;
+  #page-about {
+    padding-bottom: 155px !important;
   }
 }
 
-/* Prevent the floating BothiAI button from being hidden behind
-   content or the bottom navigation. */
-#pn-bot-toggle.pn-bot-toggle{
-  position:fixed !important;
-  z-index:12500 !important;
+/* BothiAI must sit above the nav, never underneath it. */
+#pn-bot-toggle,
+#pn-bot-toggle.pn-bot-toggle {
+  position: fixed !important;
+  z-index: 12500 !important;
+}
+@media (max-width: 720px) {
+  #pn-bot-toggle,
+  #pn-bot-toggle.pn-bot-toggle {
+    right: 14px !important;
+    bottom: 96px !important;
+  }
 }
