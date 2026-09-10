@@ -55,7 +55,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260909-final-1">
+  <link rel="stylesheet" href="style.css?v=20260910-fast-final">
   <style>
     .donor-photo-preview{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid #dbe5f0;border-radius:14px;background:#f7fbff;color:#123b82;font-weight:700}
     .donor-photo-preview img{width:64px;height:76px;object-fit:cover;border-radius:10px;border:2px solid #d7e2ef}
@@ -1794,8 +1794,8 @@
        ======================================================= -->
 
   <!-- SheetJS: Excel import/export for Admin donor management -->
-  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260909-final-1"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" defer></script>
+  <script src="app.js?v=20260910-fast-final"></script>
 <script>
 (function(){
   window.addEventListener("load", function(){
@@ -3801,7 +3801,7 @@
       const donorPhotoUrl = String(value(donor,"Photo_URL","photoUrl","PhotoURL","photoURL","Photo_Url") || "").trim();
       const cachedPhoto = getCachedDonorPhoto(donorIdForPhoto);
       const detailPhotoSrc = cachedPhoto || donorPhotoUrl;
-      const photoHtml = detailPhotoSrc ? `<img class="admin-donor-detail-photo" src="${escapeAttribute(detailPhotoSrc)}" alt="${escapeAttribute(value(donor,"Name","name") || "Donor photo")}">` : `<div class="donor-avatar">${escapeHtml(String(value(donor,"Name","name")||"D").split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase())}</div>`;
+      const photoHtml = detailPhotoSrc ? `<img class="admin-donor-detail-photo" src="${escapeAttribute(detailPhotoSrc)}" alt="${escapeAttribute(value(donor,"Name","name") || "Donor photo")}" loading="lazy">` : `<div class="donor-avatar">${escapeHtml(String(value(donor,"Name","name")||"D").split(/\s+/).slice(0,2).map(x=>x[0]).join("").toUpperCase())}</div>`;
       card.innerHTML = `<div class="admin-donor-detail-head">${photoHtml}<div><h3>${escapeHtml(value(donor,"Name","name")||"Donor")}</h3><span>${escapeHtml(value(donor,"Blood_Group","bloodGroup")||"—")}</span></div></div><div class="admin-donor-detail-list">${rows.map(r=>`<div><strong>${escapeHtml(r[0])}</strong><span>${escapeHtml(r[1]||"—")}</span></div>`).join("")}</div>`;
       card.insertAdjacentHTML("beforeend", `<div class="admin-detail-note">🔒 All donor details are visible only to Admin.</div>`);
       document.getElementById("adminDonorDetailsModal").classList.add("show");
@@ -4154,7 +4154,33 @@
 @keyframes pnLangDrop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
 /* Tamil-friendly UI font fallback. */
 html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha",Arial,sans-serif}
-</style></head><body><h2>Donor Details PNG</h2><p>Image created successfully. Save it and share it on WhatsApp.</p><img src="${url}" alt="Donor details"><br><a href="${url}" download="${safeName}_Blood_Donor_Details.png">⬇️ Save PNG</a><p><b>iPhone:</b> long-press the image to save it, then share it from Photos.<br><b>Android:</b> tap Save PNG, then share it from Gallery.</p></body></html>`);
+</style></head><body><h2>Donor Details PNG</h2><p>Image created successfully. Save it and share it on WhatsApp.</p><img src="${url}" alt="Donor details" loading="lazy"><br><a href="${url}" download="${safeName}_Blood_Donor_Details.png">⬇️ Save PNG</a><p><b>iPhone:</b> long-press the image to save it, then share it from Photos.<br><b>Android:</b> tap Save PNG, then share it from Gallery.</p>
+<script id="pn-performance-final">
+(function(){
+  function lazyImages(root){
+    if(!root || !root.querySelectorAll) return;
+    root.querySelectorAll('img').forEach(function(img){
+      if(!img.hasAttribute('loading') && !img.closest('#pn-bot-toggle')){
+        img.setAttribute('loading','lazy');
+        img.setAttribute('decoding','async');
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    lazyImages(document);
+    if(window.MutationObserver){
+      var mo=new MutationObserver(function(list){
+        list.forEach(function(m){ m.addedNodes.forEach(function(n){
+          if(n.nodeType===1) lazyImages(n);
+        });});
+      });
+      mo.observe(document.body,{childList:true,subtree:true});
+    }
+  });
+})();
+</script>
+
+</body></html>`);
           win.document.close();
           setTimeout(()=>URL.revokeObjectURL(url),60000);
           return;
@@ -5591,7 +5617,7 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 
 <!-- PNBDC BothiAI Assistant — EXACT APPROVED CHAT UI -->
 <button id="pn-bot-toggle" class="pn-bot-toggle" type="button" aria-label="BothiAI – PNBDC AI Assistant" title="BothiAI – PNBDC AI Assistant">
-  <span class="pn-bot-pulse"></span><img class="pn-bot-icon" src="icons/bothiai-icon.png" alt="BothiAI">
+  <span class="pn-bot-pulse"></span><img class="pn-bot-icon" src="icons/bothiai-icon.png" alt="BothiAI" loading="lazy">
 </button>
 
 <div id="pn-bot-panel" class="pn-bot-panel" aria-hidden="true">
@@ -5604,9 +5630,9 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
   </div>
 
   <div class="pn-bot-hero">
-    <img class="pn-bot-hero-logo" src="icons/bothiai-logo.png" alt="BothiAI">
+    <img class="pn-bot-hero-logo" src="icons/bothiai-logo.png" alt="BothiAI" loading="lazy">
     <div class="pn-bot-hero-copy"><div class="pn-bot-hero-title"><span>Bothi</span><b>AI</b></div><div class="pn-bot-hero-subtitle">PNBDC AI Assistant</div></div>
-    <img class="pn-bot-robot" src="icons/bothiai-robot.png" alt="BothiAI Assistant">
+    <img class="pn-bot-robot" src="icons/bothiai-robot.png" alt="BothiAI Assistant" loading="lazy">
     <span class="pn-bot-spark spark-1">✦</span><span class="pn-bot-spark spark-2">✦</span>
   </div>
 
@@ -5694,5 +5720,31 @@ html[data-language="ta"] body{font-family:"Noto Sans Tamil","Nirmala UI","Latha"
 </script>
 
 <script src="pn-bot.js"></script>
+
+<script id="pn-performance-final">
+(function(){
+  function lazyImages(root){
+    if(!root || !root.querySelectorAll) return;
+    root.querySelectorAll('img').forEach(function(img){
+      if(!img.hasAttribute('loading') && !img.closest('#pn-bot-toggle')){
+        img.setAttribute('loading','lazy');
+        img.setAttribute('decoding','async');
+      }
+    });
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    lazyImages(document);
+    if(window.MutationObserver){
+      var mo=new MutationObserver(function(list){
+        list.forEach(function(m){ m.addedNodes.forEach(function(n){
+          if(n.nodeType===1) lazyImages(n);
+        });});
+      });
+      mo.observe(document.body,{childList:true,subtree:true});
+    }
+  });
+})();
+</script>
+
 </body>
 </html>
