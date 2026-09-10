@@ -55,7 +55,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260909-redesign-1">
+  <link rel="stylesheet" href="style.css?v=pn-design-final-20260910">
   <style>
     .donor-photo-preview{display:flex;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;border:1px solid #dbe5f0;border-radius:14px;background:#f7fbff;color:#123b82;font-weight:700}
     .donor-photo-preview img{width:64px;height:76px;object-fit:cover;border-radius:10px;border:2px solid #d7e2ef}
@@ -129,6 +129,546 @@
   @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.pn-premium-loader{display:none}.pn-reveal{opacity:1;transform:none}}
 </style>
 
+<style id="pn-better-design">
+/* ============================================================
+   PNBDC DESIGN-ONLY REBUILD
+   Replace ONLY index.html.
+   Existing JavaScript, API, fields and backend are preserved.
+   ============================================================ */
+
+:root{
+  --pn-navy:#102a56;
+  --pn-blue:#1769e0;
+  --pn-blue2:#4da3ff;
+  --pn-red:#e51f32;
+  --pn-red2:#ff4b5c;
+  --pn-cyan:#eaf6ff;
+  --pn-bg:#f4f8fc;
+  --pn-card:#ffffff;
+  --pn-text:#13294b;
+  --pn-muted:#70809a;
+  --pn-line:#dce6f2;
+  --pn-shadow:0 16px 40px rgba(16,42,86,.10);
+  --pn-radius:24px;
+}
+
+html{scroll-behavior:smooth}
+body{
+  margin:0!important;
+  background:
+    radial-gradient(circle at 8% 4%,rgba(23,105,224,.08),transparent 28%),
+    radial-gradient(circle at 92% 12%,rgba(229,31,50,.07),transparent 24%),
+    linear-gradient(180deg,#fafdff 0%,#f2f7fc 100%)!important;
+  color:var(--pn-text)!important;
+  font-family:"DM Sans","Manrope",Arial,sans-serif!important;
+}
+*{box-sizing:border-box}
+button,input,select,textarea{font-family:inherit}
+img{max-width:100%}
+
+/* ---------- GLOBAL CONTAINER ---------- */
+.container{
+  width:min(1180px,calc(100% - 32px))!important;
+  margin-inline:auto!important;
+}
+
+/* ---------- HEADER ---------- */
+.site-header{
+  position:sticky!important;
+  top:0!important;
+  z-index:1000!important;
+  background:rgba(255,255,255,.94)!important;
+  backdrop-filter:blur(18px)!important;
+  -webkit-backdrop-filter:blur(18px)!important;
+  border-bottom:1px solid rgba(220,230,242,.9)!important;
+  box-shadow:0 8px 28px rgba(16,42,86,.07)!important;
+}
+.header-inner{
+  min-height:78px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:14px!important;
+}
+.brand{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+  min-width:0!important;
+  text-decoration:none!important;
+}
+.brand-logo{
+  width:58px!important;
+  height:58px!important;
+  border-radius:50%!important;
+  object-fit:cover!important;
+  border:3px solid #fff!important;
+  box-shadow:0 5px 18px rgba(16,42,86,.16)!important;
+}
+.brand-copy{min-width:0}
+.brand-name{
+  color:var(--pn-navy)!important;
+  font-weight:800!important;
+  font-size:clamp(17px,2.1vw,25px)!important;
+  line-height:1.05!important;
+}
+.brand-meta{
+  color:var(--pn-muted)!important;
+  font-size:12px!important;
+  font-weight:600!important;
+  margin-top:5px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  max-width:330px!important;
+}
+.mobile-menu-btn,
+.mobile-header-actions .notification-btn,
+.notification-btn{
+  border:1px solid var(--pn-line)!important;
+  background:#fff!important;
+  color:var(--pn-navy)!important;
+  border-radius:16px!important;
+  min-width:48px!important;
+  min-height:48px!important;
+  box-shadow:0 6px 18px rgba(16,42,86,.07)!important;
+}
+.mobile-menu-btn{display:none}
+
+/* desktop navigation */
+.desktop-nav{
+  margin-left:auto!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+}
+.desktop-nav .nav-link{
+  border:0!important;
+  background:transparent!important;
+  color:#50627e!important;
+  padding:10px 12px!important;
+  border-radius:12px!important;
+  font-weight:700!important;
+  cursor:pointer!important;
+}
+.desktop-nav .nav-link:hover,
+.desktop-nav .nav-link.active{
+  background:#edf5ff!important;
+  color:var(--pn-blue)!important;
+}
+.admin-btn,
+.install-app-top-btn{
+  border:0!important;
+  border-radius:13px!important;
+  padding:11px 14px!important;
+  color:#fff!important;
+  font-weight:800!important;
+  background:linear-gradient(135deg,var(--pn-navy),var(--pn-blue))!important;
+  box-shadow:0 8px 20px rgba(23,105,224,.22)!important;
+}
+.install-app-top-btn{background:linear-gradient(135deg,var(--pn-red),#ff6b61)!important}
+.language-btn{
+  border:1px solid var(--pn-line)!important;
+  background:#fff!important;
+  border-radius:13px!important;
+  padding:10px 12px!important;
+  color:var(--pn-navy)!important;
+  font-weight:700!important;
+}
+
+/* ---------- PAGE SYSTEM ---------- */
+.page-section{display:none!important}
+.page-section.active{
+  display:block!important;
+  min-height:calc(100vh - 78px)!important;
+}
+main{overflow-x:hidden!important}
+
+/* ---------- HOME ---------- */
+#page-home{
+  padding:24px 0 120px!important;
+}
+#page-home > .pn2-hero{
+  width:min(1180px,calc(100% - 32px))!important;
+  margin:0 auto 22px!important;
+  min-height:360px!important;
+  border-radius:32px!important;
+  overflow:hidden!important;
+  position:relative!important;
+  padding:42px!important;
+  color:#fff!important;
+  background:
+    radial-gradient(circle at 82% 20%,rgba(255,255,255,.22),transparent 22%),
+    radial-gradient(circle at 18% 80%,rgba(255,75,92,.28),transparent 30%),
+    linear-gradient(135deg,#0b2756 0%,#1457ae 56%,#1679e9 100%)!important;
+  box-shadow:0 25px 55px rgba(16,42,86,.20)!important;
+}
+#page-home > .pn2-hero:after{
+  content:"❤";
+  position:absolute;
+  right:5%;
+  bottom:-34px;
+  font-size:180px;
+  opacity:.08;
+}
+.pn2-hero > *{position:relative;z-index:1}
+.pn2-hero h1,
+.pn2-hero h2{
+  max-width:650px!important;
+  margin:0!important;
+  font-size:clamp(38px,6vw,70px)!important;
+  line-height:.98!important;
+  letter-spacing:-2px!important;
+}
+.pn2-hero p{max-width:620px!important;color:rgba(255,255,255,.82)!important;font-size:16px!important}
+.pn2-hero .pn2-hero-actions,
+.pn2-actions{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:12px!important;
+}
+.pn2-hero button,
+.pn2-hero .primary,
+.pn2-actions button{
+  border:0!important;
+  border-radius:16px!important;
+  min-height:50px!important;
+  padding:0 20px!important;
+  font-weight:800!important;
+}
+.pn2-hero button{background:#fff!important;color:var(--pn-navy)!important}
+.pn2-hero .primary{background:linear-gradient(135deg,#ff3346,#e51f32)!important;color:#fff!important}
+
+.pn2-live,
+.pn2-section,
+.pn2-blood-section,
+.pn2-stats,
+.pn2-updates,
+.pn2-club{
+  width:min(1180px,calc(100% - 32px))!important;
+  margin:0 auto 22px!important;
+}
+.pn2-live{
+  padding:18px 20px!important;
+  border-radius:20px!important;
+  background:#fff!important;
+  border:1px solid #ffd9dd!important;
+  box-shadow:var(--pn-shadow)!important;
+}
+.pn2-live:before{
+  content:"● LIVE";
+  color:var(--pn-red)!important;
+  font-weight:900!important;
+  margin-right:10px!important;
+}
+.pn2-section{
+  background:transparent!important;
+}
+.pn2-section h2,
+.pn2-section h3,
+.pn2-blood-section h2,
+.pn2-updates h2,
+.pn2-club h2{
+  color:var(--pn-navy)!important;
+  font-weight:850!important;
+  letter-spacing:-.8px!important;
+}
+.pn2-actions-section .pn2-action-grid,
+.pn2-action-grid{
+  display:grid!important;
+  grid-template-columns:repeat(4,1fr)!important;
+  gap:14px!important;
+}
+.pn2-action-grid > *{
+  min-height:128px!important;
+  padding:20px!important;
+  border-radius:22px!important;
+  border:1px solid var(--pn-line)!important;
+  background:#fff!important;
+  box-shadow:var(--pn-shadow)!important;
+  transition:transform .22s ease,box-shadow .22s ease!important;
+}
+.pn2-action-grid > *:hover{transform:translateY(-4px)!important;box-shadow:0 20px 42px rgba(16,42,86,.14)!important}
+.pn2-action-grid > *:nth-child(1){background:linear-gradient(145deg,#fff,#fff0f2)!important}
+.pn2-action-grid > *:nth-child(2){background:linear-gradient(145deg,#fff,#eef6ff)!important}
+.pn2-action-grid > *:nth-child(3){background:linear-gradient(145deg,#fff,#effbf5)!important}
+.pn2-action-grid > *:nth-child(4){background:linear-gradient(145deg,#fff,#fff8e9)!important}
+
+.pn2-community-section{
+  padding:28px!important;
+  border-radius:28px!important;
+  background:#fff!important;
+  box-shadow:var(--pn-shadow)!important;
+  border:1px solid var(--pn-line)!important;
+}
+.pn2-community-section .pn2-community-grid,
+.pn2-community-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 330px!important;
+  gap:22px!important;
+}
+.pn2-community-section img{
+  width:100%!important;
+  height:360px!important;
+  object-fit:cover!important;
+  border-radius:24px!important;
+  display:block!important;
+}
+.pn2-blood-section{
+  padding:24px!important;
+  border-radius:28px!important;
+  background:linear-gradient(135deg,#fff,#eef7ff)!important;
+  border:1px solid var(--pn-line)!important;
+  box-shadow:var(--pn-shadow)!important;
+}
+.pn2-stats{
+  display:grid!important;
+  grid-template-columns:repeat(3,1fr)!important;
+  gap:14px!important;
+}
+.pn2-stats > *{
+  background:#fff!important;
+  border:1px solid var(--pn-line)!important;
+  border-radius:20px!important;
+  padding:22px!important;
+  box-shadow:0 10px 25px rgba(16,42,86,.07)!important;
+}
+.pn2-events-section,
+.pn2-updates,
+.pn2-club{
+  padding:26px!important;
+  border-radius:28px!important;
+  background:#fff!important;
+  border:1px solid var(--pn-line)!important;
+  box-shadow:var(--pn-shadow)!important;
+}
+
+/* ---------- ALL OTHER PAGES ---------- */
+#page-donor,
+#page-find,
+#page-request,
+#page-about,
+#page-admin{
+  padding:26px 0 130px!important;
+}
+#page-donor > *,
+#page-find > *,
+#page-request > *,
+#page-about > *,
+#page-admin > *{
+  max-width:1180px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+#page-donor .card,
+#page-find .card,
+#page-request .card,
+#page-about .card,
+#page-admin .card,
+#page-donor form,
+#page-find form,
+#page-request form,
+#page-admin .admin-card{
+  border:1px solid var(--pn-line)!important;
+  border-radius:24px!important;
+  background:#fff!important;
+  box-shadow:var(--pn-shadow)!important;
+}
+
+/* headings */
+#page-donor h1,#page-donor h2,#page-find h1,#page-find h2,
+#page-request h1,#page-request h2,#page-about h1,#page-about h2,
+#page-admin h1,#page-admin h2{
+  color:var(--pn-navy)!important;
+  font-weight:850!important;
+}
+
+/* form fields */
+#page-donor input,#page-donor select,#page-donor textarea,
+#page-find input,#page-find select,#page-find textarea,
+#page-request input,#page-request select,#page-request textarea,
+#page-admin input,#page-admin select,#page-admin textarea{
+  width:100%!important;
+  min-height:48px!important;
+  border:1px solid #d6e2ef!important;
+  border-radius:14px!important;
+  background:#fbfdff!important;
+  color:var(--pn-text)!important;
+  padding:11px 13px!important;
+  outline:none!important;
+  transition:border .18s,box-shadow .18s,background .18s!important;
+}
+#page-donor input:focus,#page-donor select:focus,#page-donor textarea:focus,
+#page-find input:focus,#page-find select:focus,#page-find textarea:focus,
+#page-request input:focus,#page-request select:focus,#page-request textarea:focus,
+#page-admin input:focus,#page-admin select:focus,#page-admin textarea:focus{
+  border-color:var(--pn-blue)!important;
+  box-shadow:0 0 0 4px rgba(23,105,224,.10)!important;
+  background:#fff!important;
+}
+
+/* buttons */
+#page-donor button,#page-find button,#page-request button,
+#page-admin button{
+  border-radius:14px!important;
+  font-weight:800!important;
+}
+#page-donor button[type="submit"],
+#page-find button[type="submit"],
+#page-request button[type="submit"]{
+  border:0!important;
+  color:#fff!important;
+  background:linear-gradient(135deg,var(--pn-red),#ff5360)!important;
+  box-shadow:0 10px 22px rgba(229,31,50,.22)!important;
+}
+
+/* ---------- ADMIN ---------- */
+#page-admin .admin-page,
+#page-admin .admin-card{
+  background:#fff!important;
+}
+#page-admin .admin-header,
+#page-admin .admin-topbar{
+  background:linear-gradient(135deg,var(--pn-navy),var(--pn-blue))!important;
+  color:#fff!important;
+  border-radius:24px!important;
+}
+#page-admin table{
+  width:100%!important;
+  border-collapse:separate!important;
+  border-spacing:0!important;
+  overflow:hidden!important;
+  border:1px solid var(--pn-line)!important;
+  border-radius:18px!important;
+}
+#page-admin th{
+  background:#edf5ff!important;
+  color:var(--pn-navy)!important;
+  font-weight:850!important;
+}
+#page-admin th,#page-admin td{
+  padding:14px 16px!important;
+  border-bottom:1px solid #e7eef6!important;
+  white-space:nowrap!important;
+}
+#page-admin td{color:#30435f!important}
+
+/* ---------- MOBILE BOTTOM NAV ---------- */
+.mobile-bottom-nav{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  z-index:1100!important;
+  padding:10px max(14px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-bottom))!important;
+  background:rgba(255,255,255,.94)!important;
+  backdrop-filter:blur(18px)!important;
+  -webkit-backdrop-filter:blur(18px)!important;
+  border-top:1px solid rgba(220,230,242,.9)!important;
+  box-shadow:0 -12px 35px rgba(16,42,86,.10)!important;
+}
+.mobile-nav-inner{
+  width:min(720px,100%)!important;
+  margin:auto!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,1fr)!important;
+  gap:6px!important;
+  padding:5px!important;
+  border:1px solid var(--pn-line)!important;
+  border-radius:24px!important;
+  background:#fff!important;
+}
+.mobile-nav-btn{
+  border:0!important;
+  background:transparent!important;
+  min-height:64px!important;
+  border-radius:18px!important;
+  color:#516580!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  font-weight:800!important;
+}
+.mobile-nav-btn span:first-child{font-size:21px!important;line-height:1!important}
+.mobile-nav-btn span:last-child{font-size:11px!important}
+.mobile-nav-btn.active{
+  background:linear-gradient(135deg,var(--pn-blue),#2d83ed)!important;
+  color:#fff!important;
+  box-shadow:0 8px 18px rgba(23,105,224,.24)!important;
+}
+
+/* ---------- BOT ---------- */
+#pn-bot-toggle,
+.pn-bot-toggle{
+  position:fixed!important;
+  right:18px!important;
+  bottom:calc(104px + env(safe-area-inset-bottom))!important;
+  z-index:1200!important;
+  width:62px!important;
+  height:62px!important;
+  border-radius:50%!important;
+  border:4px solid #fff!important;
+  background:#fff!important;
+  box-shadow:0 12px 30px rgba(16,42,86,.20)!important;
+  overflow:hidden!important;
+}
+#pn-bot-toggle img,
+.pn-bot-toggle img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+}
+.pn-bot-panel{
+  z-index:1190!important;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:900px){
+  .desktop-nav{display:none!important}
+  .mobile-menu-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important}
+  .header-inner{min-height:70px!important}
+  .brand-logo{width:50px!important;height:50px!important}
+  #page-home{padding-top:14px!important}
+  #page-home > .pn2-hero{
+    min-height:420px!important;
+    padding:28px 22px!important;
+    border-radius:26px!important;
+  }
+  .pn2-action-grid{grid-template-columns:repeat(2,1fr)!important}
+  .pn2-community-grid{grid-template-columns:1fr!important}
+  .pn2-community-section img{height:300px!important}
+}
+@media (max-width:600px){
+  .container{width:calc(100% - 20px)!important}
+  .brand-meta{max-width:190px!important}
+  .brand-name{font-size:17px!important}
+  .mobile-header-actions{margin-left:auto!important}
+  #page-home{padding-bottom:145px!important}
+  #page-donor,#page-find,#page-request,#page-about,#page-admin{padding-bottom:145px!important}
+  #page-home > .pn2-hero,
+  .pn2-live,.pn2-section,.pn2-blood-section,.pn2-stats,.pn2-updates,.pn2-club{
+    width:calc(100% - 20px)!important;
+  }
+  #page-home > .pn2-hero{
+    min-height:390px!important;
+    padding:26px 20px!important;
+  }
+  .pn2-hero h1,.pn2-hero h2{font-size:43px!important;letter-spacing:-1.6px!important}
+  .pn2-action-grid{gap:10px!important}
+  .pn2-action-grid > *{min-height:118px!important;padding:15px!important;border-radius:19px!important}
+  .pn2-community-section,.pn2-blood-section,.pn2-events-section,.pn2-updates,.pn2-club{padding:18px!important;border-radius:22px!important}
+  .pn2-community-section img{height:250px!important;border-radius:18px!important}
+  .pn2-stats{grid-template-columns:1fr!important}
+  .mobile-nav-inner{border-radius:21px!important}
+  .mobile-nav-btn{min-height:60px!important;border-radius:16px!important}
+  .mobile-nav-btn span:first-child{font-size:20px!important}
+  .mobile-nav-btn span:last-child{font-size:10px!important}
+  #pn-bot-toggle,.pn-bot-toggle{right:14px!important;bottom:calc(112px + env(safe-area-inset-bottom))!important;width:56px!important;height:56px!important}
+  #page-admin table{display:block!important;overflow-x:auto!important;max-width:100%!important}
+  #page-admin th,#page-admin td{padding:12px!important}
+}
+</style>
 </head>
 
 
@@ -316,23 +856,80 @@
          ===================================================== -->
 
     <section id="page-home" class="page-section active">
-  <div class="pnx-home">
-    <div class="pnx-top-brand">
-      <div class="pnx-brand-left"><img src="icons/poongurichi-logo.jpeg" alt="Poongurichi Nanbargal"><div><b>Poongurichi Nanbargal</b><strong>Blood Donors Club</strong><span>One Donation. Many Lives. ❤️</span></div></div>
-      <div class="pnx-brand-slogan">Together We Save Lives<br><small>A Small Act Can Create A Big Difference</small></div>
-      <div class="pnx-brand-actions"><span>🩸<small>DONATE<br>BLOOD</small></span><span>❤️<small>SHARE<br>HOPE</small></span><span>👥<small>BUILD<br>COMMUNITY</small></span><span>✦<small>INSPIRE<br>LIVES</small></span></div>
-    </div>
-    <section class="pnx-hero">
-      <div class="pnx-hero-copy"><span class="pnx-pill">❤️ ONE DONATION • MANY LIVES</span><h1>Together<br><em>We Save Lives</em></h1><p>Be the reason someone gets a second chance. Your one small act can make a life-changing difference.</p><div class="pnx-hero-buttons"><button onclick="goTo('donor')">🩸 Become a Donor</button><button onclick="goTo('find')">🔎 Find a Donor</button></div><div class="pnx-mini-stats"><div><b id="heroDonorCount">—</b><span>Total Donors</span></div><div><b id="statRequests">—</b><span>Blood Requests</span></div><div><b id="statEvents">—</b><span>Camps & Events</span></div></div></div>
-      <div class="pnx-hero-art"><div class="pnx-orbit"></div><div class="pnx-drop">♥</div><div class="pnx-heart-line">⌁━━━━━━♥━━━━━━⌁</div><div class="pnx-art-caption">Every drop<br><strong>can save a life.</strong></div></div>
-    </section>
-    <section class="pnx-quick"><button onclick="goTo('donor')"><i>🩸</i><b>Become a Donor</b><small>Join our life-saving community</small></button><button onclick="goTo('find')"><i>🔎</i><b>Find Blood</b><small>Search donors securely</small></button><button onclick="goTo('request')"><i>🚑</i><b>Blood Request</b><small>Send an urgent request</small></button><button onclick="goTo('events')"><i>📅</i><b>Update & Camps</b><small>Stay connected with the club</small></button></section>
-    <section class="pnx-panel pnx-community"><div class="pnx-heading"><div><span>OUR COMMUNITY</span><h2>Donors who make it possible</h2></div><button onclick="goTo('find')">View donors →</button></div><div id="donorPhotoGallery" class="pnx-gallery"><div class="pnx-loading">Loading donor community…</div></div></section>
-    <section class="pnx-panel"><div class="pnx-heading"><div><span>BLOOD AVAILABILITY</span><h2>Find the group you need</h2></div><button onclick="goTo('find')">Find donor →</button></div><div id="bloodGrid" class="pnx-blood-grid"><div class="pnx-loading">Loading blood groups…</div></div></section>
-    <section class="pnx-wide-stats"><div><i>👥</i><b id="statDonors">—</b><span>Total Donors</span></div><div><i>🩸</i><b id="statRequests2">—</b><span>Blood Requests</span></div><div><i>📅</i><b id="statEvents2">—</b><span>Camps & Events</span></div><div><i>❤️</i><b id="statGroups">—</b><span>Blood Groups</span></div></section>
-    <section class="pnx-panel"><div class="pnx-heading"><div><span>COMMUNITY</span><h2>Blood Camps & Events</h2></div><button onclick="showAllEvents()">View all →</button></div><div id="eventsContainer" class="pnx-events"><div class="pnx-loading">Loading events…</div></div></section>
-    <section class="pnx-panel"><div class="pnx-heading"><div><span>LATEST UPDATES</span><h2>What's new</h2></div><div class="pnx-live">● LIVE</div></div><div class="pnx-updates"><article><i>🩸</i><b>Update Last Donation</b><p>Registered donors can securely update their last donation date.</p><button onclick="document.querySelector('.pn-self-update-btn')?.click()">Update details →</button></article><article><i>🚨</i><b>Blood Request Support</b><p>Raise a request and connect with the donor community.</p><button onclick="goTo('request')">Request blood →</button></article><article><i>🤖</i><b>BothiAI Assistant</b><p>Ask in English, தமிழ் or Tanglish.</p><button onclick="document.getElementById('pn-bot-toggle')?.click()">Ask BothiAI →</button></article></div></section>
-    <section class="pnx-footer-club"><img src="icons/poongurichi-logo.jpeg"><div><b>Poongurichi Nanbargal Blood Donors Club</b><span>Service to Humanity is Service to God ❤️</span></div><button onclick="goTo('about')">My Club →</button></section>
+  <div class="pn-home-v2">
+      <section class="pn2-hero">
+        <div class="pn2-hero-copy">
+          <div class="pn2-kicker"><i></i> COMMUNITY BLOOD NETWORK</div>
+          <h1>Give blood.<br><em>Give hope.</em></h1>
+          <p>One donation can become someone's second chance. Find a donor, become a donor, or raise a blood request in seconds.</p>
+          <div class="pn2-hero-actions">
+            <button type="button" class="pn2-btn pn2-btn-primary" onclick="goTo('find')">🔎 Find Blood</button>
+            <button type="button" class="pn2-btn pn2-btn-white" onclick="goTo('donor')">🩸 Become a Donor</button>
+          </div>
+          <div class="pn2-hero-links">
+            <button type="button" onclick="goTo('request')">🚨 Need Blood?</button>
+            <button type="button" onclick="installAppNow()">📲 Download App</button>
+          </div>
+        </div>
+        <div class="pn2-hero-art" aria-hidden="true">
+          <div class="pn2-glow"></div><div class="pn2-ring pn2-ring-a"></div><div class="pn2-ring pn2-ring-b"></div>
+          <div class="pn2-drop"><span>♥</span><small>SAVE<br>LIVES</small></div>
+          <div class="pn2-mini-card pn2-mini-top"><b id="heroDonorCount">—</b><span>Registered donors</span></div>
+          <div class="pn2-mini-card pn2-mini-bottom"><b>24/7</b><span>Community support</span></div>
+        </div>
+      </section>
+
+      <section class="pn2-live" aria-label="Blood availability">
+        <div class="pn2-live-title"><span>●</span><div><strong>LIVE BLOOD NEED</strong><small>Community availability</small></div></div>
+        <button type="button" onclick="goTo('find')">Check availability <b>→</b></button>
+      </section>
+
+      <section class="pn2-section pn2-actions-section">
+        <div class="pn2-section-head"><div><span>QUICK ACCESS</span><h2>What do you need?</h2></div><div class="pn2-head-mark">✦</div></div>
+        <div class="pn2-action-grid">
+          <button type="button" class="pn2-action pn2-action-red" onclick="goTo('donor')"><i>🩸</i><strong>Become a Donor</strong><small>Join our donor family</small><b>→</b></button>
+          <button type="button" class="pn2-action pn2-action-blue" onclick="goTo('find')"><i>🔎</i><strong>Find Blood</strong><small>Search donors securely</small><b>→</b></button>
+          <button type="button" class="pn2-action pn2-action-orange" onclick="goTo('request')"><i>🚑</i><strong>Request Blood</strong><small>Send an urgent request</small><b>→</b></button>
+          <button type="button" class="pn2-action pn2-action-purple" onclick="goTo('events')"><i>📅</i><strong>Camps & Events</strong><small>See upcoming activities</small><b>→</b></button>
+        </div>
+      </section>
+
+      <section class="pn2-section pn2-community-section">
+        <div class="pn2-section-head"><div><span>OUR COMMUNITY</span><h2>Donors who make it possible</h2></div><button type="button" onclick="goTo('find')">View donors →</button></div>
+        <div id="donorPhotoGallery" class="pn2-donor-gallery"><div class="pn2-loading">Loading donor community…</div></div>
+      </section>
+
+      <section class="pn2-blood-section">
+        <div class="pn2-section-head"><div><span>BLOOD GROUPS</span><h2>Availability at a glance</h2></div><button type="button" onclick="goTo('find')">Find donor →</button></div>
+        <div id="bloodGrid" class="pn2-blood-grid"><div class="pn2-loading">Loading blood groups…</div></div>
+      </section>
+
+      <section class="pn2-stats">
+        <div><i>👥</i><b id="statDonors">—</b><span>Total Donors</span></div>
+        <div><i>🩸</i><b id="statRequests">—</b><span>Blood Requests</span></div>
+        <div><i>📅</i><b id="statEvents">—</b><span>Camps & Events</span></div>
+        <div><i>❤️</i><b id="statGroups">—</b><span>Blood Groups</span></div>
+      </section>
+
+      <section class="pn2-section pn2-events-section">
+        <div class="pn2-section-head"><div><span>COMMUNITY</span><h2>Blood Camps & Events</h2></div><button type="button" onclick="showAllEvents()">View all →</button></div>
+        <div id="eventsContainer" class="pn2-events"><div class="pn2-loading">Loading events…</div></div>
+      </section>
+
+      <section class="pn2-updates">
+        <div class="pn2-section-head"><div><span>LATEST UPDATES</span><h2>What's new</h2></div><div class="pn2-live-dot">● Live</div></div>
+        <div class="pn2-update-grid">
+          <article><i>🩸</i><b>Update Last Donation</b><p>Registered donors can securely update their last donation date.</p><button type="button" onclick="document.querySelector('.pn-self-update-btn')?.click()">Update details →</button></article>
+          <article><i>🖼️</i><b>Blood Request Image</b><p>Admins can generate professional request posters from notifications.</p><button type="button" onclick="goTo('admin')">Admin tools →</button></article>
+          <article><i>🤖</i><b>BothiAI Assistant</b><p>Ask in English, தமிழ் or Tanglish about donation and the app.</p><button type="button" onclick="document.getElementById('pn-bot-toggle')?.click()">Ask BothiAI →</button></article>
+        </div>
+      </section>
+
+      <section class="pn2-club">
+        <div class="pn2-club-brand"><img src="icons/poongurichi-logo.jpeg" alt="PNBDC"><div><b>My Club</b><span>Poongurichi Nanbargal Blood Donors Club</span></div></div>
+        <div class="pn2-club-links"><button onclick="goTo('about')">About Club</button><button onclick="goTo('about')">Contacts</button><button onclick="goTo('about')">Developer</button></div>
+        <p>Every donor matters. Every drop counts.</p>
+      </section>
   </div>
 </section>
 
@@ -1738,7 +2335,7 @@
 
   <!-- SheetJS: Excel import/export for Admin donor management -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
-  <script src="app.js?v=20260909-final-1"></script>
+  <script src="app.js?v=pn-design-final-20260910"></script>
 <script>
 (function(){
   window.addEventListener("load", function(){
