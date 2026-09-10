@@ -4031,3 +4031,121 @@ footer{position:relative!important;z-index:1!important}.footer{position:relative
 #adminDonorTable .admin-table{
   min-width:1050px;
 }
+
+
+/* ============================================================
+   PNBDC FINAL MOBILE / ABOUT FIX
+   Based on the currently deployed package.
+   ============================================================ */
+
+/* ABOUT: the highlight panel is intentionally light, therefore
+   its inherited white text must be overridden. */
+#page-about .about-highlight,
+#page-about .about-highlight > div{
+  color:#102a56 !important;
+}
+#page-about .about-highlight h2{
+  color:#102a56 !important;
+  text-shadow:none !important;
+}
+#page-about .about-highlight p{
+  color:#62748e !important;
+  text-shadow:none !important;
+}
+#page-about .about-heart{
+  color:#e51f32 !important;
+}
+
+/* ABOUT: remove artificial full-screen height which creates the
+   huge blank area before the footer on short pages. */
+@media (max-width:720px){
+  #page-about.page-section.active{
+    min-height:auto !important;
+    height:auto !important;
+    padding-bottom:34px !important;
+  }
+
+  #page-about .about-layout{
+    min-height:0 !important;
+    height:auto !important;
+  }
+
+  #page-about .about-highlight{
+    min-height:270px !important;
+  }
+
+  /* Give the fixed bottom navigation its own safe space instead
+     of allowing it to cover footer/contact content. */
+  footer,
+  .site-footer,
+  .footer{
+    padding-bottom:118px !important;
+  }
+
+  /* Floating BothiAI stays above the navigation. */
+  #pn-bot-toggle,
+  .pn-bot-toggle{
+    bottom:108px !important;
+  }
+
+  /* Keep every page's final content above the fixed navigation. */
+  #page-about .container{
+    padding-bottom:8px !important;
+  }
+}
+
+/* ============================================================
+   ADMIN DONOR TABLE: real touch horizontal scrolling.
+   Do not turn it into cards on mobile.
+   ============================================================ */
+@media (max-width:720px){
+  #adminDonorTable{
+    position:relative !important;
+    width:100% !important;
+    max-width:100% !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    -webkit-overflow-scrolling:touch !important;
+    touch-action:pan-x pan-y !important;
+    overscroll-behavior-x:contain !important;
+    scrollbar-width:auto !important;
+  }
+
+  #adminDonorTable .admin-table{
+    display:table !important;
+    width:max-content !important;
+    min-width:1050px !important;
+    max-width:none !important;
+  }
+
+  #adminDonorTable .admin-table thead{
+    display:table-header-group !important;
+  }
+
+  #adminDonorTable .admin-table tbody{
+    display:table-row-group !important;
+  }
+
+  #adminDonorTable .admin-table tr{
+    display:table-row !important;
+  }
+
+  #adminDonorTable .admin-table th,
+  #adminDonorTable .admin-table td{
+    display:table-cell !important;
+    white-space:nowrap !important;
+  }
+
+  #adminDonorTable .admin-table td:before{
+    display:none !important;
+    content:none !important;
+  }
+}
+
+/* ============================================================
+   Prevent the browser from interpreting fixed UI as page width.
+   ============================================================ */
+html,body{
+  max-width:100% !important;
+  overflow-x:hidden !important;
+}
