@@ -1,9 +1,9 @@
-const CACHE_NAME = 'pn-blood-page-layout-1-v4';
+const CACHE_NAME = 'poongurichi-premium-v3-static-4';
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './style.css?v=20260909-final-1',
-  './app.js?v=20260909-final-1',
+  './style.css',
+  './app.js',
   './manifest.json',
   './icons/poongurichi-logo.jpeg',
   './icons/icon-192.png',
