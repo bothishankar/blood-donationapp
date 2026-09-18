@@ -1,170 +1,155 @@
-
 (function () {
-  "use strict";
+  'use strict';
 
   const $ = id => document.getElementById(id);
-  const toggle = $("pn-bot-toggle"), panel = $("pn-bot-panel");
-  const close = $("pn-bot-close"), form = $("pn-bot-form"), input = $("pn-bot-input");
-  const messages = $("pn-bot-messages");
+  const toggle = $('pn-bot-toggle');
+  const panel = $('pn-bot-panel');
+  const close = $('pn-bot-close');
+  const back = $('pn-bot-back');
+  const minimize = $('pn-bot-minimize');
+  const form = $('pn-bot-form');
+  const input = $('pn-bot-input');
+  const messages = $('pn-bot-messages');
 
-  if (!toggle || !panel || !form) return;
+  if (!toggle || !panel || !form || !messages) return;
 
-  const norm = s => String(s || "").toLowerCase()
-    .normalize("NFKC")
-    .replace(/[^\p{L}\p{N}\s+]/gu, " ")
-    .replace(/\s+/g, " ").trim();
+  const norm = s => String(s || '')
+    .toLowerCase()
+    .normalize('NFKC')
+    .replace(/[^\p{L}\p{N}\s+]/gu, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-  // Common Tamil/Thanglish variants + typo tolerance.
-  const groups = {
-    tamil: ["தமிழ்","tamil","tamizh","tami","taml"],
-    donate: ["donate","donation","blood donation","give blood","ரத்த தானம்","இரத்த தானம்","ரத்தம் கொடுக்க","இரத்தம் கொடுக்க","ratham","ratham kudukka","blood kudukka","blood donate"],
-    donor: ["donor","donors","நன்கொடையாளர்","நன்கொடையாளர்கள்","doner","donor search","find donor","donar"],
-    request: ["blood request","request blood","தேவை","இரத்தம் தேவை","ரத்தம் தேவை","blood venum","blood venum","ratham venum","request"],
-    register: ["register","become donor","join donor","பதிவு","நன்கொடையாளராக","donor register","regster"],
-    eligibility: ["eligible","eligibility","can i donate","who can donate","தானம் செய்யலாமா","யார் தானம்","eligiblity","age","வயது"],
-    id: ["id card","donor id","அடையாள அட்டை","idcard","pn bdc","pndbc","pnbdc"],
-    notification: ["notification","notifications","அறிவிப்பு","அறிவிப்புகள்","notificaton"],
-    event: ["event","events","நிகழ்வு","நிகழ்வுகள்","camp","முகாம்"],
-    contact: ["contact","phone","admin","தொடர்பு","தொலைபேசி","mobile","number"],
-    help: ["help","what can you do","என்ன செய்யலாம்","உதவி","menu"]
-  };
-
-  function similarity(a,b){
-    a=norm(a); b=norm(b);
-    if(!a||!b) return 0;
-    if(a.includes(b)||b.includes(a)) return 0.92;
-    const aa=a.split(" "), bb=b.split(" ");
-    let hit=0;
-    aa.forEach(x=>bb.forEach(y=>{
-      if(x.length>=3 && y.length>=3){
-        const d=Math.abs(x.length-y.length);
-        if(d<=1 && (x[0]===y[0] || x.slice(0,2)===y.slice(0,2))) hit++;
-      }
-    }));
-    return hit / Math.max(aa.length,bb.length,1);
-  }
-
-  function has(group,q){
-    const n=norm(q);
-    return groups[group].some(k=>similarity(n,k)>=0.45);
-  }
-
-  function lang(q){
-    if(/[அ-ஹ]/u.test(q)) return "ta";
-    const n=norm(q);
-    if(/\b(tamil|tamizh|thanglish|tanglish)\b/.test(n)) return "ta";
-    try { return localStorage.getItem("pn_language")==="ta" ? "ta" : "en"; } catch(e){ return "en"; }
+  function lang(q) {
+    if (/[அ-ஹ]/u.test(String(q || ''))) return 'ta';
+    const n = norm(q);
+    if (/\b(tamil|tamizh|thanglish|tanglish)\b/.test(n)) return 'ta';
+    try { return localStorage.getItem('pn_language') === 'ta' ? 'ta' : 'en'; }
+    catch (e) { return 'en'; }
   }
 
   const replies = {
     en: {
-      welcome:"Vanakkam! 👋 I’m PNBDC AI Assistant. You can ask in English, தமிழ் or Thanglish—even with spelling mistakes.",
-      donate:"🩸 Blood donation helps save lives. For the exact medical eligibility decision, please follow the guidance of a qualified healthcare professional or the blood centre. I can explain the donation process and help you find the relevant PNBDC section.",
-      donor:"🔎 I can help you use the Find Donor section. Choose the required blood group and location, then contact a matching donor through the app’s available contact flow. I won’t reveal private donor information beyond what the app already permits.",
-      request:"🆘 To request blood, open Blood Request and provide patient name, hospital/medical centre, contact number, blood group, units required, district and location. Mark priority appropriately.",
-      register:"📝 To become a donor, open Become a Donor, fill in your details, optionally add a photo, and submit. Your PNBDC donor ID card can then be prepared/downloaded.",
-      eligibility:"ℹ️ Donation eligibility can depend on age, health, medications, recent donation and other factors. Use the app as guidance, not as a medical diagnosis; confirm with the blood centre/health professional.",
-      id:"🪪 PNBDC donor IDs use the permanent format PNBDC000001, PNBDC000002, PNBDC000003… New IDs continue from the highest existing serial. The ID card can follow the selected Tamil/English language.",
-      notification:"🔔 Open Notifications to view updates. If supported by your browser/device, you can enable notification permission there.",
-      event:"📅 Open Events to see published blood-donation camps and club activities.",
-      contact:"📞 For club contact details, open the About/Contact section. The assistant does not invent contact numbers.",
-      help:"🩸 PNBDC AI can help with donor registration, finding donors, blood requests, donation guidance, PNBDC IDs/cards, notifications, events and app navigation. Ask naturally in English, தமிழ் or Thanglish."
+      donate: `🩸 How to Donate Blood\n\n1. Check with a blood donation centre about your eligibility.\n2. Open the Become a Donor section in PNBDC if you want to register.\n3. Select a suitable blood donation camp or donation centre.\n4. Carry a valid ID if the centre requires it.\n5. Complete the centre's health screening.\n6. Donate only after the medical team confirms you can donate.\n7. Rest and follow the centre's after-donation instructions.\n\nPNBDC AI provides general guidance; the blood centre's medical team makes the final eligibility decision.`,
+      donor: `🔎 How to Find a Donor\n\n1. Open Find Blood / Find Donor.\n2. Select the required blood group.\n3. Select the district.\n4. Select the city / area if available.\n5. Tap Search Donors.\n6. Review the available matching donors.\n7. Use only the contact information that PNBDC publicly permits.\n\nFor privacy, PNBDC AI will not reveal hidden donor information.`,
+      register: `📝 How to Become a Donor\n\n1. Open Become a Donor.\n2. Enter your full name.\n3. Enter your date of birth.\n4. Select your blood group.\n5. Enter your mobile number.\n6. Enter your address/location details.\n7. Add an alternate mobile number if needed.\n8. Upload a photo if you want an ID card photo.\n9. Review all details.\n10. Tap Register.\n11. After successful registration, your PNBDC Donor ID is generated.\n12. Prepare/download your Donor ID Card.`,
+      camps: `📅 How to Check Camps\n\n1. Open Camps & Events / Events.\n2. View the published upcoming camps.\n3. Open a camp to see its date, time and location.\n4. Contact the club if you need additional information.`,
+      eligibility: `ℹ️ Who Can Donate Blood?\n\nBlood donation eligibility depends on the donor's age, health, recent donation history, medicines and the rules of the donation centre.\n\n1. Check the donation centre's current eligibility requirements.\n2. Complete the health screening before donation.\n3. Tell the medical team about relevant medicines or recent illness.\n4. Donate only when the medical team confirms eligibility.`,
+      postpone: `⏸️ When Should Donation Be Postponed?\n\nDonation may need to be postponed for reasons such as recent illness, certain medicines or medical treatment, recent donation, or other conditions identified during screening.\n\n1. Tell the blood-centre medical team about your current health and medicines.\n2. Follow their screening decision.\n3. If they ask you to postpone, wait until they confirm that you can donate.\n\nThe blood centre should make the final medical decision.`,
+      request: `🆘 How to Submit a Blood Request\n\n1. Open Blood Request.\n2. Select the required blood group.\n3. Enter the number of units required.\n4. Enter the patient name.\n5. Enter the hospital name.\n6. Enter the contact number.\n7. Enter the required date.\n8. Select the location/district.\n9. Add remarks if necessary.\n10. Review the information and submit the request.\n\nAfter submission, the request can be handled through the PNBDC notification/admin workflow.`,
+      emergency: `🚨 Emergency Blood Requests\n\n1. Open Blood Request to submit a new urgent requirement.\n2. Enter the correct blood group and units required.\n3. Provide the patient, hospital and contact details.\n4. Select the appropriate priority.\n5. Submit the request.\n\nIf you need an existing emergency request, open the Blood Requests section in the app.`,
+      id: `🪪 PNBDC Donor ID Card\n\n1. Complete donor registration successfully.\n2. Your permanent PNBDC Donor ID is generated.\n3. Open the ID Card option.\n4. Review the displayed donor details.\n5. Use Download or Share when available.\n\nPNBDC IDs follow the format PNBDC000001, PNBDC000002, PNBDC000003…`,
+      notification: `🔔 Notifications\n\n1. Open the Notifications bell.\n2. Review new notifications.\n3. Tap a notification to open its available action.\n4. For a blood request notification, an authorised admin can use the Generate Request option when available.`,
+      help: `🤖 PNBDC AI can help with:\n\n• Becoming a donor\n• Finding a donor\n• Blood requests\n• Donation eligibility guidance\n• When donation may need to be postponed\n• Donor ID cards\n• Camps and events\n• Notifications\n• App navigation\n\nAsk your question naturally in English, தமிழ் or Thanglish.`
     },
     ta: {
-      welcome:"வணக்கம்! 👋 நான் PNBDC AI Assistant. தமிழ், English அல்லது Thanglish-ல் கேட்கலாம். Spelling mistake இருந்தாலும் புரிந்துகொள்ள முயற்சிப்பேன்.",
-      donate:"🩸 இரத்த தானம் உயிரைக் காப்பாற்ற உதவும். தகுதி குறித்த இறுதி மருத்துவ முடிவுக்கு தகுதியான மருத்துவர் அல்லது இரத்த வங்கி/தான மையத்தின் ஆலோசனையைப் பின்பற்றுங்கள். தானம் செய்வது எப்படி என்பதையும் PNBDC-யில் தொடர்புடைய பகுதியையும் நான் வழிகாட்டலாம்.",
-      donor:"🔎 Find Donor பகுதியில் தேவையான இரத்த வகை மற்றும் இடத்தைத் தேர்வு செய்து பொருத்தமான நன்கொடையாளரைத் தேடலாம். App அனுமதிக்கும் அளவுக்கு மட்டுமே donor தகவல்கள் காட்டப்படும்; தனிப்பட்ட தகவல்களை நான் வெளியிடமாட்டேன்.",
-      request:"🆘 இரத்தம் தேவைப்பட்டால் Blood Request பகுதியைத் திறந்து நோயாளி பெயர், மருத்துவமனை, தொடர்பு எண், இரத்த வகை, தேவையான Units, மாவட்டம் மற்றும் இடம் போன்ற விவரங்களைச் சமர்ப்பிக்கலாம்.",
-      register:"📝 நன்கொடையாளராக பதிவு செய்ய Become a Donor பகுதியைத் திறந்து விவரங்களை நிரப்பி Submit செய்யுங்கள். அதன் பிறகு PNBDC Donor ID Card தயாரித்து Download செய்யலாம்.",
-      eligibility:"ℹ️ இரத்த தான தகுதி வயது, உடல்நிலை, மருந்துகள், கடைசி தானம் மற்றும் பிற காரணிகளைப் பொறுத்தது. App தகவலை வழிகாட்டியாக மட்டும் பயன்படுத்துங்கள்; இறுதி முடிவுக்கு மருத்துவர்/இரத்த தான மையத்தை அணுகுங்கள்.",
-      id:"🪪 PNBDC Donor ID நிரந்தர வடிவம் PNBDC000001, PNBDC000002, PNBDC000003… என தொடரும். ஏற்கனவே உள்ள அதிகபட்ச serial-க்கு அடுத்த ID வழங்கப்படும். தேர்ந்தெடுத்த தமிழ்/English மொழிக்கு ஏற்ப ID Card label-களும் மாறும்.",
-      notification:"🔔 Notifications பகுதியில் அறிவிப்புகளைப் பார்க்கலாம். Browser/device ஆதரித்தால் அங்கே notification permission-ஐ Enable செய்யலாம்.",
-      event:"📅 Events பகுதியில் வெளியிடப்பட்ட இரத்த தான முகாம்கள் மற்றும் club நிகழ்வுகளைப் பார்க்கலாம்.",
-      contact:"📞 Club தொடர்பு விவரங்களுக்கு About/Contact பகுதியைத் திறக்கவும். நான் கற்பனையாக contact number உருவாக்கமாட்டேன்.",
-      help:"🩸 PNBDC AI: Donor registration, donor search, blood request, இரத்த தான வழிகாட்டுதல், PNBDC ID/Card, notifications, events மற்றும் app navigation ஆகியவற்றில் உதவலாம். தமிழ், English அல்லது Thanglish-ல் இயல்பாக கேளுங்கள்."
+      donate: `🩸 இரத்த தானம் செய்வது எப்படி?\n\n1. முதலில் இரத்த தான மையத்தில் உங்கள் தகுதியை சரிபார்க்கவும்.\n2. PNBDC-ல் பதிவு செய்ய வேண்டுமெனில் Become a Donor பகுதியைத் திறக்கவும்.\n3. பொருத்தமான இரத்த தான முகாம் அல்லது தான மையத்தைத் தேர்வு செய்யவும்.\n4. தேவையான அடையாள ஆவணத்தை எடுத்துச் செல்லவும்.\n5. மருத்துவக் குழுவின் health screening-ஐ முடிக்கவும்.\n6. மருத்துவக் குழு தகுதி உறுதி செய்த பிறகே இரத்த தானம் செய்யவும்.\n7. தானத்திற்குப் பிறகு மையம் வழங்கும் வழிமுறைகளைப் பின்பற்றவும்.\n\nஇறுதி மருத்துவ தகுதி முடிவை இரத்த தான மையத்தின் மருத்துவக் குழுவே வழங்கும்.`,
+      donor: `🔎 Donor-ஐ தேடுவது எப்படி?\n\n1. Find Blood / Find Donor பகுதியைத் திறக்கவும்.\n2. தேவையான Blood Group-ஐ தேர்வு செய்யவும்.\n3. District-ஐ தேர்வு செய்யவும்.\n4. City / Area கிடைத்தால் தேர்வு செய்யவும்.\n5. Search Donors என்பதை அழுத்தவும்.\n6. பொருத்தமான donors-ஐ பார்க்கவும்.\n7. PNBDC அனுமதிக்கும் contact தகவல்களை மட்டுமே பயன்படுத்தவும்.`,
+      register: `📝 Donor-ஆக பதிவு செய்வது எப்படி?\n\n1. Become a Donor பகுதியைத் திறக்கவும்.\n2. Full Name உள்ளிடவும்.\n3. Date of Birth உள்ளிடவும்.\n4. Blood Group தேர்வு செய்யவும்.\n5. Mobile Number உள்ளிடவும்.\n6. Address / Location விவரங்களை உள்ளிடவும்.\n7. தேவையெனில் Alternate Mobile Number உள்ளிடவும்.\n8. ID Card photo வேண்டுமெனில் Photo upload செய்யவும்.\n9. அனைத்து விவரங்களையும் சரிபார்க்கவும்.\n10. Register அழுத்தவும்.\n11. பதிவு வெற்றியடைந்ததும் PNBDC Donor ID உருவாகும்.\n12. Donor ID Card-ஐ Download/Share செய்யலாம்.`,
+      camps: `📅 Camps-ஐ பார்ப்பது எப்படி?\n\n1. Camps & Events / Events பகுதியைத் திறக்கவும்.\n2. வெளியிடப்பட்ட upcoming camps-ஐ பார்க்கவும்.\n3. ஒரு camp-ஐ திறந்து date, time, location பார்க்கவும்.\n4. கூடுதல் தகவலுக்கு club-ஐ தொடர்பு கொள்ளவும்.`,
+      eligibility: `ℹ️ யார் இரத்த தானம் செய்யலாம்?\n\nஇரத்த தான தகுதி வயது, உடல்நிலை, சமீபத்திய தானம், மருந்துகள் மற்றும் தான மையத்தின் விதிமுறைகளைப் பொறுத்தது.\n\n1. தற்போதைய தகுதி விதிகளை தான மையத்தில் சரிபார்க்கவும்.\n2. Donation-க்கு முன் health screening செய்யவும்.\n3. மருந்துகள் அல்லது சமீபத்திய உடல்நலப் பிரச்சினைகள் இருந்தால் மருத்துவக் குழுவிடம் தெரிவிக்கவும்.\n4. மருத்துவக் குழு தகுதி உறுதி செய்த பிறகே தானம் செய்யவும்.`,
+      postpone: `⏸️ எப்போது இரத்த தானத்தை ஒத்திவைக்க வேண்டும்?\n\nசமீபத்திய உடல்நலக்குறைவு, சில மருந்துகள்/மருத்துவ சிகிச்சைகள், சமீபத்திய இரத்த தானம் அல்லது screening-ல் கண்டறியப்படும் பிற காரணங்களால் தானம் ஒத்திவைக்கப்படலாம்.\n\n1. உங்கள் உடல்நிலை மற்றும் மருந்துகள் பற்றி மருத்துவக் குழுவிடம் தெரிவிக்கவும்.\n2. அவர்களின் screening முடிவைப் பின்பற்றவும்.\n3. ஒத்திவைக்கச் சொன்னால், மீண்டும் தானம் செய்யலாம் என்று அவர்கள் உறுதி செய்யும் வரை காத்திருக்கவும்.`,
+      request: `🆘 Blood Request செய்வது எப்படி?\n\n1. Blood Request பகுதியைத் திறக்கவும்.\n2. தேவையான Blood Group தேர்வு செய்யவும்.\n3. தேவையான Units எண்ணிக்கையை உள்ளிடவும்.\n4. Patient Name உள்ளிடவும்.\n5. Hospital Name உள்ளிடவும்.\n6. Contact Number உள்ளிடவும்.\n7. Required Date உள்ளிடவும்.\n8. Location / District தேர்வு செய்யவும்.\n9. தேவையெனில் Remarks சேர்க்கவும்.\n10. விவரங்களை சரிபார்த்து Submit செய்யவும்.`,
+      emergency: `🚨 அவசர Blood Request\n\n1. Blood Request பகுதியைத் திறக்கவும்.\n2. சரியான Blood Group மற்றும் Units உள்ளிடவும்.\n3. Patient, Hospital மற்றும் Contact விவரங்களை உள்ளிடவும்.\n4. பொருத்தமான Priority தேர்வு செய்யவும்.\n5. Request-ஐ Submit செய்யவும்.\n\nஏற்கனவே உள்ள emergency request-ஐ பார்க்க Blood Requests பகுதியைத் திறக்கவும்.`,
+      id: `🪪 PNBDC Donor ID Card\n\n1. Donor registration-ஐ வெற்றிகரமாக முடிக்கவும்.\n2. நிரந்தர PNBDC Donor ID உருவாகும்.\n3. ID Card option-ஐ திறக்கவும்.\n4. விவரங்களை சரிபார்க்கவும்.\n5. Download அல்லது Share செய்யவும்.\n\nPNBDC ID வடிவம்: PNBDC000001, PNBDC000002, PNBDC000003…`,
+      notification: `🔔 Notifications\n\n1. Notifications bell-ஐ திறக்கவும்.\n2. புதிய notifications-ஐ பார்க்கவும்.\n3. தேவையான notification-ஐ tap செய்யவும்.\n4. Blood Request notification என்றால், அனுமதியுள்ள Admin-க்கு Generate Request option கிடைக்கும்.`,
+      help: `🤖 PNBDC AI உதவக்கூடியவை:\n\n• Donor registration\n• Donor search\n• Blood Request\n• Donation eligibility guidance\n• Donation postpone guidance\n• Donor ID Card\n• Camps & Events\n• Notifications\n• App navigation\n\nதமிழ், English அல்லது Thanglish-ல் கேளுங்கள்.`
     }
   };
 
-  function add(text, who){
-    const d=document.createElement("div");
-    d.className="pn-bot-msg "+who;
-    d.textContent=text;
+  function matches(q, list) {
+    const n = norm(q);
+    return list.some(k => n.includes(norm(k)));
+  }
+
+  function intent(q) {
+    const n = norm(q);
+    if (matches(n, ['how can i donate','how to donate','donate blood','blood donation','ரத்த தானம்','இரத்த தானம்','ratham kudukka','blood kudukka'])) return 'donate';
+    if (matches(n, ['find donor','find blood','donor search','search donor','doner','donar'])) return 'donor';
+    if (matches(n, ['register as donor','become a donor','join donor','donor registration','how to register','பதிவு','நன்கொடையாளராக'])) return 'register';
+    if (matches(n, ['upcoming camp','upcoming camps','next camp','blood donation camp','events','camp','முகாம்','நிகழ்வு'])) return 'camps';
+    if (matches(n, ['who can donate','can i donate','eligible','eligibility','தகுதி','யார் தானம்','தானம் செய்யலாமா'])) return 'eligibility';
+    if (matches(n, ['when should donation be postponed','when to postpone','postpone donation','donation postponed','ஒத்திவைக்க','தள்ளிப்போட'])) return 'postpone';
+    if (matches(n, ['blood request','request blood','how to request','request blood','இரத்தம் தேவை','blood venum','request'])) return 'request';
+    if (matches(n, ['emergency blood','emergency request','urgent blood','அவசர'])) return 'emergency';
+    if (matches(n, ['id card','donor id','pn bdc','pnbdc id','அடையாள அட்டை'])) return 'id';
+    if (matches(n, ['notification','notifications','அறிவிப்பு'])) return 'notification';
+    if (matches(n, ['help','what can you do','உதவி'])) return 'help';
+    return null;
+  }
+
+  function add(text, who) {
+    const d = document.createElement('div');
+    d.className = 'pn-bot-msg ' + who;
+    d.textContent = text;
     messages.appendChild(d);
-    messages.scrollTop=messages.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
   }
 
-  function answer(q){
-    const L=lang(q), r=replies[L];
-    if(has("donate",q)) return r.donate;
-    if(has("donor",q)) return r.donor;
-    if(has("request",q)) return r.request;
-    if(has("register",q)) return r.register;
-    if(has("eligibility",q)) return r.eligibility;
-    if(has("id",q)) return r.id;
-    if(has("notification",q)) return r.notification;
-    if(has("event",q)) return r.event;
-    if(has("contact",q)) return r.contact;
-    if(has("help",q)) return r.help;
-    return L==="ta"
-      ? "நான் புரிந்துகொண்ட அளவில் உதவுகிறேன். Donor, Blood Request, Registration, Eligibility, ID Card, Notification, Event அல்லது Contact பற்றி கேளுங்கள்."
-      : "I can help with Donor, Blood Request, Registration, Eligibility, ID Card, Notifications, Events or Contact. You can ask in Tamil, English or Thanglish.";
+  function openPanel() {
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden', 'false');
+    if (input) setTimeout(() => input.focus(), 80);
+  }
+  function closePanel() {
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden', 'true');
   }
 
-  const back = $("pn-bot-back");
-  const minimize = $("pn-bot-minimize");
-
-  function openPanel(){
-    panel.classList.add("open");
-    panel.setAttribute("aria-hidden","false");
-    if(input) setTimeout(()=>input.focus(),80);
+  function navigateForIntent(type) {
+    try {
+      if (type === 'register' && typeof window.goTo === 'function') window.goTo('donor');
+      else if (type === 'donor' && typeof window.goTo === 'function') window.goTo('find');
+      else if (type === 'request' && typeof window.goTo === 'function') window.goTo('request');
+      else if (type === 'camps' && typeof window.goTo === 'function') window.goTo('events');
+    } catch (e) {}
   }
 
-  function closePanel(){
-    panel.classList.remove("open");
-    panel.setAttribute("aria-hidden","true");
-  }
-
-  toggle.addEventListener("click",()=>{
-    if(panel.classList.contains("open")) closePanel();
-    else openPanel();
-  });
-
-  close && close.addEventListener("click",closePanel);
-  back && back.addEventListener("click",closePanel);
-  minimize && minimize.addEventListener("click",closePanel);
-
-  function askFromButton(button){
-    const q=button.getAttribute("data-q")||"";
-    if(!q) return;
+  function handleQuestion(q, navigate) {
+    const type = intent(q);
     openPanel();
-    add(q,"user");
-    setTimeout(()=>add(answer(q),"bot"),180);
+    add(q, 'user');
+    if (navigate && type) navigateForIntent(type);
+    setTimeout(() => add((replies[lang(q)] || replies.en)[type || 'help'], 'bot'), 120);
   }
 
-  document.querySelectorAll("#pn-bot-suggestions button, .pn-bot-quick").forEach(b=>{
-    b.addEventListener("click",()=>askFromButton(b));
+  toggle.addEventListener('click', () => panel.classList.contains('open') ? closePanel() : openPanel());
+  if (close) close.addEventListener('click', closePanel);
+  if (back) back.addEventListener('click', closePanel);
+  if (minimize) minimize.addEventListener('click', closePanel);
+
+  document.querySelectorAll('#pn-bot-suggestions button, .pn-bot-quick').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const q = this.getAttribute('data-q') || this.textContent.trim();
+      handleQuestion(q, true);
+    });
   });
 
-  const seeAll=$("pn-bot-see-all");
-  if(seeAll){
-    seeAll.addEventListener("click",()=>{
-      document.querySelectorAll("#pn-bot-suggestions button").forEach(b=>b.style.display="flex");
+  const seeAll = $('pn-bot-see-all');
+  if (seeAll) {
+    seeAll.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelectorAll('#pn-bot-suggestions button').forEach(b => b.style.display = 'flex');
     });
   }
 
-  form.addEventListener("submit",e=>{
+  form.addEventListener('submit', e => {
     e.preventDefault();
-    const q=(input.value||"").trim();
-    if(!q)return;
-    add(q,"user");
-    input.value="";
-    setTimeout(()=>add(answer(q),"bot"),180);
+    const q = (input && input.value || '').trim();
+    if (!q) return;
+    input.value = '';
+    handleQuestion(q, false);
   });
 
-  window.PNBDCAI={
-    open:openPanel,
-    close:closePanel,
-    ask:q=>{if(q){openPanel();add(q,"user");setTimeout(()=>add(answer(q),"bot"),80);}},
-    answer
+  window.PNBDCAI = {
+    open: openPanel,
+    close: closePanel,
+    ask: q => { if (q) handleQuestion(q, false); },
+    answer: q => {
+      const type = intent(q);
+      return (replies[lang(q)] || replies.en)[type || 'help'];
+    }
   };
 })();
