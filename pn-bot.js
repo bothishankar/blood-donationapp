@@ -68,7 +68,7 @@
       notification:"🔔 Open Notifications to view updates. If supported by your browser/device, you can enable notification permission there.",
       event:"📅 Open Events to see published blood-donation camps and club activities.",
       contact:"📞 For club contact details, open the About/Contact section. The assistant does not invent contact numbers.",
-      help:"🩸 BothiAI can help with donor registration, finding donors, blood requests, donation guidance, PNBDC IDs/cards, notifications, events and app navigation. Ask naturally in English, தமிழ் or Thanglish."
+      help:"🩸 PNBDC AI can help with donor registration, finding donors, blood requests, donation guidance, PNBDC IDs/cards, notifications, events and app navigation. Ask naturally in English, தமிழ் or Thanglish."
     },
     ta: {
       welcome:"வணக்கம்! 👋 நான் PNBDC AI Assistant. தமிழ், English அல்லது Thanglish-ல் கேட்கலாம். Spelling mistake இருந்தாலும் புரிந்துகொள்ள முயற்சிப்பேன்.",
@@ -81,7 +81,7 @@
       notification:"🔔 Notifications பகுதியில் அறிவிப்புகளைப் பார்க்கலாம். Browser/device ஆதரித்தால் அங்கே notification permission-ஐ Enable செய்யலாம்.",
       event:"📅 Events பகுதியில் வெளியிடப்பட்ட இரத்த தான முகாம்கள் மற்றும் club நிகழ்வுகளைப் பார்க்கலாம்.",
       contact:"📞 Club தொடர்பு விவரங்களுக்கு About/Contact பகுதியைத் திறக்கவும். நான் கற்பனையாக contact number உருவாக்கமாட்டேன்.",
-      help:"🩸 BothiAI: Donor registration, donor search, blood request, இரத்த தான வழிகாட்டுதல், PNBDC ID/Card, notifications, events மற்றும் app navigation ஆகியவற்றில் உதவலாம். தமிழ், English அல்லது Thanglish-ல் இயல்பாக கேளுங்கள்."
+      help:"🩸 PNBDC AI: Donor registration, donor search, blood request, இரத்த தான வழிகாட்டுதல், PNBDC ID/Card, notifications, events மற்றும் app navigation ஆகியவற்றில் உதவலாம். தமிழ், English அல்லது Thanglish-ல் இயல்பாக கேளுங்கள்."
     }
   };
 
